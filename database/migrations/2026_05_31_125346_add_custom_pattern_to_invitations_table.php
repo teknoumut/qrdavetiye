@@ -1,0 +1,22 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('invitations', function (Blueprint $table) {
+            $table->string('custom_pattern', 255)->nullable()->after('envelope_pattern');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('invitations', function (Blueprint $table) {
+            $table->dropColumn('custom_pattern');
+        });
+    }
+};

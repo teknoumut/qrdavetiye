@@ -1,0 +1,63 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Plan;
+use Illuminate\Database\Seeder;
+
+class PlanSeeder extends Seeder
+{
+    public function run(): void
+    {
+        Plan::firstOrCreate(
+            ['name' => 'Temel'],
+            [
+                'name' => 'Temel',
+                'description' => 'Tek davetiye ile başlamak isteyenler için ideal.',
+                'monthly_price' => 99.90,
+                'yearly_price' => 799.90,
+                'max_invitations' => 1,
+                'max_images_per_invitation' => 5,
+                'music_feature' => false,
+                'video_feature' => false,
+                'rsvp_feature' => true,
+                'qr_download' => false,
+                'is_active' => true,
+            ]
+        );
+
+        Plan::firstOrCreate(
+            ['name' => 'Standart'],
+            [
+                'name' => 'Standart',
+                'description' => 'Daha fazla davetiye ve müzik özelliği ile öne çıkın.',
+                'monthly_price' => 149.90,
+                'yearly_price' => 1299.90,
+                'max_invitations' => 5,
+                'max_images_per_invitation' => 15,
+                'music_feature' => true,
+                'video_feature' => false,
+                'rsvp_feature' => true,
+                'qr_download' => true,
+                'is_active' => true,
+            ]
+        );
+
+        Plan::firstOrCreate(
+            ['name' => 'Premium'],
+            [
+                'name' => 'Premium',
+                'description' => 'Sınırsız davetiye, video ve tüm özelliklerle profesyonel çözüm.',
+                'monthly_price' => 249.90,
+                'yearly_price' => 2199.90,
+                'max_invitations' => -1,
+                'max_images_per_invitation' => -1,
+                'music_feature' => true,
+                'video_feature' => true,
+                'rsvp_feature' => true,
+                'qr_download' => true,
+                'is_active' => true,
+            ]
+        );
+    }
+}

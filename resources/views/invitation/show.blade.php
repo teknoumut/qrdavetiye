@@ -1,0 +1,1451 @@
+@php
+    $primaryColor = $invitation->primary_color ?: '#d4af37';
+    $hex = ltrim($primaryColor, '#');
+    $r = max(0, hexdec(substr($hex, 0, 2)) - 25);
+    $g = max(0, hexdec(substr($hex, 2, 2)) - 20);
+    $b = max(0, hexdec(substr($hex, 4, 2)) - 30);
+    $primaryDark = sprintf('#%02x%02x%02x', $r, $g, $b);
+    $isBlacksword = $invitation->font_family && str_contains($invitation->font_family, 'Blacksword');
+    $fixText = function($txt) use ($isBlacksword) {
+        return $isBlacksword ? str_replace(['ı', 'İ'], ['i', 'İ'], $txt ?? '') : ($txt ?? '');
+    };
+    $fixName = $fixText;
+
+    $eventType = $invitation->event_type ?: 'wedding';
+    $eventLabels = [
+        'wedding' => ['title' => 'Düğün Davetiyesi', 'slug' => 'Düğün', 'sub' => 'Aşkın Davetiyesi', 'couple' => true, 'parents' => true, 'showStory' => true, 'locationLabel' => 'Düğün Yeri', 'countdownLabel' => 'Düğün Günü', 'rsvpIcon' => '💍'],
+        'engagement' => ['title' => 'Nişan Davetiyesi', 'slug' => 'Nişan', 'sub' => 'Mutluluğa İlk Adım', 'couple' => true, 'parents' => true, 'showStory' => true, 'locationLabel' => 'Nişan Yeri', 'countdownLabel' => 'Nişan Günü', 'rsvpIcon' => '💍'],
+        'circumcision' => ['title' => 'Sünnet Davetiyesi', 'slug' => 'Sünnet', 'sub' => 'Bizimle Kutlayın', 'couple' => false, 'parents' => true, 'showStory' => false, 'locationLabel' => 'Etkinlik Yeri', 'countdownLabel' => 'Sünnet Günü', 'rsvpIcon' => '🎊'],
+        'birthday' => ['title' => 'Doğum Günü Davetiyesi', 'slug' => 'Doğum Günü', 'sub' => 'Kutlamaya Davetlisiniz', 'couple' => false, 'parents' => true, 'showStory' => false, 'locationLabel' => 'Parti Yeri', 'countdownLabel' => 'Doğum Günü', 'rsvpIcon' => '🎂'],
+        'corporate' => ['title' => 'Kurumsal Davetiye', 'slug' => 'Kurumsal', 'sub' => 'Davetimize Hoş Geldiniz', 'couple' => false, 'parents' => false, 'showStory' => false, 'locationLabel' => 'Etkinlik Yeri', 'countdownLabel' => 'Etkinlik Günü', 'rsvpIcon' => '📋'],
+    ];
+    $ev = $eventLabels[$eventType] ?? $eventLabels['wedding'];
+@endphp
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@if($ev['couple']){{ $fixName($invitation->groom_name) }} & {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif - {{ $ev['title'] }}</title>
+    <meta property="og:title" content="@if($ev['couple']){{ $fixName($invitation->groom_name) }} & {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif">
+    <meta property="og:description" content="{{ $invitation->welcome_message ? Str::limit(strip_tags($invitation->welcome_message), 200) : $ev['title'] }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    @if($invitation->cover_image)
+        <meta property="og:image" content="{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_image) }}">
+    @endif
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Serif+Display&family=Space+Grotesk:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&family=Anton&family=League+Spartan:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&family=Teko:wght@300;400;500;600;700&family=Allura&family=Parisienne&family=Alex+Brush&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/brittany-signature" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/anydore" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/blacksword" rel="stylesheet">
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: {{ $primaryColor }};
+            --primary-dark: {{ $primaryDark }};
+            --bg: {{ $invitation->secondary_color ?: '#fefcf8' }};
+            --font-body: 'Cormorant Garamond', serif;
+            --font-display: '{{ $invitation->font_family ?: "Playfair Display" }}', serif;
+            --envelope-text: {{ $invitation->envelope_text_color ?: '#333333' }};
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: #2d2a24;
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body { background: #12121a; color: rgba(255,255,255,0.82); }
+            .section { background: transparent !important; }
+            .countdown-item { background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-color: rgba(255,255,255,0.06); }
+            .countdown-number { color: var(--primary); }
+            .parent-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(10px); border-color: rgba(255,255,255,0.06); }
+            .parent-card .name { color: rgba(255,255,255,0.9); }
+            .parent-card .relation { color: rgba(255,255,255,0.5); }
+            .gallery img { box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+            .rsvp-form { background: rgba(255,255,255,0.04); backdrop-filter: blur(16px); border-color: rgba(255,255,255,0.06); }
+            .rsvp-form label { color: rgba(255,255,255,0.6); }
+            .rsvp-form .field-icon { opacity: 0.5; }
+            .rsvp-form input, .rsvp-form select, .rsvp-form textarea { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); }
+            .rsvp-form input::placeholder, .rsvp-form textarea::placeholder { color: rgba(255,255,255,0.2); }
+            .rsvp-form input:focus, .rsvp-form select:focus, .rsvp-form textarea:focus { border-color: var(--primary); background: rgba(255,255,255,0.08); }
+            .rsvp-form .status-options label { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+            .rsvp-form .status-options input[type="radio"]:checked + label { background: color-mix(in srgb, var(--primary) 18%, transparent); }
+            .rsvp-form .guest-count-wrapper { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+            .rsvp-form .guest-count-wrapper input { background: transparent; color: rgba(255,255,255,0.85); }
+            .rsvp-form .guest-btn { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+            .story-text { opacity: 0.6; }
+            .music-label { background: rgba(0,0,0,0.4); color: rgba(255,255,255,0.5); }
+        }
+
+        .primary-color { color: var(--primary); }
+        .bg-primary { background: var(--primary); }
+        .border-primary { border-color: var(--primary); }
+
+        .section { padding: 70px 24px; max-width: 800px; margin: 0 auto; text-align: center; }
+        .section-title { font-family: var(--font-display); font-size: 2.8rem; margin-bottom: 16px; line-height: 1.2; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .section-subtitle { font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; font-weight: 500; }
+        .countdown { display: flex; justify-content: center; gap: 24px; margin: 30px 0; }
+        .countdown-item { text-align: center; min-width: 70px; background: rgba(255,255,255,0.6); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.04); }
+        .countdown-number { font-size: 2.5rem; font-weight: 600; font-family: 'Playfair Display', serif; }
+        .countdown-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; margin-top: 6px; font-family: 'Montserrat', sans-serif; }
+        .divider { width: 60px; height: 2px; margin: 20px auto; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); }
+        .story-text { font-size: 1.05rem; line-height: 1.9; max-width: 560px; margin: 0 auto; opacity: 0.75; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; padding: 20px; }
+        .gallery img { width: 100%; height: 280px; object-fit: cover; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); transition: transform 0.5s ease, box-shadow 0.5s ease; }
+        .gallery img:hover { transform: scale(1.03); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
+        .rsvp-form {
+            max-width: 520px; margin: 0 auto; text-align: left;
+            background: rgba(255,255,255,0.45); backdrop-filter: blur(16px);
+            border-radius: 24px; padding: 40px 36px;
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.04);
+            position: relative; overflow: hidden;
+        }
+        .rsvp-form::before {
+            content: ''; position: absolute; top: -60%; right: -40%;
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%);
+            border-radius: 50%; pointer-events: none;
+        }
+        .rsvp-form .field-group { margin-bottom: 18px; }
+        .rsvp-form label {
+            display: flex; align-items: center; gap: 6px;
+            margin-bottom: 6px; font-weight: 500; font-size: 0.82rem;
+            letter-spacing: 0.5px; color: rgba(0,0,0,0.55);
+            font-family: 'Montserrat', sans-serif;
+        }
+        .rsvp-form .field-icon { font-size: 0.85rem; opacity: 0.7; }
+        .rsvp-form input, .rsvp-form select, .rsvp-form textarea {
+            width: 100%; padding: 13px 16px;
+            border: 1.5px solid rgba(0,0,0,0.06); border-radius: 14px;
+            font-size: 0.95rem; font-family: var(--font-body);
+            background: rgba(255,255,255,0.85);
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            outline: none; color: #2d2a24;
+        }
+        .rsvp-form input:focus, .rsvp-form select:focus, .rsvp-form textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 16%, transparent);
+            background: rgba(255,255,255,0.96);
+        }
+        .rsvp-form input::placeholder, .rsvp-form textarea::placeholder {
+            color: rgba(0,0,0,0.2); font-style: italic;
+        }
+        .rsvp-form select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 14px center;
+            padding-right: 40px; cursor: pointer;
+        }
+        .rsvp-form button {
+            width: 100%; padding: 15px 20px; border: none; border-radius: 14px;
+            font-size: 1rem; cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600; letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; position: relative; overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .rsvp-form button::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.12), transparent);
+            transform: rotate(45deg) translateX(-100%); transition: transform 0.6s;
+        }
+        .rsvp-form button:hover::before { transform: rotate(45deg) translateX(100%); }
+        .rsvp-form button:hover { transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 30%, transparent); }
+        .rsvp-form button:active { transform: translateY(0); }
+        .rsvp-form .status-options {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 18px;
+        }
+        .rsvp-form .status-options input[type="radio"] { display: none; }
+        .rsvp-form .status-options label {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            padding: 12px 8px; border-radius: 14px;
+            border: 1.5px solid rgba(0,0,0,0.06); cursor: pointer;
+            font-size: 0.75rem; font-weight: 500; text-align: center;
+            background: rgba(255,255,255,0.6);
+            transition: all 0.25s; margin: 0;
+        }
+        .rsvp-form .status-options label:hover {
+            border-color: var(--primary); background: color-mix(in srgb, var(--primary) 6%, transparent);
+        }
+        .rsvp-form .status-options input[type="radio"]:checked + label {
+            border-color: var(--primary);
+            background: color-mix(in srgb, var(--primary) 12%, transparent);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 15%, transparent);
+        }
+        .rsvp-form .status-options .status-icon { font-size: 1.3rem; }
+        .rsvp-form .guest-count-wrapper {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.6);
+            border: 1.5px solid rgba(0,0,0,0.06); border-radius: 14px;
+            padding: 4px; margin-bottom: 18px;
+        }
+        .rsvp-form .guest-count-wrapper input {
+            border: none; margin: 0; text-align: center; font-size: 1.2rem;
+            font-weight: 600; padding: 8px 4px; background: transparent;
+            box-shadow: none; flex: 1;
+        }
+        .rsvp-form .guest-count-wrapper input:focus { box-shadow: none; background: transparent; }
+        .rsvp-form .guest-btn {
+            width: 38px; height: 38px; border-radius: 10px; border: none;
+            background: rgba(0,0,0,0.04); cursor: pointer;
+            font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s; flex-shrink: 0;
+            color: rgba(0,0,0,0.4);
+        }
+        .rsvp-form .guest-btn:hover { background: color-mix(in srgb, var(--primary) 15%, transparent); }
+        .rsvp-form .guest-count-label { font-size: 0.75rem; color: rgba(0,0,0,0.35); font-family: 'Montserrat', sans-serif; white-space: nowrap; padding-right: 8px; }
+        .map-container { width: 100%; height: 320px; border-radius: 16px; margin-top: 24px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+        .footer { padding: 50px 24px; text-align: center; position: relative; overflow: hidden; }
+        .footer::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); opacity: 0.9; }
+        .footer > * { position: relative; z-index: 1; }
+        .music-player { position: fixed; bottom: 24px; right: 24px; z-index: 100; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+        .music-btn { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.12); transition: all 0.3s; }
+        .music-btn:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(0,0,0,0.18); }
+        .music-label { font-size: 0.65rem; color: rgba(0,0,0,0.4); letter-spacing: 1px; font-family: 'Montserrat', sans-serif; padding: 4px 12px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: 20px; }
+
+        /* ===== ENVELOPE SCREEN ===== */
+        .envelope-screen {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; overflow: hidden;
+            background: linear-gradient(145deg, var(--primary-dark) 0%, #1a1a2e 40%, #0f3460 100%);
+            transition: background 0.5s;
+        }
+
+        .envelope-screen .particle-bg {
+            position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+        }
+
+        .envelope-screen .sparkle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleFloat 4s ease-in-out infinite;
+        }
+        @keyframes sparkleFloat {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
+            50% { opacity: 0.8; transform: translateY(-30px) scale(1); }
+        }
+
+        .envelope-screen .ring {
+            position: absolute;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 50%;
+            animation: ringExpand 5s ease-out infinite;
+            pointer-events: none;
+        }
+        @keyframes ringExpand {
+            0% { transform: scale(0.3); opacity: 0.5; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .envelope-screen .hint {
+            position: absolute; bottom: 44px;
+            color: rgba(255,255,255,0.3); font-size: 0.8rem;
+            letter-spacing: 3px; animation: hintPulse 2.5s ease-in-out infinite;
+            font-family: 'Montserrat', sans-serif; text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        @keyframes hintPulse {
+            0%, 100% { transform: translateY(0); opacity: 0.2; }
+            50% { transform: translateY(-8px); opacity: 0.6; }
+        }
+
+        .envelope-screen .floating-hearts {
+            position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+        }
+        .envelope-screen .floating-hearts span {
+            position: absolute; font-size: 1.2rem; opacity: 0;
+            animation: heartRise 6s ease-in infinite;
+        }
+        @keyframes heartRise {
+            0% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0.5); }
+            20% { opacity: 0.3; }
+            80% { opacity: 0.3; }
+            100% { opacity: 0; transform: translateY(-100px) rotate(360deg) scale(1); }
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            perspective: 1200px;
+            z-index: 2;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .envelope-wrapper:hover { transform: scale(1.03) translateY(-4px); }
+
+        .envelope {
+            width: 400px; height: 280px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s, opacity 0.8s ease 0.2s;
+            filter: drop-shadow(0 20px 60px rgba(0,0,0,0.15));
+        }
+        .envelope.open {
+            transform: scale(1.7) translateY(-70px) rotateX(8deg);
+            opacity: 0;
+            pointer-events: none;
+            filter: drop-shadow(0 60px 120px rgba(0,0,0,0.25));
+        }
+        .envelope-body {
+            position: absolute; inset: 0;
+            background: linear-gradient(160deg, var(--primary), var(--primary-dark));
+            border-radius: 16px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
+        }
+        .envelope-body::after {
+            content: '';
+            position: absolute; inset: 3px;
+            border-radius: 13px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .envelope-body::before {
+            content: '';
+            position: absolute; inset: 6px;
+            border-radius: 11px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .envelope-flap {
+            position: absolute; top: -78px; left: 0; right: 0;
+            height: 90px;
+            background: linear-gradient(160deg, var(--primary), var(--primary-dark));
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: bottom center;
+            transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s;
+            z-index: 3;
+            filter: brightness(0.88);
+        }
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        .envelope-inner {
+            position: absolute;
+            top: 14px; left: 14px; right: 14px; bottom: 14px;
+            background: linear-gradient(160deg, #fffdf7, #fff);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+            z-index: 1;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .envelope-inner .heart {
+            font-size: 2.8rem;
+            animation: heartBeat 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 2px 8px rgba(255,0,0,0.2));
+            margin-bottom: 4px;
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+        }
+        .envelope-inner .names {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            color: var(--envelope-text);
+            margin: 8px 0 6px;
+            line-height: 1.3;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        .envelope-inner .names .ampersand {
+            font-family: 'Anydore', cursive;
+            font-size: 3.8rem;
+            color: var(--primary);
+            display: inline-block;
+            margin: 0 4px;
+            line-height: 1;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.08));
+        }
+        .envelope-inner .sub {
+            font-size: 0.7rem;
+            color: var(--envelope-text);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-family: 'Montserrat', sans-serif;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+        .envelope-inner .deco-line {
+            width: 50px;
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 8px auto;
+            opacity: 0.5;
+            border-radius: 2px;
+        }
+        .envelope-seal {
+            position: absolute;
+            top: -44px; left: 50%;
+            transform: translateX(-50%);
+            width: 46px; height: 46px;
+            background: linear-gradient(145deg, color-mix(in srgb, var(--primary) 80%, #fff), var(--primary-dark));
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.9);
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .envelope.open .envelope-seal {
+            opacity: 0;
+            transform: translateX(-50%) scale(0) rotate(360deg);
+        }
+
+        .envelope-glow {
+            position: absolute; top: 50%; left: 50%;
+            width: 120px; height: 120px;
+            background: radial-gradient(circle, color-mix(in srgb, var(--primary) 30%, transparent), transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 1.2s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .envelope.open ~ .envelope-glow { transform: translate(-50%, -50%) scale(5); opacity: 0; }
+
+        /* Floating letter */
+        .floating-letter {
+            position: absolute;
+            width: 250px; height: 170px;
+            background: linear-gradient(160deg, #fffdf7, #fff);
+            border-radius: 10px;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.18);
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 24px;
+            opacity: 0;
+            transform: translateY(30px) scale(0.7) rotate(-5deg);
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+            pointer-events: none;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .floating-letter.show {
+            opacity: 1;
+            transform: translateY(-70px) scale(1) rotate(0deg);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+        }
+        .floating-letter .heart-icon { font-size: 1.6rem; margin-bottom: 8px; animation: heartBeat 2s ease-in-out infinite; }
+        .floating-letter .letter-names { font-family: var(--font-display); font-size: 1rem; color: #555; }
+        .floating-letter .letter-names .ampersand { font-family: 'Anydore', cursive; font-size: 1.4rem; color: var(--primary); display: inline-block; line-height: 1; }
+        .floating-letter .letter-sub { font-size: 0.6rem; color: #999; letter-spacing: 3px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; margin-top: 6px; font-weight: 500; }
+        .floating-letter .letter-deco {
+            width: 36px; height: 1.5px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 8px auto;
+            opacity: 0.4;
+        }
+
+        /* Particle burst */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .particle.burst {
+            animation: particleBurst 1.5s ease-out forwards;
+        }
+        @keyframes particleBurst {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+        }
+        .particle.heart-shape {
+            border-radius: 0;
+            clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+        }
+
+        /* Confetti */
+        .confetti-piece {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .confetti-piece.burst {
+            animation: confettiFall 2.5s ease-out forwards;
+        }
+        @keyframes confettiFall {
+            0% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(1080deg) scale(0.2); }
+        }
+
+        .invitation-content {
+            opacity: 0;
+            transition: opacity 1s ease 0.5s;
+        }
+        .invitation-content.visible {
+            opacity: 1;
+        }
+
+        /* Cover */
+        .cover-section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 24px;
+            overflow: hidden;
+        }
+        .cover-section .cover-bg {
+            position: absolute; inset: 0;
+            background: @if($invitation->cover_image) url("{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_image) }}") @else linear-gradient(145deg, #1a1a2e, #0f3460) @endif;
+            background-size: cover;
+            background-position: center;
+            filter: saturate(1.1);
+        }
+        .cover-section .cover-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+        }
+        .cover-section .cover-overlay {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.15) 100%);
+        }
+        .cover-section .cover-particles {
+            position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+        }
+        .cover-section .cover-particle {
+            position: absolute; width: 2px; height: 2px; background: rgba(255,255,255,0.3); border-radius: 50%;
+            animation: coverParticle 6s linear infinite;
+        }
+        @keyframes coverParticle {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(50px); opacity: 0; }
+        }
+        .cover-section .names {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            position: relative;
+            line-height: 1.15;
+            animation: coverFadeUp 1.2s ease-out;
+            z-index: 1;
+        }
+        .cover-section .date {
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.85;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            animation: coverFadeUp 1.2s ease-out 0.2s both;
+            z-index: 1;
+        }
+        .cover-section .ampersand {
+            font-family: 'Anydore', cursive;
+            font-size: 5rem;
+            opacity: 0.4;
+            margin: 0 8px;
+            display: inline-block;
+        }
+        .cover-section .scroll-indicator {
+            position: absolute; bottom: 36px; z-index: 1;
+            color: rgba(255,255,255,0.35); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif; cursor: pointer;
+            animation: coverFadeUp 1.2s ease-out 0.8s both;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            transition: opacity 0.3s;
+        }
+        .cover-section .scroll-indicator .line {
+            width: 1px; height: 30px; background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+        @keyframes scrollLine {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.3; }
+            50% { transform: scaleY(1); opacity: 0.8; }
+        }
+        @keyframes coverFadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Parents section */
+        .parents-grid {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 48px;
+            max-width: 600px; margin: 0 auto;
+        }
+        .parent-card {
+            min-width: 220px;
+            padding: 24px; border-radius: 16px;
+            background: rgba(255,255,255,0.4); backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .parent-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.04); }
+        .parent-card .name {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+        .parent-card .relation {
+            font-size: 0.9rem;
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        /* Scroll progress bar */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 10000;
+            background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 60%, #e05278));
+            transform-origin: left; transform: scaleX(0);
+            transition: transform 0.1s linear;
+        }
+
+        /* Parallax cover */
+        .cover-parallax {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        /* Floating decorative elements */
+        .float-deco {
+            position: fixed; pointer-events: none; z-index: 0;
+            font-size: 1.4rem; opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .float-deco.visible { opacity: 0.12; }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .animate-on-scroll.fade-up {
+            transform: translateY(40px);
+        }
+        .animate-on-scroll.fade-left {
+            transform: translateX(-40px);
+        }
+        .animate-on-scroll.fade-right {
+            transform: translateX(40px);
+        }
+        .animate-on-scroll.zoom-in {
+            transform: scale(0.92);
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        @media (max-width: 768px) {
+            .cover-section .names { font-size: 2.8rem; }
+            .cover-section .ampersand { font-size: 3.5rem; }
+            .section { padding: 50px 20px; }
+            .section-title { font-size: 2.2rem; }
+            .countdown { gap: 12px; flex-wrap: wrap; }
+            .countdown-item { min-width: 60px; padding: 12px 8px; }
+            .countdown-number { font-size: 1.8rem; }
+            .envelope { width: 240px; height: 170px; }
+            .envelope-flap { top: -52px; height: 60px; }
+            .envelope-seal { top: -30px; width: 28px; height: 28px; font-size: 0.6rem; }
+            .envelope-inner .names { font-size: 1.6rem; }
+            .envelope-inner .heart { font-size: 2.2rem; }
+            .envelope.open { transform: scale(1.5) translateY(-50px) rotateX(5deg); }
+            .floating-letter { width: 200px; height: 130px; }
+            .floating-letter .letter-names { font-size: 0.85rem; }
+            .parents-grid { gap: 24px; }
+            .parent-card { min-width: 160px; }
+            .gallery { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+            .gallery img { height: 200px; }
+            .rsvp-form { padding: 24px; }
+        }
+
+        @media (max-width: 420px) {
+            .envelope { width: 200px; height: 145px; }
+            .envelope-flap { top: -44px; height: 50px; }
+            .envelope-seal { top: -26px; width: 24px; height: 24px; font-size: 0.5rem; }
+            .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 14px; }
+            .envelope-inner .heart { font-size: 1.8rem; }
+            .envelope-inner .names { font-size: 1.6rem; }
+            .envelope-inner .sub { font-size: 0.55rem; }
+            .envelope.open { transform: scale(1.3) translateY(-40px) rotateX(4deg); }
+            .floating-letter { width: 170px; height: 110px; padding: 14px; }
+            .floating-letter.show { transform: translateY(-40px) scale(1) rotate(0deg); }
+        }
+
+        /* ===== ENVELOPE PATTERNS (body + flap) ===== */
+        .envelope-body.pattern-lace,
+        .envelope-flap.pattern-lace {
+            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 8px),
+                              repeating-linear-gradient(-45deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 8px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+        }
+        .envelope-body.pattern-lace::after,
+        .envelope-body.pattern-floral::after,
+        .envelope-body.pattern-geometric::after,
+        .envelope-body.pattern-stars::after,
+        .envelope-body.pattern-damask::after,
+        .envelope-body.pattern-minimal::after,
+        .envelope-body.pattern-leaf::after,
+        .envelope-body.pattern-vine::after,
+        .envelope-body.pattern-blossom::after,
+        .envelope-body.pattern-botanic::after,
+        .envelope-body.pattern-fern::after,
+        .envelope-body.pattern-petal::after {
+            display: none;
+        }
+        .envelope-body.pattern-floral,
+        .envelope-flap.pattern-floral {
+            background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.35) 3px, transparent 3px),
+                              radial-gradient(circle at 80% 70%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.35) 3px, transparent 3px),
+                              radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.18) 5px, transparent 5px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+            background-size: 40px 40px, 40px 40px, 60px 60px, auto;
+        }
+        .envelope-body.pattern-geometric,
+        .envelope-flap.pattern-geometric {
+            background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 22px),
+                              repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 22px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+            background-size: 24px 24px, 24px 24px, auto;
+        }
+        .envelope-body.pattern-stars,
+        .envelope-flap.pattern-stars {
+            background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.4) 3px, transparent 3px),
+                              radial-gradient(circle at 85% 25%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.3) 2px, transparent 2px),
+                              radial-gradient(circle at 45% 75%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.35) 3px, transparent 3px),
+                              radial-gradient(circle at 70% 60%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.28) 2px, transparent 2px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+            background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, auto;
+        }
+        .envelope-body.pattern-hearts,
+        .envelope-flap.pattern-hearts {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='rgba(255,255,255,0.3)' d='M20 36.7l-2.4-2.2C9 26.3 3.3 21.2 3.3 14.8c0-5 4-9 9-9 2.9 0 5.7 1.4 7.7 3.5 2-2.1 4.8-3.5 7.7-3.5 5 0 9 4 9 9 0 6.4-5.7 11.5-14.3 19.7L20 36.7z'/%3E%3C/svg%3E"),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+            background-size: 36px 36px, auto;
+        }
+        .envelope-body.pattern-hearts::after {
+            display: none;
+        }
+        .envelope-body.pattern-damask,
+        .envelope-flap.pattern-damask {
+            background-image: repeating-conic-gradient(rgba(255,255,255,0.28) 0% 25%, transparent 0% 50%),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+            background-size: 28px 28px, auto;
+        }
+        .envelope-body.pattern-minimal,
+        .envelope-flap.pattern-minimal {
+            background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 18px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+            background-size: 20px 100%, auto;
+        }
+        .envelope-body.pattern-leaf,
+        .envelope-flap.pattern-leaf {
+            background-image: repeating-linear-gradient(12deg, transparent 0px, transparent 14px, rgba(255,255,255,0.28) 14px, rgba(255,255,255,0.28) 16px, transparent 16px, transparent 30px),
+                              linear-gradient(90deg, transparent 46%, rgba(255,255,255,0.32) 46%, rgba(255,255,255,0.32) 54%, transparent 54%),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+        }
+        .envelope-body.pattern-vine,
+        .envelope-flap.pattern-vine {
+            background-image: repeating-linear-gradient(50deg, transparent 0px, transparent 24px, rgba(255,255,255,0.25) 24px, rgba(255,255,255,0.25) 27px, transparent 27px, transparent 48px),
+                              repeating-linear-gradient(-50deg, transparent 0px, transparent 14px, rgba(255,255,255,0.18) 14px, rgba(255,255,255,0.18) 16px, transparent 16px, transparent 40px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+        }
+        .envelope-body.pattern-blossom,
+        .envelope-flap.pattern-blossom {
+            background-image: radial-gradient(circle at 15% 25%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.32) 3px, transparent 3px),
+                              radial-gradient(circle at 10% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              radial-gradient(circle at 20% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              radial-gradient(circle at 15% 34%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              radial-gradient(circle at 45% 65%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.32) 3px, transparent 3px),
+                              radial-gradient(circle at 40% 70%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              radial-gradient(circle at 50% 70%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              radial-gradient(circle at 45% 74%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              radial-gradient(circle at 75% 25%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.32) 3px, transparent 3px),
+                              radial-gradient(circle at 70% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              radial-gradient(circle at 80% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              radial-gradient(circle at 75% 34%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+        }
+        .envelope-body.pattern-botanic,
+        .envelope-flap.pattern-botanic {
+            background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.2) 0px, rgba(255,255,255,0.2) 1px, transparent 1px, transparent 10px),
+                              repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0px, rgba(255,255,255,0.2) 1px, transparent 1px, transparent 10px),
+                              radial-gradient(circle at 25% 25%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 1.5px, transparent 1.5px),
+                              radial-gradient(circle at 75% 75%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 1.5px, transparent 1.5px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+        }
+        .envelope-body.pattern-fern,
+        .envelope-flap.pattern-fern {
+            background-image: repeating-linear-gradient(30deg, rgba(255,255,255,0.25) 0px, rgba(255,255,255,0.25) 2px, transparent 2px, transparent 20px),
+                              repeating-linear-gradient(-30deg, rgba(255,255,255,0.18) 0px, rgba(255,255,255,0.18) 1.5px, transparent 1.5px, transparent 20px),
+                              linear-gradient(90deg, transparent 46%, rgba(255,255,255,0.28) 46%, rgba(255,255,255,0.28) 54%, transparent 54%),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+        }
+        .envelope-body.pattern-petal,
+        .envelope-flap.pattern-petal {
+            background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 7px, transparent 7px),
+                              radial-gradient(circle at 50% 20%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.18) 6px, transparent 6px),
+                              radial-gradient(circle at 80% 20%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 7px, transparent 7px),
+                              radial-gradient(circle at 35% 50%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.18) 6px, transparent 6px),
+                              radial-gradient(circle at 65% 50%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.18) 6px, transparent 6px),
+                              radial-gradient(circle at 20% 80%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 7px, transparent 7px),
+                              radial-gradient(circle at 50% 80%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.18) 6px, transparent 6px),
+                              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 7px, transparent 7px),
+                              linear-gradient(160deg, var(--primary), var(--primary-dark));
+            background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 60px 60px, 60px 60px, 60px 60px, 60px 60px, auto;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div id="floatDecos"></div>
+    @php
+        $showMusic = $invitation->music->isNotEmpty();
+        $musicFile = $invitation->music->first();
+        $musicIsEmbed = $musicFile && $musicFile->embed_url && !$musicFile->file_path;
+        $ytVideoId = '';
+        if ($musicIsEmbed) {
+            $url = $musicFile->embed_url;
+            if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $m)) {
+                $ytVideoId = $m[1];
+            }
+        }
+        $envelopeAnim = $invitation->envelope_animation ?: 'classic';
+        $envelopePattern = $invitation->envelope_pattern ?: '';
+        $customPatternUrl = $invitation->custom_pattern ? \Illuminate\Support\Facades\Storage::url($invitation->custom_pattern) : '';
+    @endphp
+
+    <div class="envelope-screen" id="envelopeScreen" onclick="openEnvelope()">
+        <div class="particle-bg" id="envBgParticles"></div>
+        <div class="floating-hearts" id="floatingHearts"></div>
+        <div class="envelope-wrapper">
+            <div class="envelope" id="envelope">
+                <div class="envelope-body @if($envelopePattern) pattern-{{ $envelopePattern }} @endif"></div>
+                <div class="envelope-flap @if($envelopePattern) pattern-{{ $envelopePattern }} @endif"></div>
+                <div class="envelope-seal">♥</div>
+                    <div class="envelope-inner" @if($customPatternUrl) style="background-image: linear-gradient(160deg, rgba(255,253,247,0.75), rgba(255,255,255,0.75)), url('{{ $customPatternUrl }}'); background-size: auto, cover; background-position: 0% 0%, center;" @endif>
+                        <div class="heart">💖</div>
+                        <div class="names">@if($ev['couple']){{ $fixName($invitation->groom_name) }} <span class="ampersand">&</span> {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif</div>
+                        <div class="sub">{{ $ev['title'] }}</div>
+                    </div>
+            </div>
+            <div class="envelope-glow"></div>
+            <div class="floating-letter" id="floatingLetter">
+                <div class="heart-icon">💕</div>
+                <div class="letter-names">@if($ev['couple']){{ $fixName($invitation->groom_name) }}<br><span class="ampersand">&</span><br>{{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif</div>
+                <div class="letter-sub">{{ $ev['sub'] }}</div>
+            </div>
+        </div>
+        <div class="hint">✨ Dokunarak Aç ✨</div>
+    </div>
+
+    <div class="invitation-content" id="invitationContent">
+        <div class="cover-section">
+            <div class="cover-bg"></div>
+            <div class="cover-overlay"></div>
+            <div class="cover-particles" id="coverParticles"></div>
+            <div class="names">
+                @if($ev['couple'])
+                    {{ $fixName($invitation->groom_name) }}
+                    <span class="ampersand">&</span>
+                    {{ $fixName($invitation->bride_name) }}
+                @else
+                    {{ $fixName($invitation->groom_name) }}
+                @endif
+            </div>
+            <div class="date">
+                @if($invitation->event_date){{ $invitation->event_date->format('d.m.Y') }}@endif
+                @if($invitation->event_time) / {{ $invitation->event_time }}@endif
+            </div>
+            <div class="scroll-indicator" onclick="document.querySelector('.animate-on-scroll').scrollIntoView({behavior:'smooth'})">
+                <span>{{ $fixText('Kaydır') }}</span>
+                <div class="line"></div>
+            </div>
+        </div>
+
+        @if($invitation->welcome_message)
+            <div class="section animate-on-scroll">
+                <div class="section-subtitle">Hoş Geldiniz</div>
+                <div class="section-title">Davetimize</div>
+                <div class="divider"></div>
+                <p class="story-text">{{ $invitation->welcome_message }}</p>
+            </div>
+        @endif
+
+        @if($invitation->groom_father || $invitation->groom_mother || $invitation->bride_father || $invitation->bride_mother)
+            <div class="section animate-on-scroll fade-left" style="background: rgba(0,0,0,0.015);">
+                <div class="section-subtitle">Ailelerimiz</div>
+                <div class="section-title">@if($ev['couple'])Aile Büyüklerimiz @else Ailemiz @endif</div>
+                <div class="divider"></div>
+                <div class="parents-grid">
+                    <div class="parent-card">
+                        <div class="name">{{ $fixName($invitation->groom_name) }}</div>
+                        @if($ev['couple'])
+                            @if($invitation->groom_father && $invitation->groom_mother)
+                                <div class="relation">{{ $fixName($invitation->groom_father)}} & {{ $fixName($invitation->groom_mother) }}'nın oğlu</div>
+                            @elseif($invitation->groom_father)
+                                <div class="relation">{{ $fixName($invitation->groom_father) }}'ın oğlu</div>
+                            @elseif($invitation->groom_mother)
+                                <div class="relation">{{ $fixName($invitation->groom_mother) }}'nın oğlu</div>
+                            @endif
+                        @else
+                            @if($invitation->groom_father && $invitation->groom_mother)
+                                <div class="relation">{{ $fixName($invitation->groom_father)}} & {{ $fixName($invitation->groom_mother) }}'nın oğlu/kızı</div>
+                            @elseif($invitation->groom_father)
+                                <div class="relation">{{ $fixName($invitation->groom_father) }}'ın oğlu/kızı</div>
+                            @elseif($invitation->groom_mother)
+                                <div class="relation">{{ $fixName($invitation->groom_mother) }}'nın oğlu/kızı</div>
+                            @endif
+                        @endif
+                    </div>
+                    @if($ev['couple'])
+                    <div class="parent-card">
+                        <div class="name">{{ $fixName($invitation->bride_name) }}</div>
+                        @if($invitation->bride_father && $invitation->bride_mother)
+                            <div class="relation">{{ $fixName($invitation->bride_father) }} & {{ $fixName($invitation->bride_mother) }}'nın kızı</div>
+                        @elseif($invitation->bride_father)
+                            <div class="relation">{{ $fixName($invitation->bride_father) }}'ın kızı</div>
+                        @elseif($invitation->bride_mother)
+                            <div class="relation">{{ $fixName($invitation->bride_mother) }}'nın kızı</div>
+                        @endif
+                    </div>
+                    @endif
+                </div>
+            </div>
+        @endif
+
+        <div class="section animate-on-scroll zoom-in" style="background: rgba(0,0,0,0.015);">
+            <div class="section-subtitle">{{ $ev['countdownLabel'] }}</div>
+            <div class="section-title">Kalan Süre</div>
+            <div class="divider"></div>
+            <div id="countdown" class="countdown">
+                <div class="countdown-item"><div class="countdown-number" id="days">00</div><div class="countdown-label">Gün</div></div>
+                <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Saat</div></div>
+                <div class="countdown-item"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Dakika</div></div>
+                <div class="countdown-item"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Saniye</div></div>
+            </div>
+        </div>
+
+        @if($ev['showStory'] && $invitation->story)
+            <div class="section animate-on-scroll">
+                <div class="section-subtitle">Hikayemiz</div>
+                <div class="section-title">{{ $fixText('Nasıl Başladı') }}</div>
+                <div class="divider"></div>
+                <p class="story-text">{{ $invitation->story }}</p>
+            </div>
+        @endif
+
+        @if($invitation->images->count() > 0)
+            <div class="section animate-on-scroll fade-right" style="background: rgba(0,0,0,0.015);">
+                <div class="section-subtitle">Galeri</div>
+                <div class="section-title">{{ $fixText('Anılarımız') }}</div>
+                <div class="divider"></div>
+                <div class="gallery">
+                    @foreach($invitation->images as $image)
+                        <img src="{{ \Illuminate\Support\Facades\Storage::url($image->image_path) }}" alt="{{ $image->caption ?? '' }}" loading="lazy">
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        @if($invitation->videos->count() > 0)
+            <div class="section animate-on-scroll">
+                <div class="section-subtitle">Videolar</div>
+                <div class="section-title">Özel Anlar</div>
+                <div class="divider"></div>
+                <div class="gallery">
+                    @foreach($invitation->videos as $video)
+                        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.06);">
+                            <iframe src="{{ $video->url }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        @if($invitation->event_address || $invitation->event_location)
+            <div class="section animate-on-scroll fade-left" style="background: rgba(0,0,0,0.015);">
+                <div class="section-subtitle">Konum</div>
+                <div class="section-title">{{ $ev['locationLabel'] }}</div>
+                <div class="divider"></div>
+                @if($invitation->event_address)<p style="margin-bottom:8px;opacity:0.7;">{{ $invitation->event_address }}</p>@endif
+                @if($invitation->event_lat && $invitation->event_lng)
+                    <div class="map-container">
+                        <iframe width="100%" height="100%" style="border:0;" loading="lazy"
+                            src="https://www.google.com/maps?q={{ $invitation->event_lat }},{{ $invitation->event_lng }}&output=embed">
+                        </iframe>
+                    </div>
+                @endif
+            </div>
+        @endif
+
+        @if($invitation->special_note)
+            <div class="section animate-on-scroll">
+                <div class="section-subtitle">Not</div>
+                <div class="section-title">Özel Bir Not</div>
+                <div class="divider"></div>
+                <p class="story-text">{{ $invitation->special_note }}</p>
+            </div>
+        @endif
+
+        <div class="section animate-on-scroll zoom-in" style="background: rgba(0,0,0,0.015);">
+            <div class="section-subtitle">Katılım</div>
+            <div class="section-title">RSVP</div>
+            <div class="divider"></div>
+            <div class="rsvp-form">
+                <form id="rsvpForm" action="{{ route('invitation.rsvp', $invitation->slug) }}" method="POST">
+                    @csrf
+                    <div class="field-group">
+                        <label><span class="field-icon">👤</span> Ad Soyad <span style="color:var(--primary)">*</span></label>
+                        <input type="text" name="name" required placeholder="Adın ve soyadın">
+                    </div>
+                    <div class="field-group">
+                        <label><span class="field-icon">📧</span> E-posta</label>
+                        <input type="email" name="email" placeholder="ornek@email.com">
+                    </div>
+                    <div class="field-group">
+                        <label><span class="field-icon">📞</span> Telefon</label>
+                        <input type="tel" name="phone" placeholder="05XX XXX XX XX">
+                    </div>
+                    <div class="field-group">
+                        <label><span class="field-icon">{{ $ev['rsvpIcon'] }}</span> Katılım Durumu <span style="color:var(--primary)">*</span></label>
+                        <div class="status-options">
+                            <input type="radio" name="status" value="attending" id="rsvpAttending" checked>
+                            <label for="rsvpAttending">
+                                <span class="status-icon">🎉</span>
+                                Katılıyorum
+                            </label>
+                            <input type="radio" name="status" value="maybe" id="rsvpMaybe">
+                            <label for="rsvpMaybe">
+                                <span class="status-icon">🤔</span>
+                                Belki
+                            </label>
+                            <input type="radio" name="status" value="not_attending" id="rsvpNotAttending">
+                            <label for="rsvpNotAttending">
+                                <span class="status-icon">😔</span>
+                                Katılamam
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label><span class="field-icon">👥</span> Kişi Sayısı <span style="color:var(--primary)">*</span></label>
+                        <div class="guest-count-wrapper">
+                            <button type="button" class="guest-btn" onclick="var i=this.parentElement.querySelector('input');if(parseInt(i.value)>1)i.value=parseInt(i.value)-1">−</button>
+                            <input type="number" name="guest_count" value="1" min="1" max="10" required readonly onfocus="this.blur()">
+                            <button type="button" class="guest-btn" onclick="var i=this.parentElement.querySelector('input');if(parseInt(i.value)<10)i.value=parseInt(i.value)+1">+</button>
+                            <span class="guest-count-label">kişi</span>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label><span class="field-icon">💬</span> Mesaj</label>
+                        <textarea name="message" rows="3" placeholder="Bir not bırakmak ister misin?"></textarea>
+                    </div>
+                    <button type="submit">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+                        Gönder
+                    </button>
+                </form>
+                <div id="rsvpSuccess" style="display:none;text-align:center;padding:40px 20px;">
+                    <div style="font-size:3.5rem;margin-bottom:16px;animation:heartBeat 1.8s ease-in-out infinite;">💌</div>
+                    <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--primary);margin-bottom:8px;">Teşekkür Ederiz!</div>
+                    <div style="width:40px;height:2px;margin:12px auto;border-radius:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);"></div>
+                    <p style="opacity:0.5;font-size:0.9rem;">Katılım durumunuz başarıyla kaydedildi.</p>
+                    <p style="opacity:0.35;font-size:0.75rem;margin-top:16px;font-family:'Montserrat',sans-serif;">Sizi aramızda görmekten mutluluk duyacağız 🎊</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p style="font-family: var(--font-display); font-size: 1.6rem; color: white;">{{ $fixName($invitation->groom_name) }} & {{ $fixName($invitation->bride_name) }}</p>
+            <p style="margin-top: 12px; font-size: 0.85rem; opacity: 0.7; color: white; font-family: 'Montserrat', sans-serif; letter-spacing: 1px;">
+                @if($invitation->event_date){{ $invitation->event_date->format('d.m.Y') }}@endif
+                @if($invitation->event_time) / {{ $invitation->event_time }}@endif
+            </p>
+
+        </div>
+
+        @if($showMusic && $musicFile)
+            @if($musicIsEmbed && $ytVideoId)
+                <div class="music-player">
+                    <div class="music-label" id="musicLabel">🎵 Düğün Şarkısı</div>
+                    <button id="musicBtn" class="music-btn" style="background:linear-gradient(135deg, {{ $invitation->primary_color ?: '#d4af37' }}, {{ $invitation->primary_color ?: '#b8952e' }}); color:white;" onclick="toggleMusic()">
+                        <svg id="musicIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                        </svg>
+                    </button>
+                    <iframe id="bgMusicEmbed" src="https://www.youtube.com/embed/{{ $ytVideoId }}?enablejsapi=1&autoplay=0" style="display:none;" allow="autoplay; encrypted-media"></iframe>
+                </div>
+            @elseif($musicFile->file_path)
+                <div class="music-player">
+                    <div class="music-label" id="musicLabel">🎵 Düğün Şarkısı</div>
+                    <button id="musicBtn" class="music-btn" style="background:linear-gradient(135deg, {{ $invitation->primary_color ?: '#d4af37' }}, {{ $invitation->primary_color ?: '#b8952e' }}); color:white;" onclick="toggleMusic()">
+                        <svg id="musicIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                        </svg>
+                    </button>
+                    <audio id="bgMusic" src="{{ \Illuminate\Support\Facades\Storage::url($musicFile->file_path) }}" loop preload="auto"></audio>
+                </div>
+            @endif
+        @endif
+    </div>
+
+    <script>
+        var invContent = document.getElementById('invitationContent');
+        var envelopeOpened = false;
+
+        function openEnvelope() {
+            if (envelopeOpened) return;
+            envelopeOpened = true;
+
+            var envelope = document.getElementById('envelope');
+            var screen = document.getElementById('envelopeScreen');
+            var letter = document.getElementById('floatingLetter');
+
+            envelope.classList.add('open');
+            letter.classList.add('show');
+
+            createParticles(screen);
+            createConfetti(screen);
+
+            @if($showMusic && $musicFile)
+            setTimeout(function() {
+                startMusic();
+            }, 300);
+            @endif
+
+            setTimeout(function() {
+                screen.style.display = 'none';
+                invContent.classList.add('visible');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                window.dispatchEvent(new Event('scroll'));
+                initScrollAnimation();
+                initCoverParticles();
+            }, 1200);
+        }
+
+        @if($showMusic && $musicFile)
+        @if($musicIsEmbed && $ytVideoId)
+        var isPlaying = false;
+        var embedIframe = document.getElementById('bgMusicEmbed');
+
+        function startMusic() {
+            embedIframe.src = embedIframe.src.replace('autoplay=0', 'autoplay=1');
+            isPlaying = true;
+            updateMusicIcon();
+        }
+
+        function toggleMusic() {
+            if (!embedIframe) return;
+            if (isPlaying) {
+                embedIframe.src = embedIframe.src.replace('autoplay=1', 'autoplay=0');
+            } else {
+                embedIframe.src = embedIframe.src.replace('autoplay=0', 'autoplay=1');
+            }
+            isPlaying = !isPlaying;
+            updateMusicIcon();
+        }
+
+        function updateMusicIcon() {
+            var icon = document.getElementById('musicIcon');
+            var label = document.getElementById('musicLabel');
+            if (isPlaying) {
+                icon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
+                if (label) label.textContent = '🔊 Çalıyor';
+            } else {
+                icon.innerHTML = '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>';
+                if (label) label.textContent = '🎵 Düğün Şarkısı';
+            }
+        }
+        @elseif($musicFile->file_path)
+        var isPlaying = false;
+        var audio = document.getElementById('bgMusic');
+
+        function startMusic() {
+            audio.play().then(function() {
+                isPlaying = true;
+                updateMusicIcon();
+            }).catch(function() {});
+        }
+
+        function toggleMusic() {
+            if (!audio) return;
+            if (isPlaying) {
+                audio.pause();
+            } else {
+                audio.play().catch(function() {});
+            }
+            isPlaying = !isPlaying;
+            updateMusicIcon();
+        }
+
+        function updateMusicIcon() {
+            var icon = document.getElementById('musicIcon');
+            var label = document.getElementById('musicLabel');
+            if (isPlaying) {
+                icon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
+                if (label) label.textContent = '🔊 Çalıyor';
+            } else {
+                icon.innerHTML = '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>';
+                if (label) label.textContent = '🎵 Düğün Şarkısı';
+            }
+        }
+        @endif
+        @endif
+
+        function createParticles(container) {
+            var colors = ['#ffd700', '#ff6b6b', '#ff9ff3', '#feca57', '#48dbfb', '#ff9f43', '#a29bfe', '#54a0ff', '#5f27cd', '#ff4757', '#ff6348'];
+            var rect = container.getBoundingClientRect();
+            var cx = rect.width / 2;
+            var cy = rect.height / 2;
+            var count = 60;
+
+            for (var i = 0; i < count; i++) {
+                var p = document.createElement('div');
+                p.className = 'particle';
+                var size = 2 + Math.random() * 6;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                p.style.left = (cx + (Math.random() - 0.5) * 60) + 'px';
+                p.style.top = (cy + (Math.random() - 0.5) * 60) + 'px';
+                var angle = Math.random() * Math.PI * 2;
+                var dist = 60 + Math.random() * 280;
+                p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                p.style.animationDelay = (Math.random() * 0.4) + 's';
+                p.style.animationDuration = (1 + Math.random() * 0.8) + 's';
+                if (Math.random() > 0.7) {
+                    p.style.borderRadius = '2px';
+                    p.style.width = size * 1.5 + 'px';
+                    p.style.height = size * 0.6 + 'px';
+                }
+                container.appendChild(p);
+                requestAnimationFrame(function() { p.classList.add('burst'); });
+            }
+
+            for (var i = 0; i < 8; i++) {
+                var h = document.createElement('div');
+                h.className = 'particle';
+                h.textContent = '❤️';
+                h.style.fontSize = (12 + Math.random() * 16) + 'px';
+                h.style.background = 'none';
+                h.style.width = 'auto';
+                h.style.height = 'auto';
+                h.style.left = (cx + (Math.random() - 0.5) * 100) + 'px';
+                h.style.top = (cy + (Math.random() - 0.5) * 80) + 'px';
+                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.6;
+                var dist = 120 + Math.random() * 250;
+                h.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                h.style.setProperty('--ty', Math.sin(angle) * dist - 80 + 'px');
+                h.style.animationDelay = (Math.random() * 0.5) + 's';
+                h.style.animationDuration = (1.5 + Math.random() * 1) + 's';
+                container.appendChild(h);
+                requestAnimationFrame(function() { h.classList.add('burst'); });
+            }
+
+            setTimeout(function() {
+                container.querySelectorAll('.particle').forEach(function(el) { el.remove(); });
+            }, 3000);
+        }
+
+        function createConfetti(container) {
+            var colors = ['#ffd700', '#ff6b6b', '#ff9ff3', '#feca57', '#48dbfb', '#ff9f43', '#a29bfe', '#54a0ff', '#5f27cd', '#ff4757', '#2ed573', '#1e90ff'];
+            var rect = container.getBoundingClientRect();
+            var cx = rect.width / 2;
+
+            for (var i = 0; i < 70; i++) {
+                var c = document.createElement('div');
+                c.className = 'confetti-piece';
+                c.style.background = colors[Math.floor(Math.random() * colors.length)];
+                var w = 4 + Math.random() * 8;
+                var h = 4 + Math.random() * 8;
+                c.style.width = w + 'px';
+                c.style.height = h + 'px';
+                c.style.left = (cx + (Math.random() - 0.5) * 160) + 'px';
+                c.style.top = (rect.height / 2 + (Math.random() - 0.5) * 120) + 'px';
+                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.9;
+                var dist = 80 + Math.random() * 350;
+                c.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                c.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                c.style.animationDelay = (Math.random() * 0.6) + 's';
+                c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                if (Math.random() > 0.6) {
+                    c.style.width = h * 2 + 'px';
+                    c.style.height = h + 'px';
+                    c.style.borderRadius = '0';
+                }
+                container.appendChild(c);
+                requestAnimationFrame(function() { c.classList.add('burst'); });
+            }
+
+            setTimeout(function() {
+                container.querySelectorAll('.confetti-piece').forEach(function(el) { el.remove(); });
+            }, 4000);
+        }
+
+        function initCoverParticles() {
+            var container = document.getElementById('coverParticles');
+            if (!container) return;
+            for (var i = 0; i < 30; i++) {
+                var p = document.createElement('div');
+                p.className = 'cover-particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 6 + 's';
+                p.style.animationDuration = (5 + Math.random() * 4) + 's';
+                p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+                container.appendChild(p);
+            }
+        }
+
+        function initScrollAnimation() {
+            var els = document.querySelectorAll('.animate-on-scroll');
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+            els.forEach(function(el) { observer.observe(el); });
+        }
+
+        // Scroll progress + parallax + floating decos
+        var progressBar = document.getElementById('scrollProgress');
+        var coverBg = document.querySelector('.cover-bg');
+        var floatContainer = document.getElementById('floatDecos');
+        var decoEmojis = ['🌸', '✨', '🕊️', '💫', '🌿', '✨'];
+
+        for (var i = 0; i < 6; i++) {
+            var d = document.createElement('div');
+            d.className = 'float-deco';
+            d.textContent = decoEmojis[i];
+            d.style.left = (10 + Math.random() * 80) + '%';
+            d.style.top = (Math.random() * 100) + '%';
+            d.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+            d.style.animationDelay = (i * 1.5) + 's';
+            d.dataset.speed = 0.03 + Math.random() * 0.04;
+            d.dataset.offsetY = Math.random() * 100;
+            floatContainer.appendChild(d);
+        }
+
+        window.addEventListener('scroll', function() {
+            var scrollTop = window.scrollY;
+            var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            var progress = docHeight > 0 ? scrollTop / docHeight : 0;
+            progressBar.style.transform = 'scaleX(' + Math.min(progress, 1) + ')';
+
+            if (coverBg) {
+                coverBg.style.transform = 'translateY(' + (scrollTop * 0.15) + 'px)';
+            }
+
+            var decos = floatContainer.querySelectorAll('.float-deco');
+            decos.forEach(function(d) {
+                var speed = parseFloat(d.dataset.speed);
+                var offset = parseFloat(d.dataset.offsetY);
+                var top = (offset + scrollTop * speed) % 100;
+                d.style.top = top + '%';
+                if (top > 5 && top < 95) {
+                    d.classList.add('visible');
+                } else {
+                    d.classList.remove('visible');
+                }
+            });
+        });
+
+        // Floating hearts on envelope screen
+        (function() {
+            var container = document.getElementById('floatingHearts');
+            var symbols = ['♥', '♡', '❤', '💕', '💗'];
+            for (var i = 0; i < 12; i++) {
+                var h = document.createElement('span');
+                h.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                h.style.left = Math.random() * 100 + '%';
+                h.style.fontSize = (10 + Math.random() * 18) + 'px';
+                h.style.animationDelay = Math.random() * 6 + 's';
+                h.style.animationDuration = (5 + Math.random() * 4) + 's';
+                container.appendChild(h);
+            }
+        })();
+
+        // Envelope screen sparkles and rings
+        (function() {
+            var sc = document.getElementById('envelopeScreen');
+            for (var i = 0; i < 40; i++) {
+                var s = document.createElement('div');
+                s.className = 'sparkle';
+                var size = 1 + Math.random() * 3;
+                s.style.width = size + 'px';
+                s.style.height = size + 'px';
+                s.style.left = Math.random() * 100 + '%';
+                s.style.top = Math.random() * 100 + '%';
+                s.style.animationDelay = Math.random() * 5 + 's';
+                s.style.animationDuration = (2 + Math.random() * 4) + 's';
+                sc.appendChild(s);
+            }
+            for (var i = 0; i < 3; i++) {
+                var r = document.createElement('div');
+                r.className = 'ring';
+                var s = 100 + i * 100;
+                r.style.width = s + 'px'; r.style.height = s + 'px';
+                r.style.left = '50%'; r.style.top = '50%';
+                r.style.marginLeft = -(s/2) + 'px';
+                r.style.marginTop = -(s/2) + 'px';
+                r.style.animationDelay = (i * 1.5) + 's';
+                sc.appendChild(r);
+            }
+        })();
+
+        @if($invitation->event_date)
+        (function() {
+            var target = new Date("{{ $invitation->event_date->format('Y-m-d') }}T{{ $invitation->event_time ?: '00:00' }}").getTime();
+            function update() {
+                var now = new Date().getTime();
+                var diff = target - now;
+                if (diff <= 0) { document.getElementById('countdown').innerHTML = '<p style="font-family:var(--font-display);font-size:1.5rem;color:var(--primary);">Etkinlik günü! 🎉</p>'; return; }
+                document.getElementById('days').textContent = Math.floor(diff / (1000*60*60*24)).toString().padStart(2,'0');
+                document.getElementById('hours').textContent = Math.floor((diff%(1000*60*60*24))/(1000*60*60)).toString().padStart(2,'0');
+                document.getElementById('minutes').textContent = Math.floor((diff%(1000*60*60))/(1000*60)).toString().padStart(2,'0');
+                document.getElementById('seconds').textContent = Math.floor((diff%(1000*60))/1000).toString().padStart(2,'0');
+            }
+            update(); setInterval(update, 1000);
+        })();
+        @endif
+
+        document.getElementById('rsvpForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            var formData = new FormData(form);
+            fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    if (d.success) {
+                        form.style.display = 'none';
+                        document.getElementById('rsvpSuccess').style.display = 'block';
+                    }
+                })
+                .catch(function() { form.submit(); });
+        });
+    </script>
+</body>
+</html>

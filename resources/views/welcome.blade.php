@@ -70,33 +70,34 @@
 
         .hamburger {
             display: none; flex-direction: column; gap: 5px;
-            background: none; border: none; cursor: pointer;
-            padding: 6px; z-index: 102;
+            background: none; border: none; cursor: pointer; z-index: 1000;
+            padding: 8px; position: relative;
         }
         .hamburger span {
-            display: block; width: 24px; height: 2px;
-            background: #0f1119; border-radius: 2px;
+            display: block; width: 24px; height: 2.5px;
+            background: #0f1119; border-radius: 3px;
             transition: all 0.3s;
         }
-        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
         .mobile-menu {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 24px; z-index: 101; padding: 80px 20px 40px;
-            overflow-y: auto;
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.98);
+            flex-direction: column; align-items: center; justify-content: center;
+            gap: 28px; z-index: 999; padding: 80px 24px;
         }
-        .mobile-menu .mobile-link {
-            font-size: 1.1rem; font-weight: 600; color: #464e62;
-            text-decoration: none; padding: 8px 0; transition: color 0.3s;
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            font-size: 1.15rem; font-weight: 600; color: #464e62;
+            text-decoration: none; padding: 10px 0; transition: color 0.3s;
         }
-        .mobile-menu .mobile-link:hover { color: var(--site-primary); }
+        .mobile-menu a:hover { color: var(--site-primary); }
         .mobile-menu .mobile-btn {
-            padding: 12px 36px; border-radius: 14px; font-size: 1rem; font-weight: 700; text-decoration: none;
-            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: white;
+            padding: 14px 40px; border-radius: 14px; font-size: 1.05rem; font-weight: 700;
+            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: #fff;
             box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.25);
         }
 
@@ -542,14 +543,13 @@
             .navbar { padding: 12px 16px; }
             .hamburger { display: flex; }
             .navbar .nav-links { display: none; }
-            [x-cloak] { display: none !important; }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar" id="navbar" x-data="{ mobileOpen: false }">
+    <nav class="navbar" id="navbar">
         <a href="/" class="logo"><span class="mark">s</span> senin 💝 davetiyen</a>
-        <button @click="mobileOpen = !mobileOpen" class="hamburger" :class="{ 'active': mobileOpen }" aria-label="Menü">
+        <button class="hamburger" id="hamburger" aria-label="Menü">
             <span></span><span></span><span></span>
         </button>
         <div class="nav-links">
@@ -566,21 +566,45 @@
                 @endauth
             @endif
         </div>
-        <div class="mobile-menu" x-show="mobileOpen" x-cloak @click.outside="mobileOpen = false">
-            <a href="#how" class="mobile-link" @click="mobileOpen = false">Nasıl Çalışır?</a>
-            <a href="#features" class="mobile-link" @click="mobileOpen = false">Özellikler</a>
-            <a href="#pricing" class="mobile-link" @click="mobileOpen = false">Fiyatlandırma</a>
-            <a href="#faq" class="mobile-link" @click="mobileOpen = false">SSS</a>
-            <a href="#contact" class="mobile-link" @click="mobileOpen = false">İletişim</a>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#how">Nasıl Çalışır?</a>
+            <a href="#features">Özellikler</a>
+            <a href="#pricing">Fiyatlandırma</a>
+            <a href="#faq">SSS</a>
+            <a href="#contact">İletişim</a>
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ route('dashboard') }}" class="mobile-btn" @click="mobileOpen = false">Panel</a>
+                    <a href="{{ route('dashboard') }}" class="mobile-btn">Panel</a>
                 @else
-                    <a href="{{ route('login') }}" class="mobile-btn" @click="mobileOpen = false">Giriş Yap</a>
+                    <a href="{{ route('login') }}" class="mobile-btn">Giriş Yap</a>
                 @endauth
             @endif
         </div>
     </nav>
+
+    <script>
+        (function() {
+            var hamburger = document.getElementById('hamburger');
+            var menu = document.getElementById('mobileMenu');
+            if (!hamburger || !menu) return;
+
+            function toggleMenu() {
+                var isOpen = menu.classList.toggle('open');
+                hamburger.classList.toggle('open', isOpen);
+                document.body.style.overflow = isOpen ? 'hidden' : '';
+            }
+
+            hamburger.addEventListener('click', toggleMenu);
+
+            menu.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    menu.classList.remove('open');
+                    hamburger.classList.remove('open');
+                    document.body.style.overflow = '';
+                });
+            });
+        })();
+    </script>
 
     <section class="hero">
         <div class="hero-bg"></div>

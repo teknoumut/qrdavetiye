@@ -413,6 +413,9 @@
             <a href="{{ route('admin.contact-messages.index') }}" class="nav-item {{ request()->routeIs('admin.contact-messages*') ? 'active' : '' }}">
                 <span class="nav-icon">✉️</span> Mesajlar
             </a>
+            <a href="{{ route('admin.rsvps.index') }}" class="nav-item {{ request()->routeIs('admin.rsvps*') ? 'active' : '' }}">
+                <span class="nav-icon">💌</span> RSVP Kayıtları
+            </a>
             <div class="nav-section">Sistem</div>
             <a href="{{ route('admin.settings.index') }}" class="nav-item {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
                 <span class="nav-icon">⚙️</span> Ayarlar

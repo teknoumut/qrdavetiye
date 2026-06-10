@@ -510,19 +510,21 @@
             @endif
         </div>
 
-        <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-white z-[199] flex flex-col items-center justify-center gap-2 p-6">
-            <a href="#how" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
-            <a href="#features" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
-            <a href="#pricing" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
-            <a href="#faq" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
-            <a href="#contact" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
-            @if (Route::has('login'))
-                @auth
-                    <a href="{{ route('dashboard') }}" class="mt-3 w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-bold no-underline text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
-                @else
-                    <a href="{{ route('login') }}" class="mt-3 w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-bold no-underline text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
-                @endauth
-            @endif
+        <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-white/95 backdrop-blur-xl z-[199] flex flex-col items-center justify-center gap-1 p-8">
+            <a href="#how" class="w-full max-w-xs text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
+            <a href="#features" class="w-full max-w-xs text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
+            <a href="#pricing" class="w-full max-w-xs text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
+            <a href="#faq" class="w-full max-w-xs text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
+            <a href="#contact" class="w-full max-w-xs text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
+            <div class="mt-4 w-full max-w-xs">
+                @if (Route::has('login'))
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="block text-center py-4 px-4 rounded-xl text-lg font-bold no-underline text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
+                    @else
+                        <a href="{{ route('login') }}" class="block text-center py-4 px-4 rounded-xl text-lg font-bold no-underline text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
+                    @endauth
+                @endif
+            </div>
         </div>
     </nav>
 

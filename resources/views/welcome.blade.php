@@ -483,51 +483,48 @@
     </style>
 </head>
 <body>
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-7 py-3.5 bg-white/75 backdrop-blur-2xl border-b border-black/[0.04] transition-all duration-300">
-        <a href="/" class="flex items-center gap-2.5 font-extrabold text-base text-night-900 no-underline shrink-0">
-            <span class="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center text-white text-sm font-bold" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">s</span>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-7 py-3 bg-white/75 backdrop-blur-2xl border-b border-black/[0.04] transition-all duration-300">
+        <a href="/" class="flex items-center gap-2 font-extrabold text-base text-night-900 no-underline shrink-0">
+            <span class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">s</span>
             senin 💝 davetiyen
         </a>
 
-        <button id="hamburgerBtn" class="md:hidden flex flex-col gap-1 bg-transparent border-none cursor-pointer z-[200] p-2 rounded-md" aria-label="Menü">
-            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
-            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
-            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
-        </button>
-
-        <div class="hidden md:flex items-center gap-0.5">
-            <a href="#how" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
-            <a href="#features" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
-            <a href="#pricing" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
-            <a href="#faq" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
-            <a href="#contact" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
+        <div class="hidden md:flex items-center gap-1">
+            <a href="#how" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
+            <a href="#features" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
+            <a href="#pricing" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
+            <a href="#faq" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
+            <a href="#contact" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ route('dashboard') }}" class="ml-1.5 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90 hover:-translate-y-0.5" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
+                    <a href="{{ route('dashboard') }}" class="ml-2 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
                 @else
-                    <a href="{{ route('login') }}" class="ml-1.5 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90 hover:-translate-y-0.5" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
+                    <a href="{{ route('login') }}" class="ml-2 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
                 @endauth
             @endif
         </div>
 
-        <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-white/95 backdrop-blur-xl z-[199] flex flex-col items-center justify-center gap-1 p-8 overflow-y-auto">
-            <div class="flex flex-col items-center gap-1 w-full max-w-xs py-8">
-                <a href="#how" class="w-full text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
-                <a href="#features" class="w-full text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
-                <a href="#pricing" class="w-full text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
-                <a href="#faq" class="w-full text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
-                <a href="#contact" class="w-full text-center py-4 px-4 rounded-xl text-lg font-semibold text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
-                <div class="mt-4 w-full">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="block text-center py-4 px-4 rounded-xl text-lg font-bold no-underline text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
-                        @else
-                            <a href="{{ route('login') }}" class="block text-center py-4 px-4 rounded-xl text-lg font-bold no-underline text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
-                        @endauth
-                    @endif
-                </div>
-            </div>
-        </div>
+        <button id="hamburgerBtn" class="md:hidden flex flex-col gap-1 bg-transparent border-none cursor-pointer relative z-50 p-2 rounded-md" aria-label="Menü">
+            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
+            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
+            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
+        </button>
+    </nav>
+
+    <div id="mobileMenu" class="mobile-menu fixed left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-b border-black/[0.04] shadow-lg px-4 py-4 flex flex-col gap-1" style="top:0; padding-top:70px;">
+        <a href="#how" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
+        <a href="#features" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
+        <a href="#pricing" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
+        <a href="#faq" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
+        <a href="#contact" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
+        @if (Route::has('login'))
+            @auth
+                <a href="{{ route('dashboard') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
+            @else
+                <a href="{{ route('login') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
+            @endauth
+        @endif
+    </div>
     </nav>
 
     <script>

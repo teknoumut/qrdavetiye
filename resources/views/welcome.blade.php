@@ -515,20 +515,19 @@
     </nav>
 
     <div id="mobileMenu" class="mobile-menu fixed left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-b border-black/[0.04] shadow-lg px-4 py-4 flex flex-col gap-1" style="top:0; padding-top:70px;">
-        <a href="#how" class="group block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all duration-300 hover:pl-6 hover:bg-gradient-to-r hover:from-gold-50 hover:to-transparent hover:text-gold-600">Nasıl Çalışır?</a>
-        <a href="#features" class="group block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all duration-300 hover:pl-6 hover:bg-gradient-to-r hover:from-gold-50 hover:to-transparent hover:text-gold-600">Özellikler</a>
-        <a href="#pricing" class="group block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all duration-300 hover:pl-6 hover:bg-gradient-to-r hover:from-gold-50 hover:to-transparent hover:text-gold-600">Fiyatlandırma</a>
-        <a href="#faq" class="group block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all duration-300 hover:pl-6 hover:bg-gradient-to-r hover:from-gold-50 hover:to-transparent hover:text-gold-600">SSS</a>
-        <a href="#contact" class="group block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-all duration-300 hover:pl-6 hover:bg-gradient-to-r hover:from-gold-50 hover:to-transparent hover:text-gold-600">İletişim</a>
+        <a href="#how" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">Nasıl Çalışır?</a>
+        <a href="#features" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">Özellikler</a>
+        <a href="#pricing" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">Fiyatlandırma</a>
+        <a href="#faq" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">SSS</a>
+        <a href="#contact" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">İletişim</a>
         @if (Route::has('login'))
             @auth
-                <a href="{{ route('dashboard') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all duration-300 hover:opacity-90 hover:shadow-lg" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
+                <a href="{{ route('dashboard') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
             @else
-                <a href="{{ route('login') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all duration-300 hover:opacity-90 hover:shadow-lg" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
+                <a href="{{ route('login') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
             @endauth
         @endif
     </div>
-    </nav>
 
     <script>
         (function() {

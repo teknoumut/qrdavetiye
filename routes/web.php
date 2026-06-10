@@ -3,11 +3,13 @@
 use App\Http\Controllers\Admin\AdminContactMessageController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\PaymentNotificationController as AdminPaymentNotificationController;
 use App\Http\Controllers\Admin\PlanController as AdminPlanController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\ThemeController as AdminThemeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\EftPaymentController;
 use App\Http\Controllers\InvitationPublicController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
@@ -36,6 +38,12 @@ Route::get('/robots.txt', [InvitationPublicController::class, 'robots'])->name('
 
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+Route::view('/gizlilik-politikasi', 'legal.gizlilik-politikasi')->name('legal.gizlilik');
+Route::view('/kvkk-aydinlatma-metni', 'legal.kvkk-aydinlatma')->name('legal.kvkk');
+Route::view('/kullanim-kosullari', 'legal.kullanim-kosullari')->name('legal.kullanim');
+Route::view('/iade-iptal-politikasi', 'legal.iade-iptal')->name('legal.iade');
+Route::view('/mesafeli-satis-sozlesmesi', 'legal.mesafeli-satis')->name('legal.mesafeli');
+
 Route::get('/yorumlar', [ReviewController::class, 'index'])->name('reviews.index');
 Route::post('/yorumlar', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 Route::get('/kullanici/{user}', [PublicProfileController::class, 'show'])->name('profile.show');
@@ -43,6 +51,11 @@ Route::get('/kullanici/{user}', [PublicProfileController::class, 'show'])->name(
 Route::middleware(['auth', 'throttle:10,1'])->group(function () {
     Route::get('/checkout/{plan}', [PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::get('/payment/pay/{plan}/{interval}', [PaymentController::class, 'pay'])->name('payment.pay');
+
+    Route::get('/payment/eft/{plan}', [EftPaymentController::class, 'checkout'])->name('payment.eft.checkout');
+    Route::get('/payment/eft/{plan}/success', [EftPaymentController::class, 'success'])->name('payment.eft.success');
+    Route::post('/payment/eft/notify', [EftPaymentController::class, 'notify'])->name('payment.eft.notify');
+    Route::get('/payment/eft/{plan}/{interval}', [EftPaymentController::class, 'show'])->name('payment.eft.pay');
 
     Route::post('/subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
     Route::post('/subscription/resubscribe', [SubscriptionController::class, 'resubscribe'])->name('subscription.resubscribe');
@@ -113,6 +126,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
     Route::post('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
     Route::delete('reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    Route::get('payment-notifications', [AdminPaymentNotificationController::class, 'index'])->name('payment-notifications.index');
+    Route::post('payment-notifications/{notification}/approve', [AdminPaymentNotificationController::class, 'approve'])->name('payment-notifications.approve');
+    Route::post('payment-notifications/{notification}/reject', [AdminPaymentNotificationController::class, 'reject'])->name('payment-notifications.reject');
 
 });
 

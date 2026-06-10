@@ -46,6 +46,23 @@
             </main>
         </div>
 
+        <footer class="border-t border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 mt-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-sm text-night-400 dark:text-night-500">
+                        &copy; {{ date('Y') }} senin 💝 davetiyen. Tüm hakları saklıdır.
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
+                        <a href="{{ route('legal.gizlilik') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">Gizlilik Politikası</a>
+                        <a href="{{ route('legal.kvkk') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">KVKK</a>
+                        <a href="{{ route('legal.kullanim') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">Kullanım Koşulları</a>
+                        <a href="{{ route('legal.iade') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">İade Politikası</a>
+                        <a href="{{ route('legal.mesafeli') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">Mesafeli Satış</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
         <script>
             if (localStorage.getItem('dark') === 'true') document.documentElement.classList.add('dark');
         </script>

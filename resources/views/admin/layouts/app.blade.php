@@ -11,6 +11,7 @@
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Figtree',sans-serif; background:#f1f5f9; color:#1e293b; }
+        [x-cloak] { display: none !important; }
 
         @php
             $c = \App\Models\Setting::getValue('admin_primary_color', '#4f46e5');

@@ -38,6 +38,7 @@ class Invitation extends Model
         'envelope_pattern',
         'custom_pattern',
         'envelope_text_color',
+        'corner_decoration',
         'has_music',
         'music_file',
         'embed_url',

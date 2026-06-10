@@ -92,17 +92,19 @@
         .border-primary { border-color: var(--primary); }
 
         .section { padding: 70px 24px; max-width: 800px; margin: 0 auto; text-align: center; }
-        .section-title { font-family: var(--font-display); font-size: 2.8rem; margin-bottom: 16px; line-height: 1.2; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .section-subtitle { font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; font-weight: 500; }
+        .section-title { font-family: var(--font-display); font-size: 3rem; margin-bottom: 16px; line-height: 1.2; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px; }
+        .section-subtitle { font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; font-weight: 500; position: relative; display: inline-block; }
+        .section-subtitle::before,
+        .section-subtitle::after { content: ' • '; opacity: 0.4; }
         .countdown { display: flex; justify-content: center; gap: 24px; margin: 30px 0; }
         .countdown-item { text-align: center; min-width: 70px; background: rgba(255,255,255,0.6); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.04); }
         .countdown-number { font-size: 2.5rem; font-weight: 600; font-family: 'Playfair Display', serif; }
         .countdown-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; margin-top: 6px; font-family: 'Montserrat', sans-serif; }
         .divider { width: 60px; height: 2px; margin: 20px auto; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); }
         .story-text { font-size: 1.05rem; line-height: 1.9; max-width: 560px; margin: 0 auto; opacity: 0.75; }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; padding: 20px; }
-        .gallery img { width: 100%; height: 280px; object-fit: cover; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); transition: transform 0.5s ease, box-shadow 0.5s ease; }
-        .gallery img:hover { transform: scale(1.03); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 20px; }
+        .gallery img { width: 100%; height: 280px; object-fit: cover; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease; }
+        .gallery img:hover { transform: scale(1.04) translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
         .rsvp-form {
             max-width: 520px; margin: 0 auto; text-align: left;
             background: rgba(255,255,255,0.45); backdrop-filter: blur(16px);
@@ -279,69 +281,269 @@
 
         .envelope-wrapper {
             position: relative;
-            perspective: 1200px;
+            perspective: 1400px;
             z-index: 2;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .envelope-wrapper:hover { transform: scale(1.03) translateY(-4px); }
+        .envelope-wrapper:hover {
+            transform: scale(1.04) translateY(-6px);
+        }
 
+        /* ===== 3D GERCEKCI ZARF ===== */
         .envelope {
-            width: 400px; height: 280px;
+            width: 400px; height: 270px;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s, opacity 0.8s ease 0.2s;
-            filter: drop-shadow(0 20px 60px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 30px 80px rgba(0,0,0,0.2));
+            transform: rotateX(3deg) rotateY(-4deg);
+        }
+        .envelope-wrapper:hover .envelope {
+            transform: rotateX(2deg) rotateY(-7deg);
+            filter: drop-shadow(0 40px 100px rgba(0,0,0,0.25));
         }
         .envelope.open {
-            transform: scale(1.7) translateY(-70px) rotateX(8deg);
+            transform: scale(1.7) translateY(-70px) rotateX(6deg);
             opacity: 0;
             pointer-events: none;
             filter: drop-shadow(0 60px 120px rgba(0,0,0,0.25));
         }
+
+        /* Zarf govdesi (arka yuz) */
         .envelope-body {
             position: absolute; inset: 0;
-            background: linear-gradient(160deg, var(--primary), var(--primary-dark));
-            border-radius: 16px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
+            background: linear-gradient(165deg, var(--primary), var(--primary-dark));
+            border-radius: 3px;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.12),
+                inset 0 -1px 0 rgba(0,0,0,0.15),
+                0 1px 4px rgba(0,0,0,0.06);
+            overflow: hidden;
         }
+        /* Kagit lif dokusu */
         .envelope-body::after {
             content: '';
-            position: absolute; inset: 3px;
-            border-radius: 13px;
-            border: 1px solid rgba(255,255,255,0.1);
+            position: absolute; inset: 0;
+            background-image:
+                repeating-linear-gradient(88deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 4px),
+                repeating-linear-gradient(2deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 6px);
+            pointer-events: none;
+            z-index: 0;
         }
+        /* Zarf kenar incelik efekti - 3D derinlik */
         .envelope-body::before {
             content: '';
-            position: absolute; inset: 6px;
-            border-radius: 11px;
-            border: 1px solid rgba(255,255,255,0.05);
+            position: absolute; inset: 0;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 3px;
+            pointer-events: none;
+            z-index: 2;
         }
+        /* Yan gussetler - zarfin yan katlanma cizgileri */
+        .envelope-body .gusset-left,
+        .envelope-body .gusset-right {
+            position: absolute; top: 0; bottom: 0;
+            width: 24px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .envelope-body .gusset-left {
+            left: 0;
+            background: linear-gradient(90deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 35%, transparent 100%);
+        }
+        .envelope-body .gusset-left::after {
+            content: '';
+            position: absolute; left: 24px; top: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.08), transparent);
+        }
+        .envelope-body .gusset-right {
+            right: 0;
+            background: linear-gradient(270deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 35%, transparent 100%);
+        }
+        .envelope-body .gusset-right::after {
+            content: '';
+            position: absolute; right: 24px; top: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.08), transparent);
+        }
+        /* Alt kat izi */
+        .envelope-body .bottom-fold {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 18px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.08) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .envelope-body .bottom-fold::after {
+            content: '';
+            position: absolute; top: 0; left: 24px; right: 24px;
+            height: 1px;
+            background: rgba(0,0,0,0.05);
+        }
+        /* Watermark desen */
+        .envelope-body .pattern-watermark {
+            position: absolute; inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: soft-light;
+        }
+        /* Ucgen gusset - zarfin yan ucgen katlantilari */
+        .envelope-body .triangle-left,
+        .envelope-body .triangle-right {
+            position: absolute;
+            width: 24px; height: 40px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .envelope-body .triangle-left {
+            left: 0; top: 50%;
+            margin-top: -20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+        }
+        .envelope-body .triangle-right {
+            right: 0; top: 50%;
+            margin-top: -20px;
+            background: linear-gradient(-135deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+            clip-path: polygon(100% 0, 0 50%, 100% 100%);
+        }
+
+        /* Flap - zarf kapağı (daha gerçekçi egri) */
         .envelope-flap {
-            position: absolute; top: -78px; left: 0; right: 0;
-            height: 90px;
-            background: linear-gradient(160deg, var(--primary), var(--primary-dark));
-            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            position: absolute; top: -85px; left: 0; right: 0;
+            height: 98px;
+            background: linear-gradient(168deg, var(--primary), var(--primary-dark));
+            clip-path: polygon(2% 0, 50% 97%, 98% 0);
             transform-origin: bottom center;
-            transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s;
+            transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
             z-index: 3;
-            filter: brightness(0.88);
+            filter: brightness(0.84);
+            will-change: transform;
+            backface-visibility: hidden;
         }
         .envelope.open .envelope-flap {
-            transform: rotateX(180deg);
+            transform: rotateX(185deg);
         }
+        .envelope.open .envelope-flap .flap-glue {
+            opacity: 0;
+        }
+        /* Flap gölge - kapak govdeye bindiğinde */
+        .envelope-flap::before {
+            content: '';
+            position: absolute; bottom: -8px; left: 10%; right: 10%;
+            height: 12px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        /* Flap kagit dokusu */
+        .envelope-flap::after {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                repeating-linear-gradient(88deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px);
+            pointer-events: none;
+        }
+        .envelope.open .envelope-flap::before {
+            opacity: 0;
+        }
+        /* Yapiskan bandı */
+        .flap-glue {
+            position: absolute; bottom: 16px; left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 8px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.14));
+            border-radius: 4px;
+            pointer-events: none;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);
+            transition: opacity 0.3s ease;
+        }
+        .flap-glue::after {
+            content: '';
+            position: absolute; top: 2px; left: 15%; right: 15%;
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+        }
+        .envelope.open .flap-glue {
+            opacity: 0;
+        }
+
+        /* Mühür (balmumu) */
+        .envelope-seal {
+            position: absolute;
+            top: -46px; left: 50%;
+            transform: translateX(-50%);
+            width: 52px; height: 52px;
+            background: radial-gradient(circle at 35% 35%, color-mix(in srgb, var(--primary) 90%, #fff), var(--primary-dark));
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.15);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            cursor: default;
+        }
+        .envelope-seal::after {
+            content: '';
+            position: absolute;
+            top: 4px; left: 8px; right: 8px;
+            height: 4px;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .envelope.open .envelope-seal {
+            opacity: 0;
+            transform: translateX(-50%) scale(0) rotate(380deg);
+        }
+
+        /* Ic kisim - mektup */
         .envelope-inner {
             position: absolute;
-            top: 14px; left: 14px; right: 14px; bottom: 14px;
-            background: linear-gradient(160deg, #fffdf7, #fff);
-            border-radius: 12px;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            background: linear-gradient(160deg, #fffdf7, #fefcf8);
+            border-radius: 2px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 24px;
+            padding: 22px;
             text-align: center;
             z-index: 1;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow:
+                inset 0 2px 8px rgba(0,0,0,0.03),
+                0 0 0 1px rgba(0,0,0,0.02);
+        }
+        .envelope-inner::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.006) 1px, rgba(0,0,0,0.006) 2px);
+            pointer-events: none;
+        }
+        /* Mektup kat izi */
+        .envelope-inner .letter-fold {
+            position: absolute;
+            left: 0; right: 0; top: 50%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.03), transparent);
+        }
+        .envelope-inner::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.008) 1px, rgba(0,0,0,0.008) 2px);
+            pointer-events: none;
         }
         .envelope-inner .heart {
             font-size: 2.8rem;
@@ -379,6 +581,19 @@
             opacity: 0.8;
             font-weight: 500;
         }
+        .envelope-inner .env-message {
+            font-size: 0.65rem;
+            color: var(--envelope-text);
+            opacity: 0.7;
+            margin-top: 10px;
+            line-height: 1.5;
+            max-width: 90%;
+            font-family: 'Montserrat', sans-serif;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
         .envelope-inner .deco-line {
             width: 50px;
             height: 1.5px;
@@ -387,34 +602,13 @@
             opacity: 0.5;
             border-radius: 2px;
         }
-        .envelope-seal {
-            position: absolute;
-            top: -44px; left: 50%;
-            transform: translateX(-50%);
-            width: 46px; height: 46px;
-            background: linear-gradient(145deg, color-mix(in srgb, var(--primary) 80%, #fff), var(--primary-dark));
-            border: 2px solid rgba(255,255,255,0.25);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 4;
-            font-size: 1rem;
-            color: rgba(255,255,255,0.9);
-            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-        .envelope.open .envelope-seal {
-            opacity: 0;
-            transform: translateX(-50%) scale(0) rotate(360deg);
-        }
 
         .envelope-glow {
             position: absolute; top: 50%; left: 50%;
-            width: 120px; height: 120px;
-            background: radial-gradient(circle, color-mix(in srgb, var(--primary) 30%, transparent), transparent 70%);
+            width: 140px; height: 140px;
+            background: radial-gradient(circle, color-mix(in srgb, var(--primary) 20%, transparent), transparent 70%);
             border-radius: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0.8);
             transition: all 1.2s ease;
             pointer-events: none;
             z-index: 0;
@@ -449,6 +643,7 @@
         .floating-letter .letter-names { font-family: var(--font-display); font-size: 1rem; color: #555; }
         .floating-letter .letter-names .ampersand { font-family: 'Anydore', cursive; font-size: 1.4rem; color: var(--primary); display: inline-block; line-height: 1; }
         .floating-letter .letter-sub { font-size: 0.6rem; color: #999; letter-spacing: 3px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; margin-top: 6px; font-weight: 500; }
+        .floating-letter .letter-msg { font-size: 0.6rem; color: #888; line-height: 1.5; margin-top: 6px; max-width: 85%; font-family: 'Montserrat', sans-serif; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .floating-letter .letter-deco {
             width: 36px; height: 1.5px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
@@ -500,6 +695,7 @@
         }
 
         /* Cover */
+        /* ===== KAPAK BOLUMU ===== */
         .cover-section {
             min-height: 100vh;
             position: relative;
@@ -518,17 +714,51 @@
             background-size: cover;
             background-position: center;
             filter: saturate(1.1);
+            transform: scale(1.05);
+            transition: transform 0.1s ease-out;
         }
         .cover-section .cover-bg::after {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+            background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.5) 100%);
+        }
+        .cover-section .cover-bg::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(0,0,0,0.2) 100%);
+            z-index: 1;
         }
         .cover-section .cover-overlay {
             position: absolute; inset: 0;
-            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.15) 100%);
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.2) 100%);
+            z-index: 1;
+        }
+        /* Cover dekoratif cizgi */
+        .cover-section .cover-deco {
+            position: absolute; left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vmin; height: 80vmin;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: coverRing 4s ease-in-out infinite;
+        }
+        .cover-section .cover-deco:nth-child(2) {
+            width: 60vmin; height: 60vmin;
+            border-color: rgba(255,255,255,0.04);
+            animation-delay: -1.5s;
+        }
+        .cover-section .cover-deco:nth-child(3) {
+            width: 40vmin; height: 40vmin;
+            border-color: rgba(255,255,255,0.03);
+            animation-delay: -3s;
+        }
+        @keyframes coverRing {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
         }
         .cover-section .cover-particles {
             position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+            z-index: 2;
         }
         .cover-section .cover-particle {
             position: absolute; width: 2px; height: 2px; background: rgba(255,255,255,0.3); border-radius: 50%;
@@ -542,75 +772,106 @@
         }
         .cover-section .names {
             font-family: var(--font-display);
-            font-size: 4rem;
-            margin-bottom: 12px;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            font-size: 4.5rem;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 40px rgba(0,0,0,0.4);
             position: relative;
             line-height: 1.15;
-            animation: coverFadeUp 1.2s ease-out;
-            z-index: 1;
+            animation: coverFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 3;
+            letter-spacing: -0.5px;
+        }
+        .cover-section .names .groom,
+        .cover-section .names .bride {
+            display: block;
         }
         .cover-section .date {
-            font-size: 1.1rem;
-            letter-spacing: 4px;
+            font-size: 1rem;
+            letter-spacing: 5px;
             text-transform: uppercase;
-            opacity: 0.85;
+            opacity: 0.8;
             position: relative;
             font-family: 'Montserrat', sans-serif;
             font-weight: 300;
-            animation: coverFadeUp 1.2s ease-out 0.2s both;
-            z-index: 1;
+            animation: coverFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+            z-index: 3;
+            margin-top: 16px;
+        }
+        .cover-section .date::before,
+        .cover-section .date::after {
+            content: '——';
+            margin: 0 12px;
+            opacity: 0.3;
+            letter-spacing: -2px;
         }
         .cover-section .ampersand {
             font-family: 'Anydore', cursive;
-            font-size: 5rem;
-            opacity: 0.4;
-            margin: 0 8px;
+            font-size: 5.5rem;
+            opacity: 0.5;
+            margin: 0 12px;
             display: inline-block;
+            filter: drop-shadow(0 2px 20px rgba(255,255,255,0.1));
+            line-height: 0;
+            vertical-align: middle;
         }
         .cover-section .scroll-indicator {
-            position: absolute; bottom: 36px; z-index: 1;
+            position: absolute; bottom: 36px; z-index: 3;
             color: rgba(255,255,255,0.35); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
             font-family: 'Montserrat', sans-serif; cursor: pointer;
-            animation: coverFadeUp 1.2s ease-out 0.8s both;
+            animation: coverFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
             display: flex; flex-direction: column; align-items: center; gap: 8px;
             transition: opacity 0.3s;
         }
+        .cover-section .scroll-indicator:hover { opacity: 0.7; }
         .cover-section .scroll-indicator .line {
-            width: 1px; height: 30px; background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent);
+            width: 1px; height: 30px; background: linear-gradient(180deg, rgba(255,255,255,0.4), transparent);
             animation: scrollLine 2s ease-in-out infinite;
         }
         @keyframes scrollLine {
-            0%, 100% { transform: scaleY(0.5); opacity: 0.3; }
+            0%, 100% { transform: scaleY(0.3); opacity: 0.2; }
             50% { transform: scaleY(1); opacity: 0.8; }
         }
         @keyframes coverFadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(40px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* Parents section */
+        /* ===== AILELER BOLUMU ===== */
         .parents-grid {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 48px;
-            max-width: 600px; margin: 0 auto;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 32px;
+            max-width: 620px; margin: 0 auto;
         }
         .parent-card {
-            min-width: 220px;
-            padding: 24px; border-radius: 16px;
-            background: rgba(255,255,255,0.4); backdrop-filter: blur(10px);
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: transform 0.3s, box-shadow 0.3s;
+            min-width: 230px;
+            padding: 28px 24px; border-radius: 20px;
+            background: rgba(255,255,255,0.5); backdrop-filter: blur(12px);
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .parent-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.04); }
+        .parent-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.3;
+        }
+        .parent-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+        }
         .parent-card .name {
             font-family: var(--font-display);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-bottom: 6px;
+            position: relative;
         }
         .parent-card .relation {
-            font-size: 0.9rem;
-            opacity: 0.6;
+            font-size: 0.85rem;
+            opacity: 0.55;
             font-style: italic;
+            font-family: var(--font-body);
         }
 
         /* Scroll progress bar */
@@ -637,39 +898,53 @@
 
         .animate-on-scroll {
             opacity: 0;
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .animate-on-scroll.fade-up {
-            transform: translateY(40px);
+            transform: translateY(50px);
         }
         .animate-on-scroll.fade-left {
-            transform: translateX(-40px);
+            transform: translateX(-50px);
         }
         .animate-on-scroll.fade-right {
-            transform: translateX(40px);
+            transform: translateX(50px);
         }
         .animate-on-scroll.zoom-in {
-            transform: scale(0.92);
+            transform: scale(0.88);
+        }
+        .animate-on-scroll.zoom-out {
+            transform: scale(1.08);
+        }
+        .animate-on-scroll.rotate-in {
+            transform: perspective(800px) rotateX(8deg) translateY(40px);
+            transform-origin: top center;
         }
         .animate-on-scroll.visible {
             opacity: 1;
-            transform: translateY(0) translateX(0) scale(1);
+            transform: translateY(0) translateX(0) scale(1) perspective(800px) rotateX(0);
         }
 
         @media (max-width: 768px) {
-            .cover-section .names { font-size: 2.8rem; }
-            .cover-section .ampersand { font-size: 3.5rem; }
+            .cover-section .names { font-size: 2.6rem; }
+            .cover-section .ampersand { font-size: 3.2rem; }
+            .cover-section .date { font-size: 0.75rem; letter-spacing: 3px; }
+            .cover-section .date::before,
+            .cover-section .date::after { margin: 0 6px; }
+            .section-title { font-size: 2rem; }
             .section { padding: 50px 20px; }
-            .section-title { font-size: 2.2rem; }
             .countdown { gap: 12px; flex-wrap: wrap; }
             .countdown-item { min-width: 60px; padding: 12px 8px; }
             .countdown-number { font-size: 1.8rem; }
-            .envelope { width: 240px; height: 170px; }
+            .envelope { width: 250px; height: 175px; }
             .envelope-flap { top: -52px; height: 60px; }
             .envelope-seal { top: -30px; width: 28px; height: 28px; font-size: 0.6rem; }
+            .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 14px; }
             .envelope-inner .names { font-size: 1.6rem; }
             .envelope-inner .heart { font-size: 2.2rem; }
             .envelope.open { transform: scale(1.5) translateY(-50px) rotateX(5deg); }
+            .envelope-body .gusset-left,
+            .envelope-body .gusset-right { width: 14px; }
+            .envelope-body .bottom-fold { height: 10px; }
             .floating-letter { width: 200px; height: 130px; }
             .floating-letter .letter-names { font-size: 0.85rem; }
             .parents-grid { gap: 24px; }
@@ -815,6 +1090,104 @@
             background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, 60px 60px, 60px 60px, 60px 60px, 60px 60px, auto;
         }
 
+        /* ===== 3D ANIMASYON TURLERI ===== */
+
+        /* Klasik - 3D perspektifli acilma */
+        .anim-classic .envelope {
+            transform: rotateX(2deg) rotateY(-3deg);
+        }
+        .anim-classic .envelope-wrapper:hover .envelope {
+            transform: rotateX(1deg) rotateY(-6deg);
+        }
+        .anim-classic .envelope.open {
+            transform: scale(1.7) translateY(-70px) rotateX(6deg);
+        }
+
+        /* 3D Flip - Zarf 3D uzayda doner */
+        .anim-flip .envelope {
+            transform: rotateX(3deg) rotateY(-5deg);
+        }
+        .anim-flip .envelope-wrapper:hover .envelope {
+            transform: rotateX(2deg) rotateY(-10deg);
+        }
+        .anim-flip .envelope.open {
+            transform: scale(1.8) translateY(-90px) rotateX(12deg) rotateY(15deg);
+        }
+        .anim-flip .envelope-flap {
+            transition: transform 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
+        }
+        .anim-flip .envelope-screen {
+            background: linear-gradient(145deg, #2a1a2e, #1a1a2e 40%, #0f2030 100%);
+        }
+
+        /* Kalp Patlamasi - 3D one dogru gelir */
+        .anim-heart .envelope {
+            transform: rotateX(-2deg) rotateY(4deg) scale(0.95);
+        }
+        .anim-heart .envelope-wrapper:hover .envelope {
+            transform: rotateX(-1deg) rotateY(6deg) scale(0.98);
+        }
+        .anim-heart .envelope.open {
+            transform: scale(2.0) translateY(-50px) rotateX(-8deg) translateZ(80px);
+        }
+        .anim-heart .envelope-flap {
+            clip-path: polygon(2% 0, 50% 100%, 98% 0);
+            border-radius: 0 0 30% 30%;
+        }
+        .anim-heart .envelope-seal {
+            background: linear-gradient(145deg, #ff6b6b, #c0392b);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 0 30px rgba(255,107,107,0.4);
+        }
+        .anim-heart .envelope-screen {
+            background: linear-gradient(145deg, #2d1b2e, #1a1a2e 40%, #0f3460 100%);
+        }
+
+        /* Sihirli Isilti - Yavas ve zarif 3D */
+        .anim-magic .envelope {
+            transform: rotateX(4deg) rotateY(2deg);
+        }
+        .anim-magic .envelope-wrapper:hover .envelope {
+            transform: rotateX(2deg) rotateY(4deg);
+        }
+        .anim-magic .envelope.open {
+            transition: transform 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s, opacity 1.2s ease 0.4s;
+            transform: scale(1.6) translateY(-100px) rotateX(15deg) rotateY(8deg) translateZ(40px);
+        }
+        .anim-magic .envelope-flap {
+            transition: transform 1.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
+        }
+        .anim-magic .envelope-screen {
+            background: linear-gradient(145deg, #1a1a3e, #0d0d2b 40%, #1a0a2e 100%);
+        }
+
+        /* Dalga Efekti - 3D dalga ile acilma */
+        .anim-ripple .envelope {
+            transform: rotateX(2deg) scale(1);
+        }
+        .anim-ripple .envelope-wrapper:hover .envelope {
+            transform: rotateX(0deg) scale(1.02);
+        }
+        .anim-ripple .envelope.open {
+            transform: scale(1.7) translateY(-60px) rotateX(5deg);
+        }
+        .anim-ripple .envelope.open ~ .envelope-glow {
+            transform: translate(-50%, -50%) scale(8);
+            background: radial-gradient(circle, color-mix(in srgb, var(--primary) 40%, transparent), transparent 70%);
+        }
+        .anim-ripple .envelope-flap {
+            transition: transform 1.0s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s;
+        }
+
+        /* Mobil uyum */
+        @media (max-width: 768px) {
+            .envelope { transform: rotateX(1deg) rotateY(-2deg); }
+            .envelope-wrapper:hover .envelope { transform: rotateX(0deg) rotateY(-3deg); }
+            .anim-flip .envelope.open { transform: scale(1.5) translateY(-60px) rotateX(10deg) rotateY(10deg); }
+            .anim-heart .envelope.open { transform: scale(1.6) translateY(-40px) rotateX(-4deg) translateZ(40px); }
+            .anim-magic .envelope.open { transform: scale(1.3) translateY(-70px) rotateX(10deg) rotateY(4deg) translateZ(20px); }
+            .anim-ripple .envelope.open { transform: scale(1.4) translateY(-40px) rotateX(3deg); }
+        }
     </style>
 </head>
 <body>
@@ -836,18 +1209,30 @@
         $customPatternUrl = $invitation->custom_pattern ? \Illuminate\Support\Facades\Storage::url($invitation->custom_pattern) : '';
     @endphp
 
-    <div class="envelope-screen" id="envelopeScreen" onclick="openEnvelope()">
+    <div class="envelope-screen @if($envelopeAnim !== 'classic') anim-{{ $envelopeAnim }} @endif" id="envelopeScreen" onclick="openEnvelope()">
         <div class="particle-bg" id="envBgParticles"></div>
         <div class="floating-hearts" id="floatingHearts"></div>
         <div class="envelope-wrapper">
             <div class="envelope" id="envelope">
-                <div class="envelope-body @if($envelopePattern) pattern-{{ $envelopePattern }} @endif"></div>
-                <div class="envelope-flap @if($envelopePattern) pattern-{{ $envelopePattern }} @endif"></div>
+                <div class="envelope-body @if($envelopePattern) pattern-{{ $envelopePattern }} @endif">
+                    <div class="gusset-left"></div>
+                    <div class="gusset-right"></div>
+                    <div class="bottom-fold"></div>
+                    @if($customPatternUrl)
+                        <div class="pattern-watermark" style="background-image: url('{{ $customPatternUrl }}');"></div>
+                    @endif
+                </div>
+                <div class="envelope-flap @if($envelopePattern) pattern-{{ $envelopePattern }} @endif">
+                    <div class="flap-glue"></div>
+                </div>
                 <div class="envelope-seal">♥</div>
                     <div class="envelope-inner" @if($customPatternUrl) style="background-image: linear-gradient(160deg, rgba(255,253,247,0.75), rgba(255,255,255,0.75)), url('{{ $customPatternUrl }}'); background-size: auto, cover; background-position: 0% 0%, center;" @endif>
                         <div class="heart">💖</div>
                         <div class="names">@if($ev['couple']){{ $fixName($invitation->groom_name) }} <span class="ampersand">&</span> {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif</div>
                         <div class="sub">{{ $ev['title'] }}</div>
+                        @if($invitation->welcome_message)
+                            <div class="env-message">{{ Str::limit(strip_tags($invitation->welcome_message), 120) }}</div>
+                        @endif
                     </div>
             </div>
             <div class="envelope-glow"></div>
@@ -855,6 +1240,9 @@
                 <div class="heart-icon">💕</div>
                 <div class="letter-names">@if($ev['couple']){{ $fixName($invitation->groom_name) }}<br><span class="ampersand">&</span><br>{{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif</div>
                 <div class="letter-sub">{{ $ev['sub'] }}</div>
+                @if($invitation->welcome_message)
+                    <div class="letter-msg">{{ Str::limit(strip_tags($invitation->welcome_message), 100) }}</div>
+                @endif
             </div>
         </div>
         <div class="hint">✨ Dokunarak Aç ✨</div>
@@ -864,12 +1252,15 @@
         <div class="cover-section">
             <div class="cover-bg"></div>
             <div class="cover-overlay"></div>
+            <div class="cover-deco"></div>
+            <div class="cover-deco"></div>
+            <div class="cover-deco"></div>
             <div class="cover-particles" id="coverParticles"></div>
             <div class="names">
                 @if($ev['couple'])
-                    {{ $fixName($invitation->groom_name) }}
+                    <span class="groom">{{ $fixName($invitation->groom_name) }}</span>
                     <span class="ampersand">&</span>
-                    {{ $fixName($invitation->bride_name) }}
+                    <span class="bride">{{ $fixName($invitation->bride_name) }}</span>
                 @else
                     {{ $fixName($invitation->groom_name) }}
                 @endif
@@ -894,7 +1285,7 @@
         @endif
 
         @if($invitation->groom_father || $invitation->groom_mother || $invitation->bride_father || $invitation->bride_mother)
-            <div class="section animate-on-scroll fade-left" style="background: rgba(0,0,0,0.015);">
+            <div class="section animate-on-scroll rotate-in" style="background: rgba(0,0,0,0.015);">
                 <div class="section-subtitle">Ailelerimiz</div>
                 <div class="section-title">@if($ev['couple'])Aile Büyüklerimiz @else Ailemiz @endif</div>
                 <div class="divider"></div>
@@ -935,20 +1326,20 @@
             </div>
         @endif
 
-        <div class="section animate-on-scroll zoom-in" style="background: rgba(0,0,0,0.015);">
-            <div class="section-subtitle">{{ $ev['countdownLabel'] }}</div>
-            <div class="section-title">Kalan Süre</div>
-            <div class="divider"></div>
-            <div id="countdown" class="countdown">
-                <div class="countdown-item"><div class="countdown-number" id="days">00</div><div class="countdown-label">Gün</div></div>
-                <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Saat</div></div>
-                <div class="countdown-item"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Dakika</div></div>
-                <div class="countdown-item"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Saniye</div></div>
+            <div class="section animate-on-scroll zoom-in" style="background: rgba(0,0,0,0.015);">
+                <div class="section-subtitle">{{ $ev['countdownLabel'] }}</div>
+                <div class="section-title">Kalan Süre</div>
+                <div class="divider"></div>
+                <div id="countdown" class="countdown">
+                    <div class="countdown-item"><div class="countdown-number" id="days">00</div><div class="countdown-label">Gün</div></div>
+                    <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Saat</div></div>
+                    <div class="countdown-item"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Dakika</div></div>
+                    <div class="countdown-item"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Saniye</div></div>
+                </div>
             </div>
-        </div>
 
         @if($ev['showStory'] && $invitation->story)
-            <div class="section animate-on-scroll">
+            <div class="section animate-on-scroll rotate-in">
                 <div class="section-subtitle">Hikayemiz</div>
                 <div class="section-title">{{ $fixText('Nasıl Başladı') }}</div>
                 <div class="divider"></div>
@@ -975,10 +1366,26 @@
                 <div class="section-title">Özel Anlar</div>
                 <div class="divider"></div>
                 <div class="gallery">
+                    @php
+                        function nocookieEmbedUrl($url) {
+                            if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $m)) {
+                                return 'https://www.youtube-nocookie.com/embed/'.$m[1];
+                            }
+                            return $url;
+                        }
+                    @endphp
                     @foreach($invitation->videos as $video)
-                        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.06);">
-                            <iframe src="{{ $video->url }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>
-                        </div>
+                        @if($video->file_path)
+                            <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.06);background:#000;">
+                                <video controls style="position:absolute;top:0;left:0;width:100%;height:100%;" preload="metadata">
+                                    <source src="{{ \Illuminate\Support\Facades\Storage::url($video->file_path) }}" type="video/mp4">
+                                </video>
+                            </div>
+                        @else
+                            <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.06);">
+                                <iframe src="{{ nocookieEmbedUrl($video->url) }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade" sandbox="allow-same-origin allow-scripts allow-popups allow-presentation"></iframe>
+                            </div>
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -989,7 +1396,7 @@
                 <div class="section-subtitle">Konum</div>
                 <div class="section-title">{{ $ev['locationLabel'] }}</div>
                 <div class="divider"></div>
-                @if($invitation->event_address)<p style="margin-bottom:8px;opacity:0.7;">{{ $invitation->event_address }}</p>@endif
+                @if($invitation->event_address)<p style="margin-bottom:8px;opacity:0.65;font-size:1.05rem;">{{ $invitation->event_address }}</p>@endif
                 @if($invitation->event_lat && $invitation->event_lng)
                     <div class="map-container">
                         <iframe width="100%" height="100%" style="border:0;" loading="lazy"
@@ -997,6 +1404,16 @@
                         </iframe>
                     </div>
                 @endif
+            </div>
+
+        @if($invitation->special_note)
+            <div class="section animate-on-scroll zoom-out">
+                <div class="section-subtitle">Not</div>
+                <div class="section-title">Özel Bir Not</div>
+                <div class="divider"></div>
+                <p class="story-text">{{ $invitation->special_note }}</p>
+            </div>
+        @endif
             </div>
         @endif
 
@@ -1121,27 +1538,40 @@
             var envelope = document.getElementById('envelope');
             var screen = document.getElementById('envelopeScreen');
             var letter = document.getElementById('floatingLetter');
+            var seal = envelope.querySelector('.envelope-seal');
 
-            envelope.classList.add('open');
-            letter.classList.add('show');
-
-            createParticles(screen);
-            createConfetti(screen);
-
-            @if($showMusic && $musicFile)
+            // Önce hafif bir titreme
+            envelope.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            envelope.style.transform = 'scale(1.04)';
             setTimeout(function() {
-                startMusic();
+                envelope.style.transform = 'scale(1)';
             }, 300);
-            @endif
 
+            // 400ms sonra asil acilma
             setTimeout(function() {
-                screen.style.display = 'none';
-                invContent.classList.add('visible');
-                window.scrollTo({ top: 0, behavior: 'instant' });
-                window.dispatchEvent(new Event('scroll'));
-                initScrollAnimation();
-                initCoverParticles();
-            }, 1200);
+                envelope.style.transition = '';
+                envelope.style.transform = '';
+                envelope.classList.add('open');
+                letter.classList.add('show');
+
+                createParticles(screen);
+                createConfetti(screen);
+
+                @if($showMusic && $musicFile)
+                setTimeout(function() {
+                    startMusic();
+                }, 300);
+                @endif
+
+                setTimeout(function() {
+                    screen.style.display = 'none';
+                    invContent.classList.add('visible');
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                    window.dispatchEvent(new Event('scroll'));
+                    initScrollAnimation();
+                    initCoverParticles();
+                }, 1400);
+            }, 400);
         }
 
         @if($showMusic && $musicFile)
@@ -1446,6 +1876,31 @@
                 })
                 .catch(function() { form.submit(); });
         });
+
+        // 3D Fare takibi - zarf fareyle doner
+        (function() {
+            var env = document.getElementById('envelope');
+            var wrapper = document.querySelector('.envelope-wrapper');
+            if (!env || !wrapper) return;
+            var screen = document.getElementById('envelopeScreen');
+
+            screen.addEventListener('mousemove', function(e) {
+                if (envelopeOpened) return;
+                var rect = screen.getBoundingClientRect();
+                var x = (e.clientX - rect.left) / rect.width;
+                var y = (e.clientY - rect.top) / rect.height;
+                var rotY = -8 + x * 16;
+                var rotX = 6 - y * 12;
+                env.style.transition = 'transform 0.15s ease-out';
+                env.style.transform = 'rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+            });
+
+            screen.addEventListener('mouseleave', function() {
+                if (envelopeOpened) return;
+                env.style.transition = 'transform 0.5s ease-out';
+                env.style.transform = '';
+            });
+        })();
     </script>
 </body>
 </html>

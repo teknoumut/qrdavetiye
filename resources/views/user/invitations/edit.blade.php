@@ -199,7 +199,7 @@
                                             class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all resize-none">{{ old('welcome_message', $invitation->welcome_message) }}</textarea>
                                     </div>
 
-                                    <div>
+                                    <div id="editStoryField">
                                         <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">💕 Hikayeniz</label>
                                         <textarea name="story" rows="4"
                                             class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all resize-none">{{ old('story', $invitation->story) }}</textarea>
@@ -328,36 +328,8 @@
                                         </div>
                                     </div>
 
-                                    <div x-data="{ selectedPattern: '{{ old('envelope_pattern', $invitation->envelope_pattern ?: '') }}' }">
-                                        <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-3">Zarf Deseni</label>
-
-                                        <div class="grid grid-cols-4 sm:grid-cols-4 gap-2.5 mb-4">
-                                            <template x-for="p in window.envPatterns" :key="p.v">
-                                                <button type="button"
-                                                    @click="selectedPattern = p.v"
-                                                    class="relative flex flex-col items-center gap-2 p-2 rounded-xl border-2 cursor-pointer transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-gold-400/40"
-                                                    :class="selectedPattern === p.v
-                                                        ? 'border-gold-500 bg-gold-50 dark:bg-gold-500/10 shadow-md'
-                                                        : 'border-cream-200 dark:border-night-700 hover:border-gold-300 dark:hover:border-gold-500/30 hover:shadow-sm'">
-                                                    <div class="w-full aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-gold-400 to-gold-600 shadow-sm relative">
-                                                        <div :class="'pat-prev-' + p.v" class="absolute inset-0"></div>
-                                                        <template x-if="p.v === ''">
-                                                            <div class="absolute inset-0 flex items-center justify-center bg-black/5 dark:bg-white/5">
-                                                                <svg class="w-5 h-5 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                                            </div>
-                                                        </template>
-                                                        <div x-show="selectedPattern === p.v"
-                                                            class="absolute top-1 right-1 w-5 h-5 rounded-full bg-gold-500 text-white flex items-center justify-center shadow"
-                                                            style="display: none;">
-                                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                                                        </div>
-                                                    </div>
-                                                    <span class="text-[11px] leading-tight text-center font-semibold text-night-600 dark:text-cream-300 transition-colors" x-text="p.l"></span>
-                                                </button>
-                                            </template>
-                                        </div>
-
-                                        <input type="hidden" name="envelope_pattern" :value="selectedPattern">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-3">Kendi Desenini Yükle</label>
 
                                         <div class="rounded-xl border-2 border-dashed border-cream-200 dark:border-night-700 hover:border-gold-300 dark:hover:border-gold-500/30 transition-all duration-200 overflow-hidden">
                                             <label class="flex items-center gap-3 px-4 py-3 cursor-pointer">
@@ -365,8 +337,8 @@
                                                     <span>🖼️</span>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <span class="text-sm font-semibold text-night-700 dark:text-cream-200 block leading-tight">Kendi Desenini Yükle</span>
-                                                    <span class="text-xs text-night-400 dark:text-cream-400 block mt-0.5" id="editCustomFileLabel">PNG, JPG, SVG — 64MB'a kadar</span>
+                                                    <span class="text-sm font-semibold text-night-700 dark:text-cream-200 block leading-tight">PNG, JPG, SVG — 64MB'a kadar</span>
+                                                    <span class="text-xs text-night-400 dark:text-cream-400 block mt-0.5" id="editCustomFileLabel">Dosya seçilmedi</span>
                                                 </div>
                                                 <div class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 border border-gold-200 dark:border-gold-500/20 hover:bg-gold-100 dark:hover:bg-gold-500/20 transition-colors shrink-0">
                                                     Gözat
@@ -392,7 +364,6 @@
                                                 <p class="text-xs text-red-500 mt-1.5 px-1">{{ $message }}</p>
                                             @enderror
                                         </div>
-                                    </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
                                         <div>
@@ -598,30 +569,33 @@
                                     <span class="w-10 h-10 rounded-xl bg-white dark:bg-night-800 shadow-sm flex items-center justify-center text-lg border border-cream-200 dark:border-night-700">🎬</span>
                                     <div>
                                         <h2 class="font-bold text-night-900 dark:text-cream-100">Videolar</h2>
-                                        <p class="text-xs text-night-400 dark:text-cream-400">YouTube videoları ekle</p>
+                                        <p class="text-xs text-night-400 dark:text-cream-400">YouTube linki ekle veya MP4 dosyası yükle</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="px-6 sm:px-8 py-6 sm:py-8">
-                                <form action="{{ route('user.invitations.videos.add', $invitation) }}" method="POST">
+                                <form action="{{ route('user.invitations.videos.add', $invitation) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="space-y-3">
                                         <div>
                                             <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">YouTube / Vimeo URL</label>
-                                            <input type="url" name="url" placeholder="https://www.youtube.com/watch?v=..." required
+                                            <input type="url" name="url" placeholder="https://www.youtube.com/watch?v=..."
                                                 class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                         </div>
-                                        <div class="flex gap-2">
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex-1 h-px bg-cream-200 dark:border-night-700"></div>
+                                            <span class="text-xs font-semibold text-night-400 dark:text-cream-400">VEYA</span>
+                                            <div class="flex-1 h-px bg-cream-200 dark:border-night-700"></div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">MP4 Video Yükle</label>
                                             <div class="relative">
-                                                <select name="type"
-                                                    class="w-32 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all appearance-none">
-                                                    <option value="youtube">YouTube</option>
-                                                    <option value="vimeo">Vimeo</option>
-                                                </select>
-                                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-night-400 dark:text-cream-400">
-                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                                                </div>
+                                                <input type="file" name="video_file" accept="video/mp4,video/webm,video/quicktime"
+                                                    class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:text-white file:bg-gradient-to-r file:from-gold-500 file:to-rose-500 hover:file:from-gold-600 hover:file:to-rose-600 file:cursor-pointer cursor-pointer focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                             </div>
+                                            <p class="text-xs text-night-400 dark:text-cream-500 mt-1">MP4, WebM veya MOV - maks. 50MB</p>
+                                        </div>
+                                        <div class="flex gap-2">
                                             <input type="text" name="caption" placeholder="Video açıklaması"
                                                 class="flex-1 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                             <button type="submit" class="px-5 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 transition-all shadow-sm shrink-0 flex items-center gap-1.5">
@@ -637,8 +611,8 @@
                                             <div class="flex items-center justify-between p-3.5 rounded-xl bg-cream-50 dark:bg-night-900/50 border border-cream-100 dark:border-night-700 hover:border-gold-200 dark:hover:border-gold-500/30 transition-all">
                                                 <div class="flex items-center gap-3 min-w-0">
                                                     <span class="text-lg shrink-0">🎬</span>
-                                                    <span class="text-sm font-semibold text-gold-700 dark:text-gold-400 truncate">{{ $video->caption ?: 'Video' }}</span>
-                                                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 shrink-0">{{ ucfirst($video->type) }}</span>
+                                                    <span class="text-sm font-semibold text-gold-700 dark:text-gold-400 truncate">{{ $video->caption ?: ($video->file_path ? 'MP4 Video' : 'Video') }}</span>
+                                                    <span class="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 {{ $video->file_path ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20' : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border-rose-200 dark:border-rose-500/20' }}">{{ $video->file_path ? 'Yükleme' : ucfirst($video->type) }}</span>
                                                 </div>
                                                 <form action="{{ route('user.invitations.videos.delete', $video) }}" method="POST" onsubmit="return confirm('Silmek istediğine emin misin?')">
                                                     @csrf @method('DELETE')
@@ -723,42 +697,7 @@
         </div>
     </div>
 
-    <style>
-        .pat-prev- { background: white; }
-        .dark .pat-prev- { background: #3d4353; }
-        .pat-prev-lace { background-image: repeating-linear-gradient(45deg,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px,transparent 8px),repeating-linear-gradient(-45deg,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px,transparent 8px); background-size: 10px 10px; }
-        .pat-prev-floral { background-image: radial-gradient(circle at 25% 30%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 2.5px,transparent 2.5px),radial-gradient(circle at 75% 70%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 2.5px,transparent 2.5px); background-size: 24px 24px,24px 24px; }
-        .pat-prev-geometric { background-image: repeating-linear-gradient(0deg,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 1.5px,transparent 1.5px,transparent 12px),repeating-linear-gradient(90deg,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 1.5px,transparent 1.5px,transparent 12px); background-size: 12px 12px,12px 12px; }
-        .pat-prev-stars { background-image: radial-gradient(circle at 20% 25%,rgba(0,0,0,0.25) 0,rgba(0,0,0,0.25) 2px,transparent 2px),radial-gradient(circle at 80% 30%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 50% 80%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 2px,transparent 2px); background-size: 32px 32px,32px 32px,32px 32px; }
-        .pat-prev-hearts { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' opacity='0.18' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"); background-size: 22px 22px; }
-        .pat-prev-damask { background-image: repeating-conic-gradient(rgba(0,0,0,0.15) 0% 25%,transparent 0% 50%); background-size: 18px 18px; }
-        .pat-prev-minimal { background-image: repeating-linear-gradient(90deg,rgba(0,0,0,0.22) 0,rgba(0,0,0,0.22) 1.5px,transparent 1.5px,transparent 12px); background-size: 12px 12px; }
-        .pat-prev-leaf { background-image: repeating-linear-gradient(12deg,transparent 0,transparent 8px,rgba(0,0,0,0.18) 8px,rgba(0,0,0,0.18) 9.5px,transparent 9.5px,transparent 18px),linear-gradient(90deg,transparent 45%,rgba(0,0,0,0.25) 45%,rgba(0,0,0,0.25) 55%,transparent 55%); }
-        .pat-prev-vine { background-image: repeating-linear-gradient(50deg,transparent 0,transparent 12px,rgba(0,0,0,0.18) 12px,rgba(0,0,0,0.18) 14.5px,transparent 14.5px,transparent 26px),repeating-linear-gradient(-50deg,transparent 0,transparent 8px,rgba(0,0,0,0.12) 8px,rgba(0,0,0,0.12) 9.5px,transparent 9.5px,transparent 22px); }
-        .pat-prev-blossom { background-image: radial-gradient(circle at 15% 25%,rgba(0,0,0,0.25) 0,rgba(0,0,0,0.25) 2px,transparent 2px),radial-gradient(circle at 10% 30%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 20% 30%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 15% 34%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 55% 65%,rgba(0,0,0,0.25) 0,rgba(0,0,0,0.25) 2px,transparent 2px),radial-gradient(circle at 50% 70%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 60% 70%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 55% 74%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px); background-size: 36px 36px,36px 36px,36px 36px,36px 36px,36px 36px,36px 36px,36px 36px,36px 36px; }
-        .pat-prev-botanic { background-image: repeating-linear-gradient(0deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 0.5px,transparent 0.5px,transparent 6px),repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 0.5px,transparent 0.5px,transparent 6px),radial-gradient(circle at 25% 25%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 1px,transparent 1px),radial-gradient(circle at 75% 75%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 1px,transparent 1px); background-size: 12px 12px,12px 12px,12px 12px,12px 12px; }
-        .pat-prev-fern { background-image: repeating-linear-gradient(30deg,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px,transparent 12px),repeating-linear-gradient(-30deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 12px),linear-gradient(90deg,transparent 45%,rgba(0,0,0,0.22) 45%,rgba(0,0,0,0.22) 55%,transparent 55%); }
-        .pat-prev-petal { background-image: radial-gradient(circle at 20% 20%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 5px,transparent 5px),radial-gradient(circle at 50% 20%,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 4px,transparent 4px),radial-gradient(circle at 80% 20%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 5px,transparent 5px),radial-gradient(circle at 35% 50%,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 4px,transparent 4px),radial-gradient(circle at 65% 50%,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 4px,transparent 4px),radial-gradient(circle at 20% 80%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 5px,transparent 5px),radial-gradient(circle at 50% 80%,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 4px,transparent 4px),radial-gradient(circle at 80% 80%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 5px,transparent 5px); background-size: 40px 40px,40px 40px,40px 40px,40px 40px,40px 40px,40px 40px,40px 40px,40px 40px; }
-    </style>
-
     <script>
-        window.envPatterns = [
-            {v:'', l:'Yok'},
-            {v:'lace', l:'Dantel'},
-            {v:'floral', l:'Çiçek'},
-            {v:'geometric', l:'Geometrik'},
-            {v:'stars', l:'Yıldız'},
-            {v:'hearts', l:'Kalp'},
-            {v:'damask', l:'Damask'},
-            {v:'minimal', l:'Minimal'},
-            {v:'leaf', l:'Yaprak'},
-            {v:'vine', l:'Sarmaşık'},
-            {v:'blossom', l:'Çiçek Kümesi'},
-            {v:'botanic', l:'Botanik'},
-            {v:'fern', l:'Eğrelti'},
-            {v:'petal', l:'Taç Yaprağı'},
-        ];
-
         window.themes = @json($themes);
 
         var editEventLabels = {
@@ -771,7 +710,7 @@
                 groomMotherLabel: 'Anne Ad\u0131', groomMotherPlaceholder: 'Ay\u015fe',
                 brideFatherLabel: 'Baba Ad\u0131', brideFatherPlaceholder: 'Ahmet',
                 brideMotherLabel: 'Anne Ad\u0131', brideMotherPlaceholder: 'Fatma',
-                showBride: true, showBrideParents: true, showGroomMother: true, showBrideFather: true, showBrideMother: true, titleHint: 'D\u00fc\u011f\u00fcn Davetiyesi'
+                showBride: true, showBrideParents: true, showGroomMother: true, showBrideFather: true, showBrideMother: true, showStory: true, titleHint: 'D\u00fc\u011f\u00fcn Davetiyesi'
             },
             engagement: {
                 groomLabel: '👨 Damat Ad\u0131', groomPlaceholder: 'Ahmet',
@@ -793,7 +732,7 @@
                 groomMotherLabel: 'Anne Ad\u0131', groomMotherPlaceholder: 'Ay\u015fe',
                 brideFatherLabel: '', brideFatherPlaceholder: '',
                 brideMotherLabel: '', brideMotherPlaceholder: '',
-                showBride: false, showBrideParents: false, showGroomMother: true, showBrideFather: false, showBrideMother: false, titleHint: 'S\u00fcnnet Davetiyesi'
+                showBride: false, showBrideParents: false, showGroomMother: true, showBrideFather: false, showBrideMother: false, showStory: false, titleHint: 'S\u00fcnnet Davetiyesi'
             },
             birthday: {
                 groomLabel: '\ud83c\udf82 Do\u011fum G\u00fcn\u00fc Ki\u015fisi', groomPlaceholder: 'Ay\u015fe',
@@ -804,7 +743,7 @@
                 groomMotherLabel: 'Anne Ad\u0131', groomMotherPlaceholder: 'Ay\u015fe',
                 brideFatherLabel: '', brideFatherPlaceholder: '',
                 brideMotherLabel: '', brideMotherPlaceholder: '',
-                showBride: true, showBrideParents: false, showGroomMother: true, showBrideFather: false, showBrideMother: false, titleHint: 'Do\u011fum G\u00fcn\u00fc Davetiyesi'
+                showBride: true, showBrideParents: false, showGroomMother: true, showBrideFather: false, showBrideMother: false, showStory: false, titleHint: 'Do\u011fum G\u00fcn\u00fc Davetiyesi'
             },
             corporate: {
                 groomLabel: '\ud83c\udfe2 \u015eirket Ad\u0131', groomPlaceholder: 'ACME \u015eirketi',
@@ -815,7 +754,7 @@
                 groomMotherLabel: '', groomMotherPlaceholder: '',
                 brideFatherLabel: '', brideFatherPlaceholder: '',
                 brideMotherLabel: '', brideMotherPlaceholder: '',
-                showBride: true, showBrideParents: false, showGroomMother: false, showBrideFather: false, showBrideMother: false, titleHint: 'Kurumsal Davetiye'
+                showBride: true, showBrideParents: false, showGroomMother: false, showBrideFather: false, showBrideMother: false, showStory: false, titleHint: 'Kurumsal Davetiye'
             }
         };
 
@@ -838,6 +777,7 @@
 
             show('editBrideField', l.showBride);
             show('editBrideParents', l.showBrideParents);
+            show('editStoryField', l.showStory);
             show('editGroomMotherField', l.showGroomMother);
             show('editBrideFatherField', l.showBrideFather);
             show('editBrideMotherField', l.showBrideMother);

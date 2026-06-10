@@ -72,13 +72,9 @@ class InvitationController extends Controller
             return back()->with('error', 'Üyelik süreniz doldu. Yeni davetiye oluşturmak için planınızı yenileyin.');
         }
 
-        $plan = $user->plan;
-
-        if ($plan && $plan->max_invitations >= 0) {
-            $count = $user->invitations()->count();
-            if ($count >= $plan->max_invitations) {
-                return back()->with('error', 'Planınız en fazla '.$plan->max_invitations.' davetiyeye izin veriyor. Yeni davetiye oluşturmak için planınızı yükseltin.');
-            }
+        $limit = $this->checkInvitationLimit($user);
+        if ($limit) {
+            return $limit;
         }
 
         $data = $request->validate([
@@ -109,6 +105,7 @@ class InvitationController extends Controller
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:131072',
             'envelope_pattern' => 'nullable|string|max:50',
             'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
+            'corner_decoration' => 'nullable|image|mimes:png,webp|max:5120',
             'envelope_text_color' => 'nullable|string|max:20',
         ]);
 
@@ -123,6 +120,11 @@ class InvitationController extends Controller
         if ($request->hasFile('custom_pattern')) {
             $data['custom_pattern'] = $request->file('custom_pattern')
                 ->store('invitations/patterns', 'public');
+        }
+
+        if ($request->hasFile('corner_decoration')) {
+            $data['corner_decoration'] = $request->file('corner_decoration')
+                ->store('invitations/corners', 'public');
         }
 
         $invitation = auth()->user()->invitations()->create($data);
@@ -196,6 +198,7 @@ class InvitationController extends Controller
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:131072',
             'envelope_pattern' => 'nullable|string|max:50',
             'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
+            'corner_decoration' => 'nullable|image|mimes:png,webp|max:5120',
             'envelope_text_color' => 'nullable|string|max:20',
         ]);
 
@@ -213,6 +216,14 @@ class InvitationController extends Controller
             }
             $data['custom_pattern'] = $request->file('custom_pattern')
                 ->store('invitations/patterns', 'public');
+        }
+
+        if ($request->hasFile('corner_decoration')) {
+            if ($invitation->corner_decoration) {
+                Storage::disk('public')->delete($invitation->corner_decoration);
+            }
+            $data['corner_decoration'] = $request->file('corner_decoration')
+                ->store('invitations/corners', 'public');
         }
 
         $invitation->update($data);
@@ -264,13 +275,9 @@ class InvitationController extends Controller
             return back()->with('error', 'Üyelik süreniz doldu. Yeni davetiye oluşturmak için planınızı yenileyin.');
         }
 
-        $user = auth()->user();
-        $plan = $user->plan;
-        if ($plan && $plan->max_invitations >= 0) {
-            $count = $user->invitations()->count();
-            if ($count >= $plan->max_invitations) {
-                return back()->with('error', 'Plan limitiniz doldu. Yeni davetiye oluşturmak için planınızı yükseltin.');
-            }
+        $limit = $this->checkInvitationLimit(auth()->user());
+        if ($limit) {
+            return $limit;
         }
 
         $clone = $this->invitationService->clone($invitation);
@@ -286,6 +293,26 @@ class InvitationController extends Controller
         }
 
         return view('invitation.show', compact('invitation'));
+    }
+
+    protected function checkInvitationLimit($user)
+    {
+        $plan = $user->plan;
+
+        if (! $plan) {
+            return null;
+        }
+
+        if ($plan->max_invitations === -1) {
+            return null;
+        }
+
+        $count = $user->invitations()->count();
+        if ($count >= $plan->max_invitations) {
+            return back()->with('error', 'Planınız en fazla '.$plan->max_invitations.' davetiyeye izin veriyor. Yeni davetiye oluşturmak için planınızı yükseltin.');
+        }
+
+        return null;
     }
 
     // Image management
@@ -344,11 +371,24 @@ class InvitationController extends Controller
         }
 
         $data = $request->validate([
-            'url' => 'required|url',
-            'type' => 'required|in:youtube,vimeo',
+            'url' => 'nullable|url',
+            'video_file' => 'nullable|file|mimes:mp4,webm,mov|max:51200',
+            'type' => 'nullable|in:youtube,vimeo,upload',
             'caption' => 'nullable|string|max:255',
         ]);
 
+        if ($request->hasFile('video_file')) {
+            $data['file_path'] = $request->file('video_file')
+                ->store('invitations/videos', 'public');
+            $data['type'] = 'upload';
+            unset($data['url']);
+        } elseif ($request->filled('url')) {
+            $data['type'] = $data['type'] ?? 'youtube';
+        } else {
+            return back()->with('error', 'Video URL girin veya bir dosya yükleyin.');
+        }
+
+        unset($data['video_file']);
         $invitation->videos()->create($data);
 
         return back()->with('success', 'Video eklendi.');
@@ -358,6 +398,10 @@ class InvitationController extends Controller
     {
         if ($video->invitation->user_id !== auth()->id()) {
             abort(403);
+        }
+
+        if ($video->file_path) {
+            Storage::disk('public')->delete($video->file_path);
         }
 
         $video->delete();

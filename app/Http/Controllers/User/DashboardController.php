@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\PaymentNotification;
 use App\Models\Plan;
 use App\Models\Rsvp;
 
@@ -47,8 +48,18 @@ class DashboardController extends Controller
             $suggested_plan = Plan::active()->orderBy('monthly_price')->first();
         }
 
+        $latestPayment = PaymentNotification::where('user_id', $user->id)
+            ->latest()
+            ->first();
+
+        $hasPendingPayment = PaymentNotification::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->exists();
+
         $data = [
             'plan' => $plan,
+            'payment_notification' => $latestPayment,
+            'has_pending_payment' => $hasPendingPayment,
             'invoices' => $invoices,
             'missing_features' => $missing_features,
             'suggested_plan' => $suggested_plan,

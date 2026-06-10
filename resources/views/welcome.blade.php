@@ -175,12 +175,6 @@
         .env-label .arrow { animation: arrowBounce 2s ease-in-out infinite; }
         @keyframes arrowBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
 
-        .env-3d {
-            position: relative; width: 380px; height: 280px; margin: 0 auto;
-            transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
         .env-3d .card-body {
             position: absolute; inset: 0; border-radius: 20px;
             background: linear-gradient(160deg, var(--site-primary), var(--site-primary-dark));
@@ -190,12 +184,38 @@
         .env-3d .card-body::before {
             content: ''; position: absolute; inset: 0;
             background:
-                linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%),
                 repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 3px);
+            z-index: 1;
         }
         .env-3d .card-body::after {
             content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
             background: linear-gradient(0deg, rgba(0,0,0,0.06), transparent);
+            z-index: 1;
+        }
+
+        .env-3d .gold-shimmer {
+            position: absolute; inset: 0; border-radius: 20px; z-index: 2;
+            pointer-events: none; overflow: hidden;
+            background: linear-gradient(105deg,
+                transparent 30%,
+                rgba(255,215,0,0.08) 40%,
+                rgba(255,215,0,0.15) 42%,
+                rgba(255,215,0,0.08) 44%,
+                transparent 50%
+            );
+            background-size: 300% 100%;
+            animation: goldShimmer 4s ease-in-out infinite;
+        }
+        @keyframes goldShimmer {
+            0% { background-position: 200% 0; }
+            30% { background-position: -100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        .env-3d .gold-shimmer::after {
+            content: ''; position: absolute; inset: 0; border-radius: 20px;
+            background: radial-gradient(circle at 50% 30%, rgba(255,215,0,0.04), transparent 60%);
         }
 
         .env-3d .crease {
@@ -706,9 +726,9 @@
                 <span class="arrow">↓</span> Zarfı Açmak İçin Kaydır <span class="arrow">↓</span>
             </div>
             <div class="env-3d" id="env3d">
-                <div class="card-body"></div>
+                <div class="card-body"><div class="gold-shimmer"></div></div>
                 <div class="crease"></div>
-                <div class="card-flap"></div>
+                <div class="card-flap"><div class="gold-shimmer"></div></div>
                 <div class="flap-inner"></div>
                 <div class="seal">♥</div>
                 <div class="letter">
@@ -836,7 +856,7 @@
                         <li><span class="{{ $plan->qr_download ? 'check' : 'cross' }}">{{ $plan->qr_download ? '✓' : '✗' }}</span> QR kod indirme</li>
                     </ul>
                     @auth
-                        <a href="{{ route('payment.checkout', $plan) }}" class="p-btn {{ $plan->monthly_price == 0 ? 'p-btn-outline' : '' }}">Satın Al</a>
+                        <a href="{{ route('payment.eft.checkout', $plan) }}" class="p-btn {{ $plan->monthly_price == 0 ? 'p-btn-outline' : '' }}">Satın Al</a>
                     @else
                         <a href="{{ route('register', ['purchase' => 1]) }}" class="p-btn p-btn-outline">Satın Al</a>
                     @endauth
@@ -911,7 +931,7 @@
                 </details>
                 <details class="faq-item" id="faq3">
                     <summary class="faq-q">Hangi ödeme yöntemlerini kabul ediyorsunuz?</summary>
-                    <div class="faq-a">Kredi kartı ve banka kartı ile ödeme yapabilirsiniz. Tüm ödemeler 256-bit SSL ile güvence altındadır.</div>
+                    <div class="faq-a">EFT/Havale ile ödeme yapabilirsiniz. Ödeme bildiriminiz onaylandıktan sonra aboneliğiniz aktifleşir.</div>
                 </details>
                 <details class="faq-item" id="faq4">
                     <summary class="faq-q">Aboneliğimi iptal edebilir miyim?</summary>
@@ -990,7 +1010,16 @@
         </div>
 
         <footer>
-            &copy; {{ date('Y') }} senin 💝 davetiyen. Tüm hakları saklıdır.
+            <div class="flex flex-col items-center gap-3">
+                <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+                    <a href="{{ route('legal.gizlilik') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">Gizlilik Politikası</a>
+                    <a href="{{ route('legal.kvkk') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">KVKK Aydınlatma Metni</a>
+                    <a href="{{ route('legal.kullanim') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">Kullanım Koşulları</a>
+                    <a href="{{ route('legal.iade') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">İade ve İptal Politikası</a>
+                    <a href="{{ route('legal.mesafeli') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">Mesafeli Satış Sözleşmesi</a>
+                </div>
+                <div>&copy; {{ date('Y') }} senin 💝 davetiyen. Tüm hakları saklıdır.</div>
+            </div>
         </footer>
     </div>
 
@@ -1005,9 +1034,30 @@
         var particlesEl = document.getElementById('particles');
         var heroScroll = document.getElementById('heroScroll');
         var navbar = document.getElementById('navbar');
+        var ticking = false;
+
+        // 3D tilt on mouse move
+        var envWrap = document.querySelector('.env-sticky');
+        if (envWrap && env) {
+            envWrap.addEventListener('mousemove', function(e) {
+                if (hasOpened || window.innerWidth < 768) return;
+                var rect = envWrap.getBoundingClientRect();
+                var x = (e.clientX - rect.left) / rect.width;
+                var y = (e.clientY - rect.top) / rect.height;
+                var tiltX = (y - 0.5) * -12;
+                var tiltY = (x - 0.5) * 12;
+                env.classList.add('tilt');
+                env.style.transform = 'rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg)';
+            });
+            envWrap.addEventListener('mouseleave', function() {
+                if (hasOpened) return;
+                env.classList.remove('tilt');
+                env.style.transform = '';
+            });
+        }
 
         // Navbar scroll effect
-        window.addEventListener('scroll', function() {
+        function updateNavbar() {
             if (window.scrollY > 40) {
                 navbar.classList.add('shadow-sm');
                 heroScroll.classList.add('hidden');
@@ -1015,9 +1065,9 @@
                 navbar.classList.remove('shadow-sm');
                 heroScroll.classList.remove('hidden');
             }
-        });
+        }
 
-        window.addEventListener('scroll', function() {
+        function updateEnvelopeScroll() {
             if (!scene) return;
             var rect = scene.getBoundingClientRect();
             var winH = window.innerHeight;
@@ -1043,6 +1093,10 @@
             if (prog > 0.18 && !hasOpened) {
                 hasOpened = true;
                 env.classList.add('open');
+                if (env.classList.contains('tilt')) {
+                    env.classList.remove('tilt');
+                    env.style.transform = '';
+                }
                 setTimeout(function() { spawnParticles(); }, 600);
                 setTimeout(function() { spawnConfetti(); }, 900);
             }
@@ -1073,7 +1127,19 @@
                     c.classList.add('visible');
                 }
             });
-        });
+        }
+
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    updateNavbar();
+                    updateEnvelopeScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
 
         function spawnParticles() {
             var colors = ['{{ $sp }}', '{{ $ss }}', '#f59e0b', '#ec4899', '#6366f1', '#10b981', '#f97316'];

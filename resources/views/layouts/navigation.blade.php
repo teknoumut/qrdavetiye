@@ -1,3 +1,4 @@
+@auth
 <nav x-data="{ open: false, scrolled: false }" x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 20)" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" :class="scrolled ? 'bg-white/90 dark:bg-night-800/90 backdrop-blur-2xl shadow-sm dark:shadow-night-900/50' : 'bg-white/70 dark:bg-night-800/70 backdrop-blur-xl'">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -110,3 +111,17 @@
         </div>
     </div>
 </nav>
+@else
+<div class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-night-800/80 backdrop-blur-xl border-b border-cream-200 dark:border-night-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+            <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-gold-400 to-rose-500 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-gold-200/50">s</span>
+            <span class="font-bold text-base sm:text-lg tracking-tight text-night-900 dark:text-cream-100 hidden sm:block">senin 💝 davetiyen</span>
+        </a>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-night-600 dark:text-cream-300 hover:text-night-900 dark:hover:text-cream-100 transition-colors">Giriş Yap</a>
+            <a href="{{ route('register') }}" class="px-5 py-2 text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-gold-400 to-rose-500 hover:opacity-90 transition-all shadow-lg shadow-gold-200/50 dark:shadow-gold-500/20">Kayıt Ol</a>
+        </div>
+    </div>
+</div>
+@endauth

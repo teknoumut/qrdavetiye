@@ -5,7 +5,7 @@
                 <h1 class="text-xl sm:text-2xl font-bold text-night-900 dark:text-cream-100 tracking-tight">Merhaba, {{ auth()->user()->name }}</h1>
                 <p class="text-sm text-night-400 dark:text-cream-400 mt-1">Davetiyelerinin genel durumu</p>
             </div>
-            @if($needs_subscription || $subscription_expired)
+            @if(($needs_subscription && !$has_pending_payment) || $subscription_expired)
                 <span class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white/60 bg-gradient-to-r from-gold-500/50 to-rose-500/50 cursor-not-allowed shadow-lg shadow-gold-200/50 dark:shadow-gold-500/20" title="Önce bir plan satın almalısınız">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                     Yeni Davetiye
@@ -21,7 +21,7 @@
 
     <div class="space-y-6 sm:space-y-8">
         @unless(auth()->user()->is_admin)
-        @if($needs_subscription)
+        @if($needs_subscription && !$has_pending_payment)
             <div class="animate-fade-in">
                 <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-gold-50 to-rose-50 dark:from-gold-500/10 dark:to-rose-500/10 border border-gold-200 dark:border-gold-500/20">
                     <div class="flex items-start gap-3.5">
@@ -89,6 +89,58 @@
             </div>
         @endif
         @endunless
+
+        @if($payment_notification)
+            <div class="animate-fade-in">
+                @if($payment_notification->status === 'pending')
+                    <div class="p-4 sm:p-5 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20">
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-500/20 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-amber-800 dark:text-amber-300">Ödeme Onay Bekliyor</p>
+                                <p class="text-sm text-amber-700/70 dark:text-amber-400/70 mt-0.5">
+                                    <strong>{{ $payment_notification->plan->name }}</strong> planı için <strong>{{ number_format($payment_notification->amount, 2) }} TL</strong> tutarındaki ödeme bildiriminiz (<span class="font-mono">{{ $payment_notification->order_no }}</span>) alındı, admin onayı bekleniyor.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @elseif($payment_notification->status === 'approved')
+                    <div class="p-4 sm:p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20">
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-emerald-800 dark:text-emerald-300">Ödeme Onaylandı! 🎉</p>
+                                <p class="text-sm text-emerald-700/70 dark:text-emerald-400/70 mt-0.5">
+                                    <strong>{{ $payment_notification->plan->name }}</strong> planına ait ödemeniz onaylandı. Aboneliğiniz aktif! Hemen davetiyeni oluşturmaya başlayabilirsin.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @elseif($payment_notification->status === 'rejected')
+                    <div class="p-4 sm:p-5 rounded-2xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20">
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-500/20 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-red-800 dark:text-red-300">Ödeme Reddedildi</p>
+                                <p class="text-sm text-red-700/70 dark:text-red-400/70 mt-0.5">
+                                    <strong>{{ $payment_notification->plan->name }}</strong> planı için yaptığınız ödeme bildirimi reddedildi.
+                                    @if($payment_notification->notes)
+                                        <br>Sebep: {{ $payment_notification->notes }}
+                                    @endif
+                                    Lütfen iletişime geçin.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        @endif
 
         @unless(auth()->user()->is_admin)
         @if ($plan && ! $needs_subscription)

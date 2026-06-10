@@ -139,7 +139,7 @@
                                     class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all resize-none" placeholder="Sevgili dostlarımız...">{{ old('welcome_message') }}</textarea>
                             </div>
 
-                            <div>
+                            <div id="storyField">
                                 <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">💕 Hikayeniz</label>
                                 <textarea name="story" rows="3"
                                     class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all resize-none" placeholder="Birlikte geçirdiğiniz güzel günlerden bahsedin...">{{ old('story') }}</textarea>
@@ -253,36 +253,8 @@
                             </div>
                         </div>
 
-                            <div x-data="{ selectedPattern: '{{ old('envelope_pattern', '') }}' }">
-                                <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-3">Zarf Deseni</label>
-
-                                <div class="grid grid-cols-4 sm:grid-cols-4 gap-2.5 mb-4">
-                                    <template x-for="p in window.envPatterns" :key="p.v">
-                                        <button type="button"
-                                            @click="selectedPattern = p.v"
-                                            class="relative flex flex-col items-center gap-2 p-2 rounded-xl border-2 cursor-pointer transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-gold-400/40"
-                                            :class="selectedPattern === p.v
-                                                ? 'border-gold-500 bg-gold-50 dark:bg-gold-500/10 shadow-md'
-                                                : 'border-cream-200 dark:border-night-700 hover:border-gold-300 dark:hover:border-gold-500/30 hover:shadow-sm'">
-                                            <div class="w-full aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-gold-400 to-gold-600 shadow-sm relative">
-                                                <div :class="'pat-prev-' + p.v" class="absolute inset-0"></div>
-                                                <template x-if="p.v === ''">
-                                                    <div class="absolute inset-0 flex items-center justify-center bg-black/5 dark:bg-white/5">
-                                                        <svg class="w-5 h-5 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                                    </div>
-                                                </template>
-                                                <div x-show="selectedPattern === p.v"
-                                                    class="absolute top-1 right-1 w-5 h-5 rounded-full bg-gold-500 text-white flex items-center justify-center shadow"
-                                                    style="display: none;">
-                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                                                </div>
-                                            </div>
-                                            <span class="text-[11px] leading-tight text-center font-semibold text-night-600 dark:text-cream-300 transition-colors" x-text="p.l"></span>
-                                        </button>
-                                    </template>
-                                </div>
-
-                                <input type="hidden" name="envelope_pattern" :value="selectedPattern">
+                            <div>
+                                <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-3">Kendi Desenini Yükle</label>
 
                                 <div class="rounded-xl border-2 border-dashed border-cream-200 dark:border-night-700 hover:border-gold-300 dark:hover:border-gold-500/30 transition-all duration-200 overflow-hidden">
                                     <label class="flex items-center gap-3 px-4 py-3 cursor-pointer">
@@ -290,8 +262,8 @@
                                             <span>🖼️</span>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <span class="text-sm font-semibold text-night-700 dark:text-cream-200 block leading-tight">Kendi Desenini Yükle</span>
-                                            <span class="text-xs text-night-400 dark:text-cream-400 block mt-0.5" id="customFileLabel">PNG, JPG, SVG — 64MB'a kadar</span>
+                                            <span class="text-sm font-semibold text-night-700 dark:text-cream-200 block leading-tight">PNG, JPG, SVG — 64MB'a kadar</span>
+                                            <span class="text-xs text-night-400 dark:text-cream-400 block mt-0.5" id="customFileLabel">Dosya seçilmedi</span>
                                         </div>
                                         <div class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 border border-gold-200 dark:border-gold-500/20 hover:bg-gold-100 dark:hover:bg-gold-500/20 transition-colors shrink-0">
                                             Gözat
@@ -305,6 +277,7 @@
                                             ">
                                     </label>
                                 </div>
+
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
@@ -366,23 +339,7 @@
         </div>
     </div>
 
-    <style>
-        .pat-prev- { background: white; }
-        .dark .pat-prev- { background: #3d4353; }
-        .pat-prev-lace { background-image: repeating-linear-gradient(45deg,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px,transparent 8px),repeating-linear-gradient(-45deg,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px,transparent 8px); background-size: 10px 10px; }
-        .pat-prev-floral { background-image: radial-gradient(circle at 25% 30%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 2.5px,transparent 2.5px),radial-gradient(circle at 75% 70%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 2.5px,transparent 2.5px); background-size: 24px 24px,24px 24px; }
-        .pat-prev-geometric { background-image: repeating-linear-gradient(0deg,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 1.5px,transparent 1.5px,transparent 12px),repeating-linear-gradient(90deg,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 1.5px,transparent 1.5px,transparent 12px); background-size: 12px 12px,12px 12px; }
-        .pat-prev-stars { background-image: radial-gradient(circle at 20% 25%,rgba(0,0,0,0.25) 0,rgba(0,0,0,0.25) 2px,transparent 2px),radial-gradient(circle at 80% 30%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 50% 80%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 2px,transparent 2px); background-size: 32px 32px,32px 32px,32px 32px; }
-        .pat-prev-hearts { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' opacity='0.18' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"); background-size: 22px 22px; }
-        .pat-prev-damask { background-image: repeating-conic-gradient(rgba(0,0,0,0.15) 0% 25%,transparent 0% 50%); background-size: 18px 18px; }
-        .pat-prev-minimal { background-image: repeating-linear-gradient(90deg,rgba(0,0,0,0.22) 0,rgba(0,0,0,0.22) 1.5px,transparent 1.5px,transparent 12px); background-size: 12px 12px; }
-        .pat-prev-leaf { background-image: repeating-linear-gradient(12deg,transparent 0,transparent 8px,rgba(0,0,0,0.18) 8px,rgba(0,0,0,0.18) 9.5px,transparent 9.5px,transparent 18px),linear-gradient(90deg,transparent 45%,rgba(0,0,0,0.25) 45%,rgba(0,0,0,0.25) 55%,transparent 55%); }
-        .pat-prev-vine { background-image: repeating-linear-gradient(50deg,transparent 0,transparent 12px,rgba(0,0,0,0.18) 12px,rgba(0,0,0,0.18) 14.5px,transparent 14.5px,transparent 26px),repeating-linear-gradient(-50deg,transparent 0,transparent 8px,rgba(0,0,0,0.12) 8px,rgba(0,0,0,0.12) 9.5px,transparent 9.5px,transparent 22px); }
-        .pat-prev-blossom { background-image: radial-gradient(circle at 15% 25%,rgba(0,0,0,0.25) 0,rgba(0,0,0,0.25) 2px,transparent 2px),radial-gradient(circle at 10% 30%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 20% 30%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 15% 34%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 55% 65%,rgba(0,0,0,0.25) 0,rgba(0,0,0,0.25) 2px,transparent 2px),radial-gradient(circle at 50% 70%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 60% 70%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px),radial-gradient(circle at 55% 74%,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px); background-size: 36px 36px,36px 36px,36px 36px,36px 36px,36px 36px,36px 36px,36px 36px,36px 36px; }
-        .pat-prev-botanic { background-image: repeating-linear-gradient(0deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 0.5px,transparent 0.5px,transparent 6px),repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 0.5px,transparent 0.5px,transparent 6px),radial-gradient(circle at 25% 25%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 1px,transparent 1px),radial-gradient(circle at 75% 75%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 1px,transparent 1px); background-size: 12px 12px,12px 12px,12px 12px,12px 12px; }
-        .pat-prev-fern { background-image: repeating-linear-gradient(30deg,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 1.5px,transparent 1.5px,transparent 12px),repeating-linear-gradient(-30deg,rgba(0,0,0,0.12) 0,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 12px),linear-gradient(90deg,transparent 45%,rgba(0,0,0,0.22) 45%,rgba(0,0,0,0.22) 55%,transparent 55%); }
-        .pat-prev-petal { background-image: radial-gradient(circle at 20% 20%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 5px,transparent 5px),radial-gradient(circle at 50% 20%,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 4px,transparent 4px),radial-gradient(circle at 80% 20%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 5px,transparent 5px),radial-gradient(circle at 35% 50%,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 4px,transparent 4px),radial-gradient(circle at 65% 50%,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 4px,transparent 4px),radial-gradient(circle at 20% 80%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 5px,transparent 5px),radial-gradient(circle at 50% 80%,rgba(0,0,0,0.15) 0,rgba(0,0,0,0.15) 4px,transparent 4px),radial-gradient(circle at 80% 80%,rgba(0,0,0,0.2) 0,rgba(0,0,0,0.2) 5px,transparent 5px); background-size: 40px 40px,40px 40px,40px 40px,40px 40px,40px 40px,40px 40px,40px 40px,40px 40px; }
-    </style>
+
 
     <script>
         var eventTypeLabels = {
@@ -395,7 +352,7 @@
                 groomMotherLabel: 'Anne Ad\u0131', groomMotherPlaceholder: 'Ay\u015fe',
                 brideFatherLabel: 'Baba Ad\u0131', brideFatherPlaceholder: 'Ahmet',
                 brideMotherLabel: 'Anne Ad\u0131', brideMotherPlaceholder: 'Fatma',
-                showBride: true, showBrideParents: true, titleHint: 'D\u00fc\u011f\u00fcn Davetiyesi'
+                showBride: true, showBrideParents: true, showStory: true, titleHint: 'D\u00fc\u011f\u00fcn Davetiyesi'
             },
             engagement: {
                 groomLabel: '👨 Damat Ad\u0131', groomPlaceholder: 'Ahmet',
@@ -406,7 +363,7 @@
                 groomMotherLabel: 'Anne Ad\u0131', groomMotherPlaceholder: 'Ay\u015fe',
                 brideFatherLabel: 'Baba Ad\u0131', brideFatherPlaceholder: 'Ahmet',
                 brideMotherLabel: 'Anne Ad\u0131', brideMotherPlaceholder: 'Fatma',
-                showBride: true, showBrideParents: true, titleHint: 'Ni\u015fan Davetiyesi'
+                showBride: true, showBrideParents: true, showStory: true, titleHint: 'Ni\u015fan Davetiyesi'
             },
             circumcision: {
                 groomLabel: '\u2702\ufe0f \u00c7ocuk Ad\u0131', groomPlaceholder: 'Mehmet',
@@ -417,7 +374,7 @@
                 groomMotherLabel: 'Anne Ad\u0131', groomMotherPlaceholder: 'Ay\u015fe',
                 brideFatherLabel: '', brideFatherPlaceholder: '',
                 brideMotherLabel: '', brideMotherPlaceholder: '',
-                showBride: false, showBrideParents: false, titleHint: 'S\u00fcnnet Davetiyesi'
+                showBride: false, showBrideParents: false, showStory: false, titleHint: 'S\u00fcnnet Davetiyesi'
             },
             birthday: {
                 groomLabel: '\ud83c\udf82 Do\u011fum G\u00fcn\u00fc Ki\u015fisi', groomPlaceholder: 'Ay\u015fe',
@@ -428,7 +385,7 @@
                 groomMotherLabel: 'Anne Ad\u0131', groomMotherPlaceholder: 'Ay\u015fe',
                 brideFatherLabel: '', brideFatherPlaceholder: '',
                 brideMotherLabel: '', brideMotherPlaceholder: '',
-                showBride: true, showBrideParents: false, titleHint: 'Do\u011fum G\u00fcn\u00fc Davetiyesi'
+                showBride: true, showBrideParents: false, showStory: false, titleHint: 'Do\u011fum G\u00fcn\u00fc Davetiyesi'
             },
             corporate: {
                 groomLabel: '\ud83c\udfe2 \u015eirket / Organizasyon Ad\u0131', groomPlaceholder: 'ACME \u015eirketi',
@@ -439,7 +396,7 @@
                 groomMotherLabel: '', groomMotherPlaceholder: '',
                 brideFatherLabel: '', brideFatherPlaceholder: '',
                 brideMotherLabel: '', brideMotherPlaceholder: '',
-                showBride: true, showBrideParents: false, titleHint: 'Kurumsal Davetiye'
+                showBride: true, showBrideParents: false, showStory: false, titleHint: 'Kurumsal Davetiye'
             }
         };
 
@@ -466,6 +423,8 @@
 
             if (brideField) brideField.style.display = labels.showBride ? '' : 'none';
             if (brideParents) brideParents.style.display = labels.showBrideParents ? '' : 'none';
+            var storyField = document.getElementById('storyField');
+            if (storyField) storyField.style.display = labels.showStory ? '' : 'none';
 
             if (brideInput) {
                 brideInput.required = labels.showBride;
@@ -513,23 +472,6 @@
         });
     </script>
     <script>
-        window.envPatterns = [
-            {v:'', l:'Yok'},
-            {v:'lace', l:'Dantel'},
-            {v:'floral', l:'Çiçek'},
-            {v:'geometric', l:'Geometrik'},
-            {v:'stars', l:'Yıldız'},
-            {v:'hearts', l:'Kalp'},
-            {v:'damask', l:'Damask'},
-            {v:'minimal', l:'Minimal'},
-            {v:'leaf', l:'Yaprak'},
-            {v:'vine', l:'Sarmaşık'},
-            {v:'blossom', l:'Çiçek Kümesi'},
-            {v:'botanic', l:'Botanik'},
-            {v:'fern', l:'Eğrelti'},
-            {v:'petal', l:'Taç Yaprağı'},
-        ];
-
         window.themes = @json($themes);
 
         document.addEventListener('DOMContentLoaded', function() {

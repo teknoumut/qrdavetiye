@@ -1,5 +1,9 @@
 <?php
 
+ini_set('upload_max_filesize', '100M');
+ini_set('post_max_size', '110M');
+ini_set('max_execution_time', '300');
+
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 

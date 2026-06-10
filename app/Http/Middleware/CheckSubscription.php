@@ -14,6 +14,10 @@ class CheckSubscription
     {
         $user = auth()->user();
 
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
         if (! $user->is_active && ! $user->is_admin) {
             return redirect()->route('home')->with('error', 'Hesabınız pasif durumda. Lütfen yöneticinizle iletişime geçin.');
         }

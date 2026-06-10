@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\PaymentNotification;
+use App\Models\Plan;
+use App\Models\Setting;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class EftPaymentController extends Controller
+{
+    public function checkout(Plan $plan)
+    {
+        if (! $plan->is_active) {
+            return redirect()->route('home')->with('error', 'Bu plan şu anda aktif değil.');
+        }
+
+        return view('payment.eft-checkout', compact('plan'));
+    }
+
+    public function show(Plan $plan, string $interval)
+    {
+        if (! in_array($interval, ['monthly', 'yearly'])) {
+            return redirect()->route('home');
+        }
+
+        if (! $plan->is_active) {
+            return redirect()->route('home')->with('error', 'Bu plan şu anda aktif değil.');
+        }
+
+        $price = $interval === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
+
+        if (is_null($price) || $price < 0) {
+            return redirect()->route('home')->with('error', 'Geçersiz fiyat.');
+        }
+
+        $orderNo = PaymentNotification::generateOrderNo();
+
+        $bankName = Setting::getValue('bank_name', 'Ziraat Bankası');
+        $iban = Setting::getValue('bank_iban', 'TR00 0000 0000 0000 0000 0000');
+        $bankHolder = Setting::getValue('bank_holder', 'senindavetiyen.com.tr');
+
+        return view('payment.eft', compact('plan', 'interval', 'price', 'orderNo', 'bankName', 'iban', 'bankHolder'));
+    }
+
+    public function notify(Request $request)
+    {
+        $data = $request->validate([
+            'plan_id' => 'required|exists:plans,id',
+            'interval' => 'required|in:monthly,yearly',
+            'order_no' => 'required|string|max:50|unique:payment_notifications,order_no',
+            'amount' => 'required|numeric|min:0',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $plan = Plan::findOrFail($data['plan_id']);
+        $expectedPrice = $data['interval'] === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
+
+        if (abs((float) $data['amount'] - (float) $expectedPrice) > 0.01) {
+            return back()->with('error', 'Gönderilen tutar plan ücreti ile uyuşmuyor. Lütfen doğru tutarı gönderdiğinizden emin olun.');
+        }
+
+        try {
+            $notification = PaymentNotification::create([
+                'user_id' => auth()->id(),
+                'plan_id' => $data['plan_id'],
+                'order_no' => $data['order_no'],
+                'interval' => $data['interval'],
+                'amount' => $data['amount'],
+                'status' => 'pending',
+                'notes' => $data['notes'] ?? null,
+            ]);
+
+            Log::info('EFT payment notification submitted', [
+                'user_id' => auth()->id(),
+                'notification_id' => $notification->id,
+                'order_no' => $data['order_no'],
+            ]);
+
+            return redirect()->route('payment.eft.success', [
+                'plan' => $plan->id,
+                'order_no' => $data['order_no'],
+            ])->with('success', 'Ödeme bildiriminiz alındı. Onay süreci tamamlandığında aboneliğiniz aktifleşecektir.');
+        } catch (\Throwable $e) {
+            Log::error('EFT notification creation failed', [
+                'user_id' => auth()->id(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'Bildirim gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+        }
+    }
+
+    public function success(Plan $plan, Request $request)
+    {
+        $orderNo = $request->order_no;
+
+        return view('payment.eft-success', compact('plan', 'orderNo'));
+    }
+}

@@ -9,6 +9,7 @@ class InvitationVideo extends Model
     protected $fillable = [
         'invitation_id',
         'url',
+        'file_path',
         'type',
         'caption',
         'order',

@@ -9,19 +9,24 @@
                 <p class="text-night-400 dark:text-night-500 text-sm mt-1">{{ $plan->description }}</p>
             </div>
 
+            @php
+                $taxRate = (float) \App\Models\Setting::getValue('tax_rate', 20);
+                $monthlyTotal = round($plan->monthly_price * (1 + $taxRate / 100), 2);
+                $yearlyTotal = round($plan->yearly_price * (1 + $taxRate / 100), 2);
+            @endphp
             <div class="grid grid-cols-2 gap-3 mb-6">
                 <a href="{{ route('payment.eft.pay', ['plan' => $plan->id, 'interval' => 'monthly']) }}"
                    class="block p-5 rounded-xl border-2 border-emerald-200 dark:border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-500/5 text-center hover:border-emerald-400 dark:hover:border-emerald-400 transition-all group">
-                    <div class="text-2xl font-black text-night-900 dark:text-cream-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ number_format($plan->monthly_price, 2) }} TL</div>
-                    <div class="text-sm text-night-400 dark:text-night-500 mt-1">Aylık</div>
+                    <div class="text-2xl font-black text-night-900 dark:text-cream-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ number_format($monthlyTotal, 2) }} TL</div>
+                    <div class="text-xs text-night-400 dark:text-night-500 mt-1">Aylık (KDV Dahil)</div>
                 </a>
                 <a href="{{ route('payment.eft.pay', ['plan' => $plan->id, 'interval' => 'yearly']) }}"
                    class="block p-5 rounded-xl border-2 border-emerald-200 dark:border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-500/5 text-center hover:border-emerald-400 dark:hover:border-emerald-400 transition-all group relative">
                     @if($plan->yearly_price < $plan->monthly_price * 12)
                         <span class="absolute -top-2.5 right-3 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">%{{ round((1 - $plan->yearly_price / ($plan->monthly_price * 12)) * 100) }} TASARRUF</span>
                     @endif
-                    <div class="text-2xl font-black text-night-900 dark:text-cream-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ number_format($plan->yearly_price, 2) }} TL</div>
-                    <div class="text-sm text-night-400 dark:text-night-500 mt-1">Yıllık</div>
+                    <div class="text-2xl font-black text-night-900 dark:text-cream-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ number_format($yearlyTotal, 2) }} TL</div>
+                    <div class="text-xs text-night-400 dark:text-night-500 mt-1">Yıllık (KDV Dahil)</div>
                 </a>
             </div>
 

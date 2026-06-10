@@ -1,8 +1,8 @@
 {
-    "name": "laravel/laravel",
+    "name": "teknoumut/qrdavetiye",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "senin 💝 davetiyen - Dijital Davetiye Platformu.",
+    "keywords": ["davetiye", "qr-davetiye"],
     "license": "MIT",
     "require": {
         "php": "^8.1",

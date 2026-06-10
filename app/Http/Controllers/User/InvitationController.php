@@ -105,9 +105,9 @@ class InvitationController extends Controller
             'envelope_animation' => 'nullable|string|max:50',
             'primary_color' => 'nullable|string|max:7',
             'secondary_color' => 'nullable|string|max:7',
-            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:65536',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:131072',
             'envelope_pattern' => 'nullable|string|max:50',
-            'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:65536',
+            'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
             'envelope_text_color' => 'nullable|string|max:20',
         ]);
 
@@ -192,9 +192,9 @@ class InvitationController extends Controller
             'envelope_animation' => 'nullable|string|max:50',
             'primary_color' => 'nullable|string|max:7',
             'secondary_color' => 'nullable|string|max:7',
-            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:65536',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:131072',
             'envelope_pattern' => 'nullable|string|max:50',
-            'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:65536',
+            'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
             'envelope_text_color' => 'nullable|string|max:20',
         ]);
 
@@ -303,7 +303,7 @@ class InvitationController extends Controller
         }
 
         $data = $request->validate([
-            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:10240',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:20480',
             'caption' => 'nullable|string|max:255',
         ]);
 
@@ -378,7 +378,7 @@ class InvitationController extends Controller
 
         $data = $request->validate([
             'title' => 'nullable|string|max:255',
-            'music_file' => 'nullable|file|mimes:mp3,wav,ogg|max:10240',
+            'music_file' => 'nullable|file|mimes:mp3,wav,ogg|max:30720',
             'embed_url' => 'nullable|string',
         ]);
 

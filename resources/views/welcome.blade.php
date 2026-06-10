@@ -178,29 +178,44 @@
         .env-3d {
             position: relative; width: 380px; height: 280px; margin: 0 auto;
             transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         .env-3d .card-body {
             position: absolute; inset: 0; border-radius: 20px;
             background: linear-gradient(160deg, var(--site-primary), var(--site-primary-dark));
             box-shadow: 0 40px 100px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.20);
-            transform: translateZ(0); overflow: hidden;
+            overflow: hidden;
         }
         .env-3d .card-body::before {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 3px);
         }
         .env-3d .card-body::after {
             content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
             background: linear-gradient(0deg, rgba(0,0,0,0.06), transparent);
         }
 
+        .env-3d .crease {
+            position: absolute; top: 50%; left: 6%; right: 6%;
+            height: 1px; z-index: 5;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.07) 20%, rgba(0,0,0,0.07) 80%, transparent);
+            opacity: 0;
+            transition: opacity 0.8s ease 0.3s;
+        }
+        .env-3d.open .crease { opacity: 1; }
+
         .env-3d .card-flap {
             position: absolute; top: -4px; left: -4px; right: -4px;
             height: 54%; border-radius: 20px 20px 0 0;
             background: linear-gradient(160deg, var(--site-primary), var(--site-primary-dark));
             clip-path: polygon(0 0, 50% 100%, 100% 0);
-            transform-origin: bottom; z-index: 3;
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
+            transform-origin: bottom center;
+            z-index: 3;
+            backface-visibility: hidden;
+            transition: transform 1s cubic-bezier(0.22, 1.0, 0.36, 1) 0.4s;
         }
         .env-3d .card-flap::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -209,6 +224,25 @@
         }
         .env-3d.open .card-flap { transform: rotateX(180deg); }
 
+        .env-3d .flap-inner {
+            position: absolute; top: -4px; left: -4px; right: -4px;
+            height: 54%; border-radius: 20px 20px 0 0;
+            background: linear-gradient(160deg, var(--site-primary-dark), var(--site-primary));
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: bottom center;
+            z-index: 2;
+            backface-visibility: hidden;
+            transform: rotateX(180deg);
+            opacity: 0;
+            transition: opacity 0.4s ease 0.9s;
+        }
+        .env-3d .flap-inner::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.04) 0%, transparent 40%);
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+        }
+        .env-3d.open .flap-inner { opacity: 1; }
+
         .env-3d .seal {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 46px; height: 46px; border-radius: 50%; z-index: 4;
@@ -216,26 +250,27 @@
             display: flex; align-items: center; justify-content: center;
             color: white; font-size: 1.1rem; font-weight: 700;
             box-shadow: 0 4px 20px rgba({{ $sdr }}, {{ $sdg }}, {{ $sdb }}, 0.30), 0 0 30px rgba({{ $sdr }}, {{ $sdg }}, {{ $sdb }}, 0.10);
-            transition: all 0.5s ease;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s;
         }
         .env-3d.open .seal {
-            opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(180deg);
+            opacity: 0; transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
         }
 
         .env-3d .letter {
             position: absolute; left: 50%; transform: translateX(-50%);
-            width: 88%; height: 88%; top: 6%;
+            width: 88%; height: 85%; top: 8%;
             background: linear-gradient(160deg, #fffdf7, #fff);
             border-radius: 16px; z-index: 1; padding: 28px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.04);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
-            opacity: 0; transform: translateX(-50%) scale(0.9);
+            transition: all 0.9s cubic-bezier(0.22, 1.0, 0.36, 1) 0.5s;
+            opacity: 0; transform: translateX(-50%) scale(0.92) translateY(10px);
+            will-change: transform, top;
         }
         .env-3d.open .letter {
-            top: -80%; opacity: 1;
-            transform: translateX(-50%) rotate(-4deg) scale(1);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.12);
+            top: -85%; opacity: 1;
+            transform: translateX(-50%) rotate(-3deg) scale(1) translateY(0);
+            box-shadow: 0 50px 120px rgba(0,0,0,0.15), 0 10px 30px rgba(0,0,0,0.06);
         }
 
         .env-3d .letter .couple {
@@ -257,17 +292,17 @@
             position: absolute; bottom: -20px; left: 5%; right: 5%;
             height: 40px;
             background: radial-gradient(ellipse, rgba(0,0,0,0.1), transparent);
-            border-radius: 50%; transition: all 0.8s ease;
+            border-radius: 50%; transition: all 1s ease 0.2s;
         }
-        .env-3d.open .env-shadow { transform: scale(1.6); opacity: 0.5; }
+        .env-3d.open .env-shadow { transform: scale(1.8); opacity: 0.4; }
 
         .env-glow {
             position: absolute; top: 50%; left: 50%;
             width: 200px; height: 200px;
             background: radial-gradient(circle, rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.06), transparent 70%);
             border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 1s ease;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: all 1.2s ease;
             pointer-events: none;
         }
         .env-3d.open ~ .env-glow { transform: translate(-50%, -50%) scale(3); opacity: 0; }
@@ -672,7 +707,9 @@
             </div>
             <div class="env-3d" id="env3d">
                 <div class="card-body"></div>
+                <div class="crease"></div>
                 <div class="card-flap"></div>
+                <div class="flap-inner"></div>
                 <div class="seal">♥</div>
                 <div class="letter">
                     <div class="couple">
@@ -1005,15 +1042,9 @@
             // Envelope opening sequence
             if (prog > 0.18 && !hasOpened) {
                 hasOpened = true;
-                env.style.transition = 'transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                env.style.transform = 'rotateY(360deg)';
-                setTimeout(function() {
-                    env.style.transition = '';
-                    env.style.transform = '';
-                    env.classList.add('open');
-                    spawnParticles();
-                    spawnConfetti();
-                }, 750);
+                env.classList.add('open');
+                setTimeout(function() { spawnParticles(); }, 600);
+                setTimeout(function() { spawnConfetti(); }, 900);
             }
 
             // Scroll reveal for sections

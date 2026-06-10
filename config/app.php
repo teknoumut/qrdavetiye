@@ -156,7 +156,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | These configuration options determine the driver used to determine and
-    | manage Laravel's "maintenance mode" status. The "cache" driver will
+    | manage the "maintenance mode" status. The "cache" driver will
     | allow maintenance mode to be controlled across multiple machines.
     |
     | Supported drivers: "file", "cache"
@@ -182,7 +182,7 @@ return [
     'providers' => [
 
         /*
-         * Laravel Framework Service Providers...
+         * Framework Service Providers...
          */
         AuthServiceProvider::class,
         BroadcastServiceProvider::class,

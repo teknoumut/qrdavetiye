@@ -71,7 +71,7 @@
         .hamburger {
             display: none; flex-direction: column; gap: 5px;
             background: none; border: none; cursor: pointer;
-            padding: 6px; z-index: 10;
+            padding: 6px; z-index: 102;
         }
         .hamburger span {
             display: block; width: 24px; height: 2px;
@@ -86,7 +86,8 @@
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 20px; z-index: 5;
+            gap: 24px; z-index: 101; padding: 80px 20px 40px;
+            overflow-y: auto;
         }
         .mobile-menu .mobile-link {
             font-size: 1.1rem; font-weight: 600; color: #464e62;

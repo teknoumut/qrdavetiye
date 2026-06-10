@@ -478,9 +478,7 @@
             .steps { grid-template-columns: 1fr; }
             .features-grid { grid-template-columns: 1fr; }
             .contact-form { padding: 24px; }
-            .navbar { padding: 12px 16px; }
-            #navbar .nav-links { display: none; }
-            #hamburgerBtn { display: flex !important; }
+            #navbar { padding: 12px 16px; }
         }
     </style>
 </head>
@@ -491,13 +489,13 @@
             senin 💝 davetiyen
         </a>
 
-        <button id="hamburgerBtn" class="hidden flex-col gap-1 bg-none border-none cursor-pointer z-[200] p-2 rounded-md" aria-label="Menü">
-            <span class="block w-[22px] h-[2.5px] bg-night-900 rounded-sm"></span>
-            <span class="block w-[22px] h-[2.5px] bg-night-900 rounded-sm"></span>
-            <span class="block w-[22px] h-[2.5px] bg-night-900 rounded-sm"></span>
+        <button id="hamburgerBtn" class="md:hidden flex flex-col gap-1 bg-transparent border-none cursor-pointer z-50 p-2 rounded-md" aria-label="Menü">
+            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
+            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
+            <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
         </button>
 
-        <div class="nav-links flex items-center gap-0.5">
+        <div class="hidden md:flex items-center gap-0.5">
             <a href="#how" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
             <a href="#features" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
             <a href="#pricing" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>

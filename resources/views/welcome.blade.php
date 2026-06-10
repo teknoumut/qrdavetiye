@@ -38,73 +38,59 @@
             transition: all 0.4s;
         }
         .navbar.scrolled { background: rgba(255,255,255,0.92); box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
-        .navbar .logo { font-weight: 800; font-size: 1.15rem; color: #0f1119; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .navbar .logo { font-weight: 800; font-size: 1.15rem; color: #0f1119; text-decoration: none; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
         .navbar .logo .mark {
             width: 34px; height: 34px; border-radius: 10px;
             background: linear-gradient(135deg, var(--site-primary), var(--site-secondary));
             display: flex; align-items: center; justify-content: center;
             color: white; font-size: 0.9rem; font-weight: 700;
-            box-shadow: 0 4px 12px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.25);
-            transition: transform 0.3s;
         }
-        .navbar .logo:hover .mark { transform: scale(1.08) rotate(-5deg); }
-        .navbar .nav-links { display: flex; align-items: center; gap: 4px; }
+        .navbar .nav-links { display: flex; align-items: center; gap: 2px; }
         .navbar .nav-link {
             padding: 8px 14px; font-size: 0.85rem; font-weight: 500; text-decoration: none; color: #5a6278;
-            border-radius: 8px; transition: all 0.25s; position: relative;
+            border-radius: 8px; transition: all 0.2s;
         }
-        .navbar .nav-link::after {
-            content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 2px; border-radius: 2px;
-            background: var(--site-primary); transition: width 0.3s;
-        }
-        .navbar .nav-link:hover { color: var(--site-primary); background: rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.06); }
-        .navbar .nav-link:hover::after { width: 20px; }
+        .navbar .nav-link:hover { background: rgba(0,0,0,0.05); color: var(--site-primary); }
         .navbar .btn-nav {
-            padding: 9px 22px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 6px;
-            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: white;
-            transition: all 0.3s; box-shadow: 0 4px 16px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.25);
+            padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 6px;
+            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: #fff;
+            transition: all 0.2s;
         }
-        .navbar .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.35); }
+        .navbar .btn-nav:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .hamburger {
-            display: none; flex-direction: column; gap: 5px;
+            display: none; flex-direction: column; gap: 4px;
             background: none; border: none; cursor: pointer; z-index: 200;
-            padding: 8px; border-radius: 8px;
-            transition: background 0.2s;
+            padding: 8px; border-radius: 6px;
         }
-        .hamburger:hover { background: rgba(0,0,0,0.04); }
         .hamburger span {
-            display: block; width: 22px; height: 2px;
+            display: block; width: 22px; height: 2.5px;
             background: #0f1119; border-radius: 2px;
-            transition: all 0.3s;
+            transition: all 0.25s;
         }
-        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-6px); }
-        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
         .mobile-menu {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.97);
+            background: #fff; z-index: 199;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 10px; z-index: 199; padding: 80px 24px 40px;
-            opacity: 0; visibility: hidden; transition: all 0.35s;
+            gap: 8px; padding: 24px;
+            opacity: 0; visibility: hidden; transition: all 0.3s;
         }
         .mobile-menu.open { opacity: 1; visibility: visible; }
         .mobile-menu a {
-            font-size: 1.15rem; font-weight: 600; color: #5a6278;
-            text-decoration: none; padding: 14px 24px; border-radius: 12px;
-            transition: all 0.25s; width: 100%; max-width: 260px;
-            text-align: center;
+            font-size: 1.1rem; font-weight: 500; color: #5a6278;
+            text-decoration: none; padding: 14px 24px; border-radius: 10px;
+            transition: all 0.2s; width: 220px; text-align: center;
         }
-        .mobile-menu a:hover { color: var(--site-primary); background: rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.06); }
+        .mobile-menu a:hover { background: rgba(0,0,0,0.05); color: var(--site-primary); }
         .mobile-menu .mobile-btn {
-            margin-top: 12px;
-            padding: 14px 40px; border-radius: 12px; font-size: 1rem; font-weight: 700;
-            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: #fff !important;
-            box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.25);
+            margin-top: 12px; color: #fff !important;
+            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary));
         }
-        .mobile-menu .mobile-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.35); }
+        .mobile-menu .mobile-btn:hover { opacity: 0.9; }
 
         /* Hero */
         .hero {

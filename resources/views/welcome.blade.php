@@ -550,6 +550,14 @@
                     document.body.style.overflow = '';
                 });
             });
+
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) {
+                    menu.classList.remove('open');
+                    hamburger.classList.remove('open');
+                    document.body.style.overflow = '';
+                }
+            });
         })();
     </script>
 

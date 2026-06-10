@@ -12,6 +12,9 @@ class PaymentNotification extends Model
         'order_no',
         'interval',
         'amount',
+        'tax_rate',
+        'tax_amount',
+        'subtotal',
         'status',
         'notes',
         'approved_at',
@@ -21,6 +24,9 @@ class PaymentNotification extends Model
     protected $casts = [
         'approved_at' => 'datetime',
         'amount' => 'decimal:2',
+        'tax_rate' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
+        'subtotal' => 'decimal:2',
     ];
 
     public function user()

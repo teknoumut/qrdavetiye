@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\SubscriptionService;
 use App\Models\Invoice;
 use App\Models\PaymentNotification;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -41,6 +42,26 @@ class PaymentNotificationController extends Controller
                 'status' => 'approved',
                 'approved_at' => now(),
                 'approved_by' => auth()->id(),
+            ]);
+
+            $lastInvoice = Invoice::latest()->first();
+            $seq = $lastInvoice ? (intval(substr($lastInvoice->invoice_no, -4)) + 1) : 1;
+
+            $subtotal = $notification->subtotal ?? $notification->amount;
+            $taxRate = $notification->tax_rate ?? (float) Setting::getValue('tax_rate', 20);
+            $taxAmount = $notification->tax_amount ?? round($subtotal * $taxRate / 100, 2);
+
+            Invoice::create([
+                'user_id' => $notification->user_id,
+                'plan_id' => $notification->plan_id,
+                'invoice_no' => 'INV-'.now()->format('Ymd').'-'.str_pad($seq, 4, '0', STR_PAD_LEFT),
+                'interval' => $notification->interval,
+                'amount' => $subtotal,
+                'tax_rate' => $taxRate,
+                'tax_amount' => $taxAmount,
+                'status' => 'paid',
+                'gateway' => 'EFT/Havale',
+                'transaction_id' => $notification->order_no,
             ]);
 
             DB::commit();

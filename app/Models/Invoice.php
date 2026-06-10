@@ -12,9 +12,21 @@ class Invoice extends Model
         'invoice_no',
         'interval',
         'amount',
+        'tax_rate',
+        'tax_amount',
         'status',
         'gateway',
         'transaction_id',
+        'billing_name',
+        'billing_address',
+        'tax_number',
+        'tax_office',
+    ];
+
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'tax_rate' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
     ];
 
     public function user()

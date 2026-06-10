@@ -50,9 +50,19 @@
                     @endif
                 </div>
 
-                <div class="flex items-center justify-between py-3">
+                <div class="flex items-center justify-between py-2">
+                    <span class="font-semibold text-night-700 dark:text-cream-200">Ara Toplam</span>
+                    <span class="text-night-900 dark:text-cream-100">{{ number_format($invoice->amount, 2) }} TL</span>
+                </div>
+                @if($invoice->tax_rate > 0)
+                <div class="flex items-center justify-between py-2">
+                    <span class="font-semibold text-night-700 dark:text-cream-200">KDV ({{ number_format($invoice->tax_rate, 0) }}%)</span>
+                    <span class="text-night-900 dark:text-cream-100">{{ number_format($invoice->tax_amount, 2) }} TL</span>
+                </div>
+                @endif
+                <div class="flex items-center justify-between py-3 border-t border-cream-200 dark:border-night-700">
                     <span class="text-lg font-bold text-night-900 dark:text-cream-100">Toplam</span>
-                    <span class="text-2xl font-black text-night-900 dark:text-cream-100">{{ number_format($invoice->amount, 2) }} TL</span>
+                    <span class="text-2xl font-black text-night-900 dark:text-cream-100">{{ number_format($invoice->amount + $invoice->tax_amount, 2) }} TL</span>
                 </div>
             </div>
         </div>

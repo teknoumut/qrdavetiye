@@ -58,17 +58,20 @@
                     <span class="val">{{ auth()->user()->email }}</span>
                 </div>
                 <div class="divider"></div>
+                <div class="row">
+                    <span class="label">Ara Toplam</span>
+                    <span class="val">{{ number_format($invoice->amount, 2) }} TL</span>
+                </div>
+                @if($invoice->tax_rate > 0)
+                <div class="row">
+                    <span class="label">KDV ({{ number_format($invoice->tax_rate, 0) }}%)</span>
+                    <span class="val">{{ number_format($invoice->tax_amount, 2) }} TL</span>
+                </div>
+                @endif
+                <div class="divider"></div>
                 <div class="row total">
-                    <span>Tutar</span>
-                    <span>{{ number_format($invoice->amount, 2) }} TL</span>
-                </div>
-                <div class="row">
-                    <span class="label">KDV (20%)</span>
-                    <span class="val">{{ number_format($invoice->amount * 0.20, 2) }} TL</span>
-                </div>
-                <div class="row">
-                    <span class="label">KDV Dahil</span>
-                    <span class="val" style="font-size:1.1rem;font-weight:900">{{ number_format($invoice->amount * 1.20, 2) }} TL</span>
+                    <span>KDV Dahil Toplam</span>
+                    <span style="font-size:1.1rem;font-weight:900">{{ number_format($invoice->amount + $invoice->tax_amount, 2) }} TL</span>
                 </div>
             </div>
             @endif

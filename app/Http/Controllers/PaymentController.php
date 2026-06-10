@@ -6,6 +6,7 @@ use App\Contracts\PaymentGateway;
 use App\Http\Services\SubscriptionService;
 use App\Models\Invoice;
 use App\Models\Plan;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -238,10 +239,16 @@ class PaymentController extends Controller
         return Invoice::where('transaction_id', $transactionId)->exists();
     }
 
+    private function getTaxRate(): float
+    {
+        return (float) Setting::getValue('tax_rate', 20);
+    }
+
     private function createInvoice($user, $plan, $interval, $price, ?string $transactionId = null): Invoice
     {
         $last = Invoice::latest()->first();
         $seq = $last ? (intval(substr($last->invoice_no, -4)) + 1) : 1;
+        $taxRate = $this->getTaxRate();
 
         return Invoice::create([
             'user_id' => $user->id,
@@ -249,6 +256,8 @@ class PaymentController extends Controller
             'invoice_no' => 'INV-'.now()->format('Ymd').'-'.str_pad($seq, 4, '0', STR_PAD_LEFT),
             'interval' => $interval,
             'amount' => $price,
+            'tax_rate' => $taxRate,
+            'tax_amount' => round($price * $taxRate / 100, 2),
             'status' => 'paid',
             'gateway' => $this->gateway->getName(),
             'transaction_id' => $transactionId,

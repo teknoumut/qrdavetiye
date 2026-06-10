@@ -19,6 +19,7 @@ class SettingSeeder extends Seeder
             'social_facebook' => '',
             'social_instagram' => '',
             'social_twitter' => '',
+            'tax_rate' => '20',
         ];
 
         foreach ($settings as $key => $value) {

@@ -10,9 +10,22 @@
             </div>
 
             <div class="bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-500/10 dark:to-emerald-500/5 rounded-xl border border-emerald-200 dark:border-emerald-500/20 p-5 mb-6">
+                <div class="space-y-1.5 text-sm mb-3">
+                    <div class="flex items-center justify-between text-night-500 dark:text-night-400">
+                        <span>Ara Toplam</span>
+                        <span>{{ number_format($price, 2) }} TL</span>
+                    </div>
+                    @if($taxRate > 0)
+                    <div class="flex items-center justify-between text-night-500 dark:text-night-400">
+                        <span>KDV ({{ number_format($taxRate, 0) }}%)</span>
+                        <span>{{ number_format($taxAmount, 2) }} TL</span>
+                    </div>
+                    @endif
+                    <div class="border-t border-emerald-200 dark:border-emerald-500/20 pt-1.5"></div>
+                </div>
                 <div class="text-center">
-                    <div class="text-3xl font-black text-night-900 dark:text-cream-100">{{ number_format($price, 2) }} TL</div>
-                    <div class="text-sm text-night-400 dark:text-night-500 mt-1">Ödenecek Tutar</div>
+                    <div class="text-3xl font-black text-night-900 dark:text-cream-100">{{ number_format($total, 2) }} TL</div>
+                    <div class="text-sm text-night-400 dark:text-night-500 mt-1">KDV Dahil Toplam Tutar</div>
                 </div>
             </div>
 
@@ -48,7 +61,7 @@
                 <input type="hidden" name="plan_id" value="{{ $plan->id }}">
                 <input type="hidden" name="interval" value="{{ $interval }}">
                 <input type="hidden" name="order_no" value="{{ $orderNo }}">
-                <input type="hidden" name="amount" value="{{ $price }}">
+                <input type="hidden" name="amount" value="{{ $total }}">
 
                 <div class="mb-5">
                     <label class="block text-sm font-semibold text-night-600 dark:text-cream-300 mb-1.5">Not (isteğe bağlı)</label>

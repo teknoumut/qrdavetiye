@@ -35,13 +35,17 @@ class EftPaymentController extends Controller
             return redirect()->route('home')->with('error', 'Geçersiz fiyat.');
         }
 
+        $taxRate = (float) Setting::getValue('tax_rate', 20);
+        $taxAmount = round($price * $taxRate / 100, 2);
+        $total = round($price + $taxAmount, 2);
+
         $orderNo = PaymentNotification::generateOrderNo();
 
         $bankName = Setting::getValue('bank_name', 'Ziraat Bankası');
         $iban = Setting::getValue('bank_iban', 'TR00 0000 0000 0000 0000 0000');
         $bankHolder = Setting::getValue('bank_holder', 'senindavetiyen.com.tr');
 
-        return view('payment.eft', compact('plan', 'interval', 'price', 'orderNo', 'bankName', 'iban', 'bankHolder'));
+        return view('payment.eft', compact('plan', 'interval', 'price', 'taxRate', 'taxAmount', 'total', 'orderNo', 'bankName', 'iban', 'bankHolder'));
     }
 
     public function notify(Request $request)
@@ -56,8 +60,11 @@ class EftPaymentController extends Controller
 
         $plan = Plan::findOrFail($data['plan_id']);
         $expectedPrice = $data['interval'] === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
+        $taxRate = (float) Setting::getValue('tax_rate', 20);
+        $expectedTotal = round($expectedPrice * (1 + $taxRate / 100), 2);
+        $taxAmount = round($expectedPrice * $taxRate / 100, 2);
 
-        if (abs((float) $data['amount'] - (float) $expectedPrice) > 0.01) {
+        if (abs((float) $data['amount'] - $expectedTotal) > 0.01) {
             return back()->with('error', 'Gönderilen tutar plan ücreti ile uyuşmuyor. Lütfen doğru tutarı gönderdiğinizden emin olun.');
         }
 
@@ -68,6 +75,9 @@ class EftPaymentController extends Controller
                 'order_no' => $data['order_no'],
                 'interval' => $data['interval'],
                 'amount' => $data['amount'],
+                'subtotal' => $expectedPrice,
+                'tax_rate' => $taxRate,
+                'tax_amount' => $taxAmount,
                 'status' => 'pending',
                 'notes' => $data['notes'] ?? null,
             ]);

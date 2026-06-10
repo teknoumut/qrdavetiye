@@ -64,8 +64,20 @@
         </tbody>
     </table>
 
-    <div class="total">
-        Toplam: {{ number_format($invoice->amount, 2) }} TL
+    <div style="text-align:right;margin-top:20px;padding-top:15px;border-top:1px solid #eceef2;">
+        <div style="font-size:13px;padding:3px 0;color:#464e62;">
+            <span>Ara Toplam:</span>
+            <span style="margin-left:20px;font-weight:600;">{{ number_format($invoice->amount, 2) }} TL</span>
+        </div>
+        @if($invoice->tax_rate > 0)
+        <div style="font-size:13px;padding:3px 0;color:#464e62;">
+            <span>KDV ({{ number_format($invoice->tax_rate, 0) }}%):</span>
+            <span style="margin-left:20px;font-weight:600;">{{ number_format($invoice->tax_amount, 2) }} TL</span>
+        </div>
+        @endif
+        <div class="total">
+            Toplam: {{ number_format($invoice->amount + $invoice->tax_amount, 2) }} TL
+        </div>
     </div>
 
     <div class="footer">

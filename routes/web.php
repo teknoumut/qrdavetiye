@@ -57,7 +57,7 @@ Route::middleware(['throttle:10,1'])->group(function () {
     Route::get('/payment/fail/{plan}', [PaymentController::class, 'fail'])->name('payment.fail');
 });
 
-Route::middleware(['auth', 'verified', 'subscription'])->group(function () {
+Route::middleware(['auth', 'subscription'])->group(function () {
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('user')->name('user.')->group(function () {

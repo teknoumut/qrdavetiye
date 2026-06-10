@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="senin 💝 davetiyen - Özel günleriniz için modern ve şık davetiyeler">
-    <title>{{ config('app.name', 'senin 💝 davetiyen') }} - Dijital Davetiye Platformu</title>
+    <title>Dijital Davetiye Platformu</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|playfair-display:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -67,6 +67,37 @@
         }
         .navbar .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.35); }
         .navbar .btn-nav:hover::after { opacity: 1; }
+
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            background: none; border: none; cursor: pointer;
+            padding: 6px; z-index: 10;
+        }
+        .hamburger span {
+            display: block; width: 24px; height: 2px;
+            background: #0f1119; border-radius: 2px;
+            transition: all 0.3s;
+        }
+        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .mobile-menu {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 20px; z-index: 5;
+        }
+        .mobile-menu .mobile-link {
+            font-size: 1.1rem; font-weight: 600; color: #464e62;
+            text-decoration: none; padding: 8px 0; transition: color 0.3s;
+        }
+        .mobile-menu .mobile-link:hover { color: var(--site-primary); }
+        .mobile-menu .mobile-btn {
+            padding: 12px 36px; border-radius: 14px; font-size: 1rem; font-weight: 700; text-decoration: none;
+            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: white;
+            box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.25);
+        }
 
         /* Hero */
         .hero {
@@ -508,12 +539,18 @@
             .features-grid { grid-template-columns: 1fr; }
             .contact-form { padding: 24px; }
             .navbar { padding: 12px 16px; }
+            .hamburger { display: flex; }
+            .navbar .nav-links { display: none; }
+            [x-cloak] { display: none !important; }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" x-data="{ mobileOpen: false }">
         <a href="/" class="logo"><span class="mark">s</span> senin 💝 davetiyen</a>
+        <button @click="mobileOpen = !mobileOpen" class="hamburger" :class="{ 'active': mobileOpen }" aria-label="Menü">
+            <span></span><span></span><span></span>
+        </button>
         <div class="nav-links">
             <a href="#how" class="nav-link">Nasıl Çalışır?</a>
             <a href="#features" class="nav-link">Özellikler</a>
@@ -525,6 +562,20 @@
                     <a href="{{ route('dashboard') }}" class="btn-nav">Panel</a>
                 @else
                     <a href="{{ route('login') }}" class="btn-nav">Giriş Yap</a>
+                @endauth
+            @endif
+        </div>
+        <div class="mobile-menu" x-show="mobileOpen" x-cloak @click.outside="mobileOpen = false">
+            <a href="#how" class="mobile-link" @click="mobileOpen = false">Nasıl Çalışır?</a>
+            <a href="#features" class="mobile-link" @click="mobileOpen = false">Özellikler</a>
+            <a href="#pricing" class="mobile-link" @click="mobileOpen = false">Fiyatlandırma</a>
+            <a href="#faq" class="mobile-link" @click="mobileOpen = false">SSS</a>
+            <a href="#contact" class="mobile-link" @click="mobileOpen = false">İletişim</a>
+            @if (Route::has('login'))
+                @auth
+                    <a href="{{ route('dashboard') }}" class="mobile-btn" @click="mobileOpen = false">Panel</a>
+                @else
+                    <a href="{{ route('login') }}" class="mobile-btn" @click="mobileOpen = false">Giriş Yap</a>
                 @endauth
             @endif
         </div>

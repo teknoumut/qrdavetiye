@@ -946,7 +946,7 @@
             <div class="section-sub animate-reveal">Formu doldurun, size özel davetiyenizi birlikte oluşturalım</div>
             <div class="contact-wrap">
                 <div class="contact-form" id="contactFormCard">
-                    <form id="contactForm">
+                    <form id="contactForm" action="{{ route('contact.store') }}" method="POST">
                         @csrf
                         <div class="form-header">
                             <div class="icon">✉️</div>
@@ -1089,6 +1089,29 @@
                 particlesEl.appendChild(p);
                 setTimeout(function() { p.remove(); }, 5000);
             }
+        }
+
+        // Contact form AJAX
+        var contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var btn = contactForm.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.innerHTML = '<span>Gönderiliyor...</span>';
+                var formData = new FormData(contactForm);
+                fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                }).then(function(r) { return r.json(); }).then(function(data) {
+                    contactForm.style.display = 'none';
+                    document.getElementById('contactSuccess').style.display = 'block';
+                }).catch(function() {
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>Mesajı Gönder</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+                });
+            });
         }
 
         function spawnConfetti() {

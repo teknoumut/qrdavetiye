@@ -49,12 +49,11 @@
 
             <form id="paymentForm" method="GET" action="{{ route('payment.pay', ['plan' => $plan->id, 'interval' => 'monthly']) }}">
                 <button type="submit" class="btn-pay" id="payBtn">
-                    <span class="label">Iyzico ile Öde</span>
+                    <span class="label">Ödemeyi Tamamla</span>
                     <span class="spinner" style="display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
                 </button>
             </form>
-            <div class="secure-badge">🔒 Iyzico ile güvenli ödeme</div>
-            <div style="text-align:center;margin-top:8px;font-size:0.72rem;color:#b1b8c9">Kart bilgileriniz sunucumuza ulaşmaz</div>
+            <div class="secure-badge">🔒 Güvenli ödeme</div>
         </div>
     </div>
 

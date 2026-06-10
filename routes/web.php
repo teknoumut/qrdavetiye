@@ -70,6 +70,9 @@ Route::middleware(['auth', 'subscription'])->group(function () {
         Route::get('invitations/{invitation}/qr', [UserInvitationController::class, 'qrCode'])->name('invitations.qr');
         Route::post('invitations/{invitation}/qr-regenerate', [UserInvitationController::class, 'regenerateQr'])->name('invitations.qr-regenerate');
         Route::get('invitations/{invitation}/rsvps', [UserInvitationController::class, 'rsvps'])->name('invitations.rsvps');
+        Route::post('rsvps/{rsvp}/confirm', [UserInvitationController::class, 'confirmRsvp'])->name('rsvps.confirm');
+        Route::post('rsvps/{rsvp}/reject', [UserInvitationController::class, 'rejectRsvp'])->name('rsvps.reject');
+        Route::delete('rsvps/{rsvp}', [UserInvitationController::class, 'destroyRsvp'])->name('rsvps.destroy');
         Route::get('invitations/{invitation}/rsvps-export', [UserInvitationController::class, 'exportRsvp'])->name('invitations.rsvps-export');
         Route::get('rsvps', [UserInvitationController::class, 'allRsvps'])->name('rsvps.index');
 

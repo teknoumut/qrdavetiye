@@ -491,4 +491,37 @@ class InvitationController extends Controller
             'Content-Disposition' => 'attachment; filename="rsvp-'.$invitation->slug.'.csv"',
         ]);
     }
+
+    public function confirmRsvp(Rsvp $rsvp)
+    {
+        if ($rsvp->invitation->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $rsvp->update(['is_confirmed' => true]);
+
+        return back()->with('success', 'Katılımcı onaylandı.');
+    }
+
+    public function rejectRsvp(Rsvp $rsvp)
+    {
+        if ($rsvp->invitation->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $rsvp->update(['is_confirmed' => false]);
+
+        return back()->with('success', 'Katılımcı reddedildi.');
+    }
+
+    public function destroyRsvp(Rsvp $rsvp)
+    {
+        if ($rsvp->invitation->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $rsvp->delete();
+
+        return back()->with('success', 'Katılımcı kaydı silindi.');
+    }
 }

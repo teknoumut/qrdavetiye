@@ -489,7 +489,7 @@
             senin 💝 davetiyen
         </a>
 
-        <button id="hamburgerBtn" class="md:hidden flex flex-col gap-1 bg-transparent border-none cursor-pointer z-50 p-2 rounded-md" aria-label="Menü">
+        <button id="hamburgerBtn" class="md:hidden flex flex-col gap-1 bg-transparent border-none cursor-pointer z-[200] p-2 rounded-md" aria-label="Menü">
             <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
             <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>
             <span class="block w-5 h-0.5 bg-night-900 rounded-sm transition-all duration-300"></span>

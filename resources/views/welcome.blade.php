@@ -29,68 +29,15 @@
         body { font-family: 'Figtree', sans-serif; overflow-x: hidden; background: #faf9f7; color: #0f1119; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
         ::selection { background: rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.20); color: #634319; }
 
-        .navbar {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            padding: 14px 28px;
-            background: rgba(255,255,255,0.75); backdrop-filter: blur(24px) saturate(1.4);
-            border-bottom: 1px solid rgba(0,0,0,0.04);
-            display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.4s;
-        }
-        .navbar.scrolled { background: rgba(255,255,255,0.92); box-shadow: 0 1px 20px rgba(0,0,0,0.04); }
-        .navbar .logo { font-weight: 800; font-size: 1.15rem; color: #0f1119; text-decoration: none; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-        .navbar .logo .mark {
-            width: 34px; height: 34px; border-radius: 10px;
-            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary));
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 0.9rem; font-weight: 700;
-        }
-        .navbar .nav-links { display: flex; align-items: center; gap: 2px; }
-        .navbar .nav-link {
-            padding: 8px 14px; font-size: 0.85rem; font-weight: 500; text-decoration: none; color: #5a6278;
-            border-radius: 8px; transition: all 0.2s;
-        }
-        .navbar .nav-link:hover { background: rgba(0,0,0,0.05); color: var(--site-primary); }
-        .navbar .btn-nav {
-            padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 6px;
-            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: #fff;
-            transition: all 0.2s;
-        }
-        .navbar .btn-nav:hover { opacity: 0.9; transform: translateY(-1px); }
-
-        .hamburger {
-            display: none; flex-direction: column; gap: 4px;
-            background: none; border: none; cursor: pointer; z-index: 200;
-            padding: 8px; border-radius: 6px;
-        }
-        .hamburger span {
-            display: block; width: 22px; height: 2.5px;
-            background: #0f1119; border-radius: 2px;
-            transition: all 0.25s;
-        }
+        .hamburger span { transition: all 0.25s; }
         .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
         .hamburger.open span:nth-child(2) { opacity: 0; }
         .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
         .mobile-menu {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; z-index: 199;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 8px; padding: 24px;
             opacity: 0; visibility: hidden; transition: all 0.3s;
         }
         .mobile-menu.open { opacity: 1; visibility: visible; }
-        .mobile-menu a {
-            font-size: 1.1rem; font-weight: 500; color: #5a6278;
-            text-decoration: none; padding: 14px 24px; border-radius: 10px;
-            transition: all 0.2s; width: 220px; text-align: center;
-        }
-        .mobile-menu a:hover { background: rgba(0,0,0,0.05); color: var(--site-primary); }
-        .mobile-menu .mobile-btn {
-            margin-top: 12px; color: #fff !important;
-            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary));
-        }
-        .mobile-menu .mobile-btn:hover { opacity: 0.9; }
 
         /* Hero */
         .hero {
@@ -532,42 +479,50 @@
             .features-grid { grid-template-columns: 1fr; }
             .contact-form { padding: 24px; }
             .navbar { padding: 12px 16px; }
-            .hamburger { display: flex; }
-            .navbar .nav-links { display: none; }
+            #navbar .nav-links { display: none; }
+            #hamburgerBtn { display: flex !important; }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar" id="navbar">
-        <a href="/" class="logo"><span class="mark">s</span> senin 💝 davetiyen</a>
-        <button class="hamburger" id="hamburger" aria-label="Menü">
-            <span></span><span></span><span></span>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-7 py-3.5 bg-white/75 backdrop-blur-2xl border-b border-black/[0.04] transition-all duration-300">
+        <a href="/" class="flex items-center gap-2.5 font-extrabold text-base text-night-900 no-underline shrink-0">
+            <span class="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center text-white text-sm font-bold" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">s</span>
+            senin 💝 davetiyen
+        </a>
+
+        <button id="hamburgerBtn" class="hidden flex-col gap-1 bg-none border-none cursor-pointer z-[200] p-2 rounded-md" aria-label="Menü">
+            <span class="block w-[22px] h-[2.5px] bg-night-900 rounded-sm"></span>
+            <span class="block w-[22px] h-[2.5px] bg-night-900 rounded-sm"></span>
+            <span class="block w-[22px] h-[2.5px] bg-night-900 rounded-sm"></span>
         </button>
-        <div class="nav-links">
-            <a href="#how" class="nav-link">Nasıl Çalışır?</a>
-            <a href="#features" class="nav-link">Özellikler</a>
-            <a href="#pricing" class="nav-link">Fiyatlandırma</a>
-            <a href="#faq" class="nav-link">SSS</a>
-            <a href="#contact" class="nav-link">İletişim</a>
+
+        <div class="nav-links flex items-center gap-0.5">
+            <a href="#how" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
+            <a href="#features" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
+            <a href="#pricing" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
+            <a href="#faq" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
+            <a href="#contact" class="px-3.5 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ route('dashboard') }}" class="btn-nav">Panel</a>
+                    <a href="{{ route('dashboard') }}" class="ml-1.5 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90 hover:-translate-y-0.5" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
                 @else
-                    <a href="{{ route('login') }}" class="btn-nav">Giriş Yap</a>
+                    <a href="{{ route('login') }}" class="ml-1.5 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90 hover:-translate-y-0.5" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
                 @endauth
             @endif
         </div>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#how">Nasıl Çalışır?</a>
-            <a href="#features">Özellikler</a>
-            <a href="#pricing">Fiyatlandırma</a>
-            <a href="#faq">SSS</a>
-            <a href="#contact">İletişim</a>
+
+        <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-white z-[199] flex flex-col items-center justify-center gap-2 p-6">
+            <a href="#how" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
+            <a href="#features" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
+            <a href="#pricing" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
+            <a href="#faq" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
+            <a href="#contact" class="w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-medium text-night-500 no-underline transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ route('dashboard') }}" class="mobile-btn">Panel</a>
+                    <a href="{{ route('dashboard') }}" class="mt-3 w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-bold no-underline text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
                 @else
-                    <a href="{{ route('login') }}" class="mobile-btn">Giriş Yap</a>
+                    <a href="{{ route('login') }}" class="mt-3 w-[220px] text-center py-3.5 px-6 rounded-[10px] text-base font-bold no-underline text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
                 @endauth
             @endif
         </div>
@@ -575,7 +530,7 @@
 
     <script>
         (function() {
-            var hamburger = document.getElementById('hamburger');
+            var hamburger = document.getElementById('hamburgerBtn');
             var menu = document.getElementById('mobileMenu');
             if (!hamburger || !menu) return;
 
@@ -1008,10 +963,10 @@
         // Navbar scroll effect
         window.addEventListener('scroll', function() {
             if (window.scrollY > 40) {
-                navbar.classList.add('scrolled');
+                navbar.classList.add('shadow-sm');
                 heroScroll.classList.add('hidden');
             } else {
-                navbar.classList.remove('scrolled');
+                navbar.classList.remove('shadow-sm');
                 heroScroll.classList.remove('hidden');
             }
         });

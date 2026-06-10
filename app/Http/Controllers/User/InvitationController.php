@@ -11,6 +11,7 @@ use App\Models\InvitationMusic;
 use App\Models\InvitationTheme;
 use App\Models\InvitationVideo;
 use App\Models\Plan;
+use App\Models\Rsvp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -438,6 +439,18 @@ class InvitationController extends Controller
         $this->qrCodeService->generate($invitation);
 
         return back()->with('success', 'QR kod yeniden oluşturuldu.');
+    }
+
+    // All RSVPs for current user
+    public function allRsvps()
+    {
+        $invitationIds = auth()->user()->invitations()->pluck('id');
+        $rsvps = Rsvp::whereIn('invitation_id', $invitationIds)
+            ->with('invitation')
+            ->latest()
+            ->paginate(30);
+
+        return view('user.rsvps.index', compact('rsvps'));
     }
 
     // RSVP management

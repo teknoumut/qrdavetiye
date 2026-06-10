@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\AdminContactMessageController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PlanController as AdminPlanController;
-use App\Http\Controllers\Admin\RsvpController as AdminRsvpController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\ThemeController as AdminThemeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -72,6 +71,7 @@ Route::middleware(['auth', 'subscription'])->group(function () {
         Route::post('invitations/{invitation}/qr-regenerate', [UserInvitationController::class, 'regenerateQr'])->name('invitations.qr-regenerate');
         Route::get('invitations/{invitation}/rsvps', [UserInvitationController::class, 'rsvps'])->name('invitations.rsvps');
         Route::get('invitations/{invitation}/rsvps-export', [UserInvitationController::class, 'exportRsvp'])->name('invitations.rsvps-export');
+        Route::get('rsvps', [UserInvitationController::class, 'allRsvps'])->name('rsvps.index');
 
         Route::post('invitations/{invitation}/images', [UserInvitationController::class, 'uploadImage'])->name('invitations.images.upload');
         Route::delete('invitations/images/{image}', [UserInvitationController::class, 'deleteImage'])->name('invitations.images.delete');
@@ -111,7 +111,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
     Route::delete('reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
 
-    Route::get('rsvps', [AdminRsvpController::class, 'index'])->name('rsvps.index');
 });
 
 require __DIR__.'/auth.php';

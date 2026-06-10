@@ -10,6 +10,9 @@
                 <a href="{{ route('reviews.index') }}" class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('reviews*') ? 'text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 font-semibold' : 'text-night-500 dark:text-night-300 hover:text-night-900 dark:hover:text-cream-100 hover:bg-gold-50 dark:hover:bg-gold-500/5' }}">
                     Yorumlar
                 </a>
+                <a href="{{ route('user.rsvps.index') }}" class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('user.rsvps*') ? 'text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 font-semibold' : 'text-night-500 dark:text-night-300 hover:text-night-900 dark:hover:text-cream-100 hover:bg-gold-50 dark:hover:bg-gold-500/5' }}">
+                    RSVP'lerim
+                </a>
                 <a href="{{ route('user.invitations.index') }}" class="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('user.invitations*') ? 'text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 font-semibold' : 'text-night-500 dark:text-night-300 hover:text-night-900 dark:hover:text-cream-100 hover:bg-gold-50 dark:hover:bg-gold-500/5' }}">
                     Davetiyelerim
                 </a>
@@ -66,6 +69,9 @@
         <div class="px-4 py-3 space-y-1">
             <a href="{{ route('reviews.index') }}" class="block px-4 py-3 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('reviews*') ? 'text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 font-semibold' : 'text-night-600 dark:text-cream-300 hover:text-gold-700 dark:hover:text-gold-400 hover:bg-gold-50 dark:hover:bg-gold-500/5' }}">
                 Yorumlar
+            </a>
+            <a href="{{ route('user.rsvps.index') }}" class="block px-4 py-3 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('user.rsvps*') ? 'text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 font-semibold' : 'text-night-600 dark:text-cream-300 hover:text-gold-700 dark:hover:text-gold-400 hover:bg-gold-50 dark:hover:bg-gold-500/5' }}">
+                RSVP'lerim
             </a>
             <a href="{{ route('user.invitations.index') }}" class="block px-4 py-3 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('user.invitations*') ? 'text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 font-semibold' : 'text-night-600 dark:text-cream-300 hover:text-gold-700 dark:hover:text-gold-400 hover:bg-gold-50 dark:hover:bg-gold-500/5' }}">
                 Davetiyelerim

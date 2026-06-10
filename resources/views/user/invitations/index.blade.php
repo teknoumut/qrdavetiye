@@ -70,7 +70,7 @@
                             @endif
                             <div class="flex items-center gap-4 text-xs text-night-400 dark:text-cream-400 mb-4 pb-4 border-b border-cream-100 dark:border-night-700">
                                 <span class="flex items-center gap-1.5"><span>👁️</span> <strong class="text-night-700 dark:text-cream-300">{{ $inv->views }}</strong></span>
-                                <span class="flex items-center gap-1.5"><span>💌</span> <strong class="text-night-700 dark:text-cream-300">{{ $inv->rsvps_count }}</strong></span>
+                                <a href="{{ route('user.invitations.rsvps', $inv) }}" class="flex items-center gap-1.5 hover:text-gold-600 dark:hover:text-gold-400 transition-colors"><span>💌</span> <strong class="text-night-700 dark:text-cream-300">{{ $inv->rsvps_count }}</strong></a>
                                 @if($inv->qr_scans)<span class="flex items-center gap-1.5"><span>📱</span> <strong class="text-night-700 dark:text-cream-300">{{ $inv->qr_scans }}</strong></span>@endif
                             </div>
                             <div class="flex gap-2.5">

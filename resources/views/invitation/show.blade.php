@@ -1225,6 +1225,15 @@
         $envelopeAnim = $invitation->envelope_animation ?: 'classic';
         $envelopePattern = $invitation->envelope_pattern ?: '';
         $customPatternUrl = $invitation->custom_pattern ? \Illuminate\Support\Facades\Storage::url($invitation->custom_pattern) : '';
+        $eventMusicLabels = [
+            'wedding' => '🎵 Düğün Şarkısı',
+            'engagement' => '🎵 Nişan Şarkısı',
+            'circumcision' => '🎵 Sünnet Şarkısı',
+            'birthday' => '🎵 Doğum Günü Şarkısı',
+            'corporate' => '🎵 Kurumsal Müzik',
+            'graduation' => '🎵 Mezuniyet Şarkısı',
+        ];
+        $musicLabel = $eventMusicLabels[$eventType] ?? '🎵 Düğün Şarkısı';
     @endphp
 
     <div class="envelope-screen event-{{ $eventType }} @if($envelopeAnim !== 'classic') anim-{{ $envelopeAnim }} @endif" id="envelopeScreen" onclick="openEnvelope()">

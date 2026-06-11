@@ -28,7 +28,11 @@
         @else
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($invitations as $inv)
-                    <div class="group bg-white dark:bg-night-800 rounded-2xl border border-cream-200 dark:border-night-700 shadow-sm hover:shadow-lg hover:border-gold-200 dark:hover:border-gold-500/30 transition-all duration-300 overflow-hidden animate-scale-in hover:-translate-y-1">
+                    @php
+                        $cardBorderStyles = ['wedding'=>'border-l-rose-300 dark:border-l-rose-500/40','engagement'=>'border-l-purple-300 dark:border-l-purple-500/40','circumcision'=>'border-l-cyan-300 dark:border-l-cyan-500/40','birthday'=>'border-l-pink-300 dark:border-l-pink-500/40','corporate'=>'border-l-blue-300 dark:border-l-blue-500/40','graduation'=>'border-l-purple-300 dark:border-l-purple-500/40'];
+                        $cardBorder = $cardBorderStyles[$inv->event_type] ?? $cardBorderStyles['wedding'];
+                    @endphp
+                    <div class="group bg-white dark:bg-night-800 rounded-2xl border border-cream-200 dark:border-night-700 border-l-4 {{ $cardBorder }} shadow-sm hover:shadow-lg hover:border-gold-200 dark:hover:border-gold-500/30 transition-all duration-300 overflow-hidden animate-scale-in hover:-translate-y-1">
                         @if($inv->cover_image)
                             <div class="h-48 overflow-hidden relative">
                                 <img src="{{ \Illuminate\Support\Facades\Storage::url($inv->cover_image) }}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" alt="">
@@ -40,9 +44,20 @@
                                 </div>
                             </div>
                         @else
-                            <div class="h-48 bg-gradient-to-br from-gold-100 via-rose-50 to-amber-50 dark:from-gold-500/10 dark:via-rose-500/5 dark:to-amber-500/10 flex items-center justify-center relative">
-                                @php $eType = $inv->event_type ?: 'wedding'; @endphp
-                                <span class="text-5xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-rose-400">{{ $eType === 'corporate' ? substr($inv->groom_name, 0, 2) : substr($inv->groom_name, 0, 1) }}{{ $eType === 'corporate' ? '' : ($eType !== 'circumcision' && $eType !== 'birthday' && $eType !== 'graduation' ? substr($inv->bride_name, 0, 1) : '') }}</span>
+                            @php
+                                $eType = $inv->event_type ?: 'wedding';
+                                $eventCardStyles = [
+                                    'wedding' => ['bg' => 'from-gold-100 via-rose-50 to-amber-50', 'dark' => 'dark:from-gold-500/10 dark:via-rose-500/5 dark:to-amber-500/10', 'icon' => '💍', 'text' => 'from-gold-400 to-rose-400'],
+                                    'engagement' => ['bg' => 'from-gold-100 via-purple-50 to-pink-50', 'dark' => 'dark:from-gold-500/10 dark:via-purple-500/5 dark:to-pink-500/10', 'icon' => '💍', 'text' => 'from-gold-400 to-purple-400'],
+                                    'circumcision' => ['bg' => 'from-sky-100 via-cyan-50 to-teal-50', 'dark' => 'dark:from-sky-500/10 dark:via-cyan-500/5 dark:to-teal-500/10', 'icon' => '✂️', 'text' => 'from-sky-400 to-cyan-400'],
+                                    'birthday' => ['bg' => 'from-pink-100 via-rose-50 to-orange-50', 'dark' => 'dark:from-pink-500/10 dark:via-rose-500/5 dark:to-orange-500/10', 'icon' => '🎂', 'text' => 'from-pink-400 to-orange-400'],
+                                    'corporate' => ['bg' => 'from-slate-100 via-blue-50 to-indigo-50', 'dark' => 'dark:from-slate-500/10 dark:via-blue-500/5 dark:to-indigo-500/10', 'icon' => '🏢', 'text' => 'from-slate-400 to-blue-400'],
+                                    'graduation' => ['bg' => 'from-purple-100 via-indigo-50 to-gold-50', 'dark' => 'dark:from-purple-500/10 dark:via-indigo-500/5 dark:to-gold-500/10', 'icon' => '🎓', 'text' => 'from-purple-400 to-gold-400'],
+                                ];
+                                $cardStyle = $eventCardStyles[$eType] ?? $eventCardStyles['wedding'];
+                            @endphp
+                            <div class="h-48 bg-gradient-to-br {{ $cardStyle['bg'] }} {{ $cardStyle['dark'] }} flex items-center justify-center relative">
+                                <span class="text-6xl">{{ $cardStyle['icon'] }}</span>
                                 <div class="absolute top-3 right-3 flex gap-1.5">
                                     <span class="text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm {{ $inv->is_published ? 'bg-emerald-500/80 text-white' : 'bg-night-800/60 text-white' }}">
                                         {{ $inv->is_published ? __('Yayında') : __('Taslak') }}
@@ -55,10 +70,19 @@
                                 @php
                                     $typeNames = ['wedding'=>'💍 '.__('Düğün'),'engagement'=>'💍 '.__('Nişan'),'circumcision'=>'✂️ '.__('Sünnet'),'birthday'=>'🎂 '.__('Doğum Günü'),'corporate'=>'🏢 '.__('Kurumsal'),'graduation'=>'🎓 '.__('Mezuniyet')];
                                     $typeName = $typeNames[$inv->event_type] ?? '💍 '.__('Düğün');
+                                    $typeBadgeStyles = [
+                                        'wedding' => 'bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-500/10 dark:text-rose-300 dark:border-rose-500/30',
+                                        'engagement' => 'bg-purple-50 text-purple-600 border-purple-200 dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/30',
+                                        'circumcision' => 'bg-cyan-50 text-cyan-600 border-cyan-200 dark:bg-cyan-500/10 dark:text-cyan-300 dark:border-cyan-500/30',
+                                        'birthday' => 'bg-pink-50 text-pink-600 border-pink-200 dark:bg-pink-500/10 dark:text-pink-300 dark:border-pink-500/30',
+                                        'corporate' => 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/30',
+                                        'graduation' => 'bg-purple-50 text-purple-600 border-purple-200 dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/30',
+                                    ];
+                                    $badgeStyle = $typeBadgeStyles[$inv->event_type] ?? $typeBadgeStyles['wedding'];
                                 @endphp
                                 <div class="flex items-center justify-between gap-2 mb-1.5">
                                     <h3 class="font-bold text-night-900 dark:text-cream-100 text-lg leading-tight group-hover:text-gold-700 dark:group-hover:text-gold-400 transition-colors truncate">{{ $inv->title }}</h3>
-                                    <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-cream-50 dark:bg-night-700 text-night-500 dark:text-cream-300 border border-cream-100 dark:border-night-600 whitespace-nowrap">{{ $typeName }}</span>
+                                    <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full {{ $badgeStyle }} whitespace-nowrap">{{ $typeName }}</span>
                                 </div>
                                 <p class="text-sm text-night-400 dark:text-cream-400 mt-0.5 font-medium">{{ $inv->groom_name }} @if(!$inv->event_type || $inv->event_type === 'wedding' || $inv->event_type === 'engagement')<span class="text-gold-400">&</span> {{ $inv->bride_name }}@endif</p>
                             </div>

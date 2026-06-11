@@ -227,6 +227,23 @@
             background: linear-gradient(145deg, var(--primary-dark) 0%, #1a1a2e 40%, #0f3460 100%);
             transition: background 0.5s;
         }
+        /* Event-type specific envelope screen backgrounds */
+        .envelope-screen.event-wedding { background: linear-gradient(145deg, var(--primary-dark) 0%, #2d1b2e 40%, #4a1942 100%); }
+        .envelope-screen.event-engagement { background: linear-gradient(145deg, var(--primary-dark) 0%, #2d1b3e 40%, #3a1f5e 100%); }
+        .envelope-screen.event-circumcision { background: linear-gradient(145deg, #0f4c5c 0%, #0a2a36 40%, #0f3460 100%); }
+        .envelope-screen.event-birthday { background: linear-gradient(145deg, #c9434a 0%, #2d1020 40%, #4a1020 100%); }
+        .envelope-screen.event-corporate { background: linear-gradient(145deg, #1e293b 0%, #0f172a 40%, #1e3a5f 100%); }
+        .envelope-screen.event-graduation { background: linear-gradient(145deg, #4a148c 0%, #1a0a2e 40%, #2d1b4e 100%); }
+        /* Event-specific envelope decoration */
+        .envelope-screen.event-birthday .envelope-body { background: linear-gradient(165deg, #e84393, #c0387a) !important; }
+        .envelope-screen.event-graduation .envelope-body { background: linear-gradient(165deg, #6c5ce7, #4a148c) !important; }
+        .envelope-screen.event-circumcision .envelope-body { background: linear-gradient(165deg, #00b894, #008060) !important; }
+        .envelope-screen.event-corporate .envelope-body { background: linear-gradient(165deg, #2d3436, #1a1a2e) !important; }
+        .envelope-screen.event-wedding .envelope-body { background: linear-gradient(165deg, var(--primary), var(--primary-dark)) !important; }
+        .envelope-screen.event-engagement .envelope-body { background: linear-gradient(165deg, var(--primary), #6c3483) !important; }
+        .envelope-screen.event-birthday .envelope-seal { background: linear-gradient(135deg, #fd79a8, #e84393) !important; font-size: 1.6rem !important; }
+        .envelope-screen.event-graduation .envelope-seal { background: linear-gradient(135deg, #a29bfe, #6c5ce7) !important; font-size: 1.6rem !important; }
+        .envelope-screen.event-circumcision .envelope-seal { background: linear-gradient(135deg, #55efc4, #00b894) !important; font-size: 1.6rem !important; }
 
         .envelope-screen .particle-bg {
             position: absolute; inset: 0; pointer-events: none; overflow: hidden;
@@ -1210,7 +1227,7 @@
         $customPatternUrl = $invitation->custom_pattern ? \Illuminate\Support\Facades\Storage::url($invitation->custom_pattern) : '';
     @endphp
 
-    <div class="envelope-screen @if($envelopeAnim !== 'classic') anim-{{ $envelopeAnim }} @endif" id="envelopeScreen" onclick="openEnvelope()">
+    <div class="envelope-screen event-{{ $eventType }} @if($envelopeAnim !== 'classic') anim-{{ $envelopeAnim }} @endif" id="envelopeScreen" onclick="openEnvelope()">
         <div class="particle-bg" id="envBgParticles"></div>
         <div class="floating-hearts" id="floatingHearts"></div>
         <div class="envelope-wrapper">
@@ -1980,15 +1997,23 @@
             });
         });
 
-        // Floating hearts on envelope screen
+        // Floating symbols on envelope screen (per event type)
         (function() {
             var container = document.getElementById('floatingHearts');
-            var symbols = ['♥', '♡', '❤', '💕', '💗'];
-            for (var i = 0; i < 12; i++) {
+            var typeSymbols = {
+                wedding: ['♥', '♡', '❤', '💕', '💗'],
+                engagement: ['♥', '♡', '❤', '💕', '💗'],
+                circumcision: ['✂️', '⭐', '🌟', '✨', '🎊'],
+                birthday: ['🎂', '🎉', '🎊', '🎈', '🎁'],
+                corporate: ['📋', '⭐', '📈', '📑', '✨'],
+                graduation: ['🎓', '⭐', '🌟', '✨', '📜'],
+            };
+            var symbols = typeSymbols['{{ $eventType }}'] || typeSymbols.wedding;
+            for (var i = 0; i < 14; i++) {
                 var h = document.createElement('span');
                 h.textContent = symbols[Math.floor(Math.random() * symbols.length)];
                 h.style.left = Math.random() * 100 + '%';
-                h.style.fontSize = (10 + Math.random() * 18) + 'px';
+                h.style.fontSize = (12 + Math.random() * 18) + 'px';
                 h.style.animationDelay = Math.random() * 6 + 's';
                 h.style.animationDuration = (5 + Math.random() * 4) + 's';
                 container.appendChild(h);

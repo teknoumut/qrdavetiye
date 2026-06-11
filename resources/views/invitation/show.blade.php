@@ -1495,7 +1495,7 @@
         </div>
 
         <div class="footer">
-            <p style="font-family: var(--font-display); font-size: 1.6rem; color: white;">{{ $fixName($invitation->groom_name) }} & {{ $fixName($invitation->bride_name) }}</p>
+            <p style="font-family: var(--font-display); font-size: 1.6rem; color: white;">@if($ev['couple']){{ $fixName($invitation->groom_name) }} & {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif</p>
             <p style="margin-top: 12px; font-size: 0.85rem; opacity: 0.7; color: white; font-family: 'Montserrat', sans-serif; letter-spacing: 1px;">
                 @if($invitation->event_date){{ $invitation->event_date->format('d.m.Y') }}@endif
                 @if($invitation->event_time) / {{ $invitation->event_time }}@endif

@@ -42,7 +42,7 @@
                         @else
                             <div class="h-48 bg-gradient-to-br from-gold-100 via-rose-50 to-amber-50 dark:from-gold-500/10 dark:via-rose-500/5 dark:to-amber-500/10 flex items-center justify-center relative">
                                 @php $eType = $inv->event_type ?: 'wedding'; @endphp
-                                <span class="text-5xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-rose-400">{{ $eType === 'corporate' ? substr($inv->groom_name, 0, 2) : substr($inv->groom_name, 0, 1) }}{{ $eType === 'corporate' ? '' : ($eType !== 'circumcision' && $eType !== 'birthday' ? substr($inv->bride_name, 0, 1) : '') }}</span>
+                                <span class="text-5xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-rose-400">{{ $eType === 'corporate' ? substr($inv->groom_name, 0, 2) : substr($inv->groom_name, 0, 1) }}{{ $eType === 'corporate' ? '' : ($eType !== 'circumcision' && $eType !== 'birthday' && $eType !== 'graduation' ? substr($inv->bride_name, 0, 1) : '') }}</span>
                                 <div class="absolute top-3 right-3 flex gap-1.5">
                                     <span class="text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm {{ $inv->is_published ? 'bg-emerald-500/80 text-white' : 'bg-night-800/60 text-white' }}">
                                         {{ $inv->is_published ? __('Yayında') : __('Taslak') }}
@@ -60,7 +60,7 @@
                                     <h3 class="font-bold text-night-900 dark:text-cream-100 text-lg leading-tight group-hover:text-gold-700 dark:group-hover:text-gold-400 transition-colors truncate">{{ $inv->title }}</h3>
                                     <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-cream-50 dark:bg-night-700 text-night-500 dark:text-cream-300 border border-cream-100 dark:border-night-600 whitespace-nowrap">{{ $typeName }}</span>
                                 </div>
-                                <p class="text-sm text-night-400 dark:text-cream-400 mt-0.5 font-medium">{{ $inv->groom_name }} @if($inv->event_type === 'wedding' || $inv->event_type === 'engagement' || !$inv->event_type)<span class="text-gold-400">&</span> {{ $inv->bride_name }}@endif</p>
+                                <p class="text-sm text-night-400 dark:text-cream-400 mt-0.5 font-medium">{{ $inv->groom_name }} @if(!$inv->event_type || $inv->event_type === 'wedding' || $inv->event_type === 'engagement')<span class="text-gold-400">&</span> {{ $inv->bride_name }}@endif</p>
                             </div>
                             @if($inv->event_date)
                                 <div class="flex items-center gap-3 text-xs text-night-400 dark:text-cream-400 mb-4 bg-cream-50 dark:bg-night-900/50 rounded-xl px-3 py-2 border border-cream-100 dark:border-night-700">

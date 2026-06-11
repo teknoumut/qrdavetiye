@@ -398,6 +398,17 @@
                 brideFatherLabel: '', brideFatherPlaceholder: '',
                 brideMotherLabel: '', brideMotherPlaceholder: '',
                 showBride: true, showBrideParents: false, showStory: false, titleHint: 'Kurumsal Davetiye'
+            },
+            graduation: {
+                groomLabel: '\ud83c\udf93 Mezun Olan Ki\u015fi', groomPlaceholder: 'Ali',
+                brideLabel: '', bridePlaceholder: '',
+                groomParentTitle: 'Aile Bilgileri',
+                brideParentTitle: '',
+                groomFatherLabel: 'Baba Ad\u0131', groomFatherPlaceholder: 'Ahmet',
+                groomMotherLabel: 'Anne Ad\u0131', groomMotherPlaceholder: 'Ay\u015fe',
+                brideFatherLabel: '', brideFatherPlaceholder: '',
+                brideMotherLabel: '', brideMotherPlaceholder: '',
+                showBride: false, showBrideParents: false, showStory: false, titleHint: 'Mezuniyet Davetiyesi'
             }
         };
 

@@ -1558,6 +1558,8 @@
                 createParticles(screen);
                 @if($eventType === 'graduation')
                 createGraduationCaps(screen);
+                @elseif($eventType === 'birthday')
+                createBirthdayCake(screen);
                 @else
                 createConfetti(screen);
                 @endif
@@ -1779,6 +1781,62 @@
                 conf.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
                 conf.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
                 conf.style.animationDelay = (Math.random() * 0.6) + 's';
+                conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                if (Math.random() > 0.6) {
+                    conf.style.width = h * 2 + 'px';
+                    conf.style.height = h + 'px';
+                    conf.style.borderRadius = '0';
+                }
+                container.appendChild(conf);
+                requestAnimationFrame(function() { conf.classList.add('burst'); });
+            }
+
+            setTimeout(function() {
+                container.querySelectorAll('.particle, .confetti-piece').forEach(function(el) { el.remove(); });
+            }, 4000);
+        }
+
+        function createBirthdayCake(container) {
+            var rect = container.getBoundingClientRect();
+            var cx = rect.width / 2;
+            var cy = rect.height / 2;
+
+            for (var i = 0; i < 25; i++) {
+                var cake = document.createElement('div');
+                cake.className = 'particle';
+                cake.innerHTML = ['🎂', '🎉', '🎊', '🎈', '✨', '💫'][Math.floor(Math.random() * 6)];
+                cake.style.fontSize = (16 + Math.random() * 22) + 'px';
+                cake.style.background = 'none';
+                cake.style.width = 'auto';
+                cake.style.height = 'auto';
+                cake.style.left = (cx + (Math.random() - 0.5) * 180) + 'px';
+                cake.style.top = (cy + (Math.random() - 0.5) * 100) + 'px';
+                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.7;
+                var dist = 90 + Math.random() * 280;
+                cake.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                cake.style.setProperty('--ty', Math.sin(angle) * dist - 80 + 'px');
+                cake.style.animationDelay = (Math.random() * 0.4) + 's';
+                cake.style.animationDuration = (1.2 + Math.random() * 0.8) + 's';
+                container.appendChild(cake);
+                requestAnimationFrame(function() { cake.classList.add('burst'); });
+            }
+
+            for (var i = 0; i < 50; i++) {
+                var conf = document.createElement('div');
+                conf.className = 'confetti-piece';
+                var colors = ['#ff6b6b', '#feca57', '#ff9ff3', '#ffd700', '#ff4757', '#ff6348', '#ff9f43'];
+                conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+                var w = 4 + Math.random() * 8;
+                var h = 4 + Math.random() * 8;
+                conf.style.width = w + 'px';
+                conf.style.height = h + 'px';
+                conf.style.left = (cx + (Math.random() - 0.5) * 160) + 'px';
+                conf.style.top = (cy + (Math.random() - 0.5) * 120) + 'px';
+                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.9;
+                var dist = 80 + Math.random() * 320;
+                conf.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                conf.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                conf.style.animationDelay = (Math.random() * 0.5) + 's';
                 conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
                 if (Math.random() > 0.6) {
                     conf.style.width = h * 2 + 'px';

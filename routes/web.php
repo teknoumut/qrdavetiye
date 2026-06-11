@@ -140,6 +140,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('refund-requests/{invoice}/reject', [RefundController::class, 'reject'])->name('refund-requests.reject');
 
     Route::get('visitors', [VisitorController::class, 'index'])->name('visitors.index');
+    Route::post('visitors/reset', [VisitorController::class, 'reset'])->name('visitors.reset');
 
 });
 

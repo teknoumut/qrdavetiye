@@ -20,4 +20,11 @@ class VisitorController extends Controller
 
         return view('admin.visitors.index', compact('visits', 'stats'));
     }
+
+    public function reset()
+    {
+        PageVisit::truncate();
+
+        return redirect()->route('admin.visitors.index')->with('success', 'Ziyaretçi kayıtları sıfırlandı.');
+    }
 }

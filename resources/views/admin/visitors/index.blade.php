@@ -4,6 +4,23 @@
         <span class="sub">Siteyi ziyaret eden IP'ler ve konum bilgileri</span>
     </x-slot>
 
+    @if(session('success'))
+        <div class="mb-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+        <div class="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-medium">{{ session('error') }}</div>
+    @endif
+
+    <div class="flex items-center justify-between mb-6">
+        <div></div>
+        <form method="POST" action="{{ route('admin.visitors.reset') }}" onsubmit="return confirm('Tüm ziyaretçi kayıtları silinecek! Emin misiniz?')">
+            @csrf
+            <button type="submit" class="px-4 py-2 rounded-lg bg-red-50 border border-red-200 text-red-600 hover:bg-red-100 text-sm font-semibold transition-all flex items-center gap-2">
+                🗑️ Ziyaretçi Kayıtlarını Sıfırla
+            </button>
+        </form>
+    </div>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <div class="stat-card">
             <div class="stat-value">{{ number_format($stats['total']) }}</div>

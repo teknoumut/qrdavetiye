@@ -399,14 +399,32 @@
                             <tbody>
                                 @foreach($invoices as $inv)
                                     <tr class="border-b border-cream-50 dark:border-night-800">
-                                        <td class="py-3 pr-4 font-mono text-xs text-night-600 dark:text-cream-300">{{ $inv->invoice_no }}</td>
+                                        <td class="py-3 pr-4">
+                                            <a href="{{ route('invoices.show', $inv) }}" class="font-mono text-xs text-indigo-600 dark:text-indigo-400 hover:underline">{{ $inv->invoice_no }}</a>
+                                        </td>
                                         <td class="py-3 pr-4 font-semibold text-night-900 dark:text-cream-100">{{ $inv->plan?->name ?? '-' }}</td>
                                         <td class="py-3 pr-4 text-night-500 dark:text-cream-400">{{ $inv->interval === 'yearly' ? 'Yıllık' : 'Aylık' }}</td>
-                                        <td class="py-3 pr-4 font-semibold text-night-900 dark:text-cream-100">{{ number_format($inv->amount, 2) }} TL</td>
+                                        <td class="py-3 pr-4 font-semibold text-night-900 dark:text-cream-100">{{ number_format($inv->amount + $inv->tax_amount, 2) }} TL</td>
                                         <td class="py-3 pr-4 text-night-500 dark:text-cream-400 whitespace-nowrap">{{ $inv->created_at->format('d.m.Y') }}</td>
                                         <td class="py-3">
-                                            <span class="text-xs font-semibold px-2.5 py-1 rounded-lg {{ $inv->status === 'paid' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20' : 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/20' }}">
-                                                {{ $inv->status === 'paid' ? 'Ödendi' : 'Başarısız' }}
+                                            @php
+                                                $statusText = match(true) {
+                                                    $inv->refund_status === 'refunded' => 'İade Edildi',
+                                                    $inv->refund_status === 'requested' => 'İade Talep Edildi',
+                                                    $inv->refund_status === 'rejected' => 'İade Reddedildi',
+                                                    $inv->status === 'paid' => 'Ödendi',
+                                                    default => 'Başarısız',
+                                                };
+                                                $statusClass = match(true) {
+                                                    $inv->refund_status === 'refunded' => 'bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/20',
+                                                    $inv->refund_status === 'requested' => 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20',
+                                                    $inv->refund_status === 'rejected' => 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20',
+                                                    $inv->status === 'paid' => 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20',
+                                                    default => 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20',
+                                                };
+                                            @endphp
+                                            <span class="text-xs font-semibold px-2.5 py-1 rounded-lg border {{ $statusClass }}">
+                                                {{ $statusText }}
                                             </span>
                                         </td>
                                     </tr>

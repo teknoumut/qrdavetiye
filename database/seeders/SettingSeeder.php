@@ -20,6 +20,7 @@ class SettingSeeder extends Seeder
             'social_instagram' => '',
             'social_twitter' => '',
             'tax_rate' => '20',
+            'bank_name' => 'Yapı Kredi Bankası',
             'bank_holder' => 'UMUT UÇAR',
             'bank_iban' => 'TR450006701000000048863426',
         ];

@@ -71,19 +71,6 @@
 
     @php
         $allPayments = collect()
-            ->merge($recent_invoices->map(function($i) {
-                return (object)[
-                    'type' => 'online',
-                    'user' => $i->user,
-                    'plan' => $i->plan,
-                    'amount' => $i->amount,
-                    'interval' => $i->interval,
-                    'date' => $i->created_at,
-                    'label' => 'Kart',
-                    'status' => 'paid',
-                    'invoice_no' => $i->invoice_no,
-                ];
-            }))
             ->merge($recent_approved_payments->map(function($p) {
                 return (object)[
                     'type' => 'eft',

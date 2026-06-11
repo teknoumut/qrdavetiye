@@ -39,10 +39,6 @@ class DashboardController extends Controller
             'pending_payments' => PaymentNotification::pending()->count(),
             'recent_payments' => PaymentNotification::with(['user', 'plan'])->pending()->latest()->take(5)->get(),
             'total_revenue' => PaymentNotification::approved()->sum('amount'),
-            'recent_invoices' => Invoice::with(['user', 'plan'])
-                ->latest()
-                ->take(5)
-                ->get(),
             'recent_approved_payments' => PaymentNotification::with(['user', 'plan'])
                 ->approved()
                 ->latest()

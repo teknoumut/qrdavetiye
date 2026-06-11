@@ -27,58 +27,58 @@
     <div class="result-container">
         <div class="result-card">
             <div class="check-icon">✓</div>
-            <h2>Ödeme Başarılı!</h2>
-            <p><strong>{{ $plan->name }}</strong> planına başarıyla kaydoldunuz. Davetiyelerinizi hemen oluşturmaya başlayabilirsiniz.</p>
+            <h2>{{ __('Ödeme Başarılı!') }}</h2>
+            <p><strong>{{ $plan->name }}</strong> {{ __('planına başarıyla kaydoldunuz. Davetiyelerinizi hemen oluşturmaya başlayabilirsiniz.') }}</p>
 
             @if ($invoice)
             <div class="invoice-box" id="invoice">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-                    <strong style="font-size:1rem;color:#0f1119">FATURA</strong>
+                    <strong style="font-size:1rem;color:#0f1119">{{ __('FATURA') }}</strong>
                     <span style="font-size:0.75rem;color:#8893ac">#{{ $invoice->invoice_no }}</span>
                 </div>
                 <div class="row">
-                    <span class="label">Plan</span>
+                    <span class="label">{{ __('Plan') }}</span>
                     <span class="val">{{ $plan->name }}</span>
                 </div>
                 <div class="row">
-                    <span class="label">Dönem</span>
-                    <span class="val">{{ $invoice->interval === 'yearly' ? 'Yıllık' : 'Aylık' }}</span>
+                    <span class="label">{{ __('Dönem') }}</span>
+                    <span class="val">{{ $invoice->interval === 'yearly' ? __('Yıllık') : __('Aylık') }}</span>
                 </div>
                 <div class="row">
-                    <span class="label">Tarih</span>
+                    <span class="label">{{ __('Tarih') }}</span>
                     <span class="val">{{ $invoice->created_at->format('d.m.Y H:i') }}</span>
                 </div>
                 <div class="divider"></div>
                 <div class="row">
-                    <span class="label">Müşteri</span>
+                    <span class="label">{{ __('Müşteri') }}</span>
                     <span class="val">{{ auth()->user()->name }}</span>
                 </div>
                 <div class="row">
-                    <span class="label">E-posta</span>
+                    <span class="label">{{ __('E-posta') }}</span>
                     <span class="val">{{ auth()->user()->email }}</span>
                 </div>
                 <div class="divider"></div>
                 <div class="row">
-                    <span class="label">Ara Toplam</span>
-                    <span class="val">{{ number_format($invoice->amount, 2) }} TL</span>
+                    <span class="label">{{ __('Ara Toplam') }}</span>
+                    <span class="val">{{ formatCurrency($invoice->amount) }}</span>
                 </div>
                 @if($invoice->tax_rate > 0)
                 <div class="row">
-                    <span class="label">KDV ({{ number_format($invoice->tax_rate, 0) }}%)</span>
-                    <span class="val">{{ number_format($invoice->tax_amount, 2) }} TL</span>
+                    <span class="label">{{ __('KDV (:tax%)', ['tax' => number_format($invoice->tax_rate, 0)]) }}</span>
+                    <span class="val">{{ formatCurrency($invoice->tax_amount) }}</span>
                 </div>
                 @endif
                 <div class="divider"></div>
                 <div class="row total">
-                    <span>KDV Dahil Toplam</span>
-                    <span style="font-size:1.1rem;font-weight:900">{{ number_format($invoice->amount + $invoice->tax_amount, 2) }} TL</span>
+                    <span>{{ __('KDV Dahil Toplam') }}</span>
+                    <span style="font-size:1.1rem;font-weight:900">{{ formatCurrency($invoice->amount + $invoice->tax_amount) }}</span>
                 </div>
             </div>
             @endif
 
-            <a href="{{ route('dashboard') }}" class="btn-primary">Paneli Aç</a>
+            <a href="{{ route('dashboard') }}" class="btn-primary">{{ __('Paneli Aç') }}</a>
             <br>
-            <a href="#" onclick="window.print();return false" class="btn-ghost">🖨 Faturayı Yazdır</a>
+            <a href="#" onclick="window.print();return false" class="btn-ghost">🖨 {{ __('Faturayı Yazdır') }}</a>
         </div>
     </div>
 </x-app-layout>

@@ -11,9 +11,9 @@
     <div class="result-container">
         <div class="result-card">
             <div class="fail-icon">✕</div>
-            <h2>Ödeme Başarısız</h2>
-            <p>{{ session('error') ?: 'Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyin veya farklı bir ödeme yöntemi kullanın.' }}</p>
-            <a href="{{ route('payment.checkout', $plan) }}" class="btn-retry">Tekrar Dene</a>
+            <h2>{{ __('Ödeme Başarısız') }}</h2>
+            <p>{{ session('error') ?: __('Ödeme işlemi tamamlanamadı. Lütfen tekrar deneyin veya farklı bir ödeme yöntemi kullanın.') }}</p>
+            <a href="{{ route('payment.checkout', $plan) }}" class="btn-retry">{{ __('Tekrar Dene') }}</a>
         </div>
     </div>
 </x-app-layout>

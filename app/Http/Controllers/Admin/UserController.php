@@ -76,6 +76,17 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'Kullanıcı güncellendi.');
     }
 
+    public function toggleAdmin(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Kendinizin admin yetkisini değiştiremezsiniz.');
+        }
+
+        $user->update(['is_admin' => ! $user->is_admin]);
+
+        return back()->with('success', 'Kullanıcı admin yetkisi '.($user->is_admin ? 'verildi' : 'alındı').'.');
+    }
+
     public function destroy(User $user)
     {
         if ($user->is_admin) {

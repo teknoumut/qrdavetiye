@@ -26,25 +26,25 @@
             <p class="desc">{{ $plan->description }}</p>
 
             <div class="interval-toggle">
-                <button class="interval-btn {{ $interval ?? 'active' }}" data-interval="monthly" onclick="setPlanInterval('monthly')">Aylık</button>
-                <button class="interval-btn" data-interval="yearly" onclick="setPlanInterval('yearly')">Yıllık</button>
+                <button class="interval-btn {{ $interval ?? 'active' }}" data-interval="monthly" onclick="setPlanInterval('monthly')">{{ __('Aylık') }}</button>
+                <button class="interval-btn" data-interval="yearly" onclick="setPlanInterval('yearly')">{{ __('Yıllık') }}</button>
             </div>
 
-            <div id="yearlySaving" class="saving" style="display:none">🎉 Yıllık pakette %16 tasarruf edin!</div>
+            <div id="yearlySaving" class="saving" style="display:none">🎉 {{ __('Yıllık pakette %16 tasarruf edin!') }}</div>
 
             <div class="price-display">
                 <span id="priceDisplay">{{ number_format($plan->monthly_price, 2) }}</span>
-                <span class="cur">TL</span>
-                <span id="periodDisplay" style="font-size:0.9rem;color:#8893ac;font-weight:400">/ ay</span>
+                <span class="cur">USD</span>
+                <span id="periodDisplay" style="font-size:0.9rem;color:#8893ac;font-weight:400">/ {{ __('ay') }}</span>
             </div>
 
             <ul class="features">
-                <li><span class="check">✓</span> Maksimum {{ $plan->max_invitations == -1 ? 'sınırsız' : $plan->max_invitations }} davetiye</li>
-                <li><span class="check">✓</span> Davetiye başına {{ $plan->max_images_per_invitation == -1 ? 'sınırsız' : $plan->max_images_per_invitation }} fotoğraf</li>
-                <li><span class="{{ $plan->music_feature ? 'check' : 'cross' }}">{{ $plan->music_feature ? '✓' : '✗' }}</span> Müzik desteği</li>
-                <li><span class="{{ $plan->video_feature ? 'check' : 'cross' }}">{{ $plan->video_feature ? '✓' : '✗' }}</span> Video desteği</li>
-                <li><span class="{{ $plan->rsvp_feature ? 'check' : 'cross' }}">{{ $plan->rsvp_feature ? '✓' : '✗' }}</span> RSVP katılım takibi</li>
-                <li><span class="{{ $plan->qr_download ? 'check' : 'cross' }}">{{ $plan->qr_download ? '✓' : '✗' }}</span> QR kod indirme</li>
+                <li><span class="check">✓</span> {{ __('Maksimum :count davetiye', ['count' => $plan->max_invitations == -1 ? __('sınırsız') : $plan->max_invitations]) }}</li>
+                <li><span class="check">✓</span> {{ __('Davetiye başına :count fotoğraf', ['count' => $plan->max_images_per_invitation == -1 ? __('sınırsız') : $plan->max_images_per_invitation]) }}</li>
+                <li><span class="{{ $plan->music_feature ? 'check' : 'cross' }}">{{ $plan->music_feature ? '✓' : '✗' }}</span> {{ __('Müzik desteği') }}</li>
+                <li><span class="{{ $plan->video_feature ? 'check' : 'cross' }}">{{ $plan->video_feature ? '✓' : '✗' }}</span> {{ __('Video desteği') }}</li>
+                <li><span class="{{ $plan->rsvp_feature ? 'check' : 'cross' }}">{{ $plan->rsvp_feature ? '✓' : '✗' }}</span> {{ __('RSVP katılım takibi') }}</li>
+                <li><span class="{{ $plan->qr_download ? 'check' : 'cross' }}">{{ $plan->qr_download ? '✓' : '✗' }}</span> {{ __('QR kod indirme') }}</li>
             </ul>
 
             <form id="paymentForm" method="GET" action="{{ route('payment.pay', ['plan' => $plan->id, 'interval' => 'monthly']) }}">

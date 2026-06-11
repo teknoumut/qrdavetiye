@@ -59,7 +59,7 @@
                 <td>{{ $invoice->plan->name ?? 'Plan' }}</td>
                 <td>{{ $invoice->interval === 'yearly' ? 'Yıllık' : 'Aylık' }}</td>
                 <td>{{ ucfirst($invoice->status) }}</td>
-                <td>{{ number_format($invoice->amount, 2) }} TL</td>
+                <td>{{ formatCurrency($invoice->amount) }}</td>
             </tr>
         </tbody>
     </table>
@@ -67,16 +67,16 @@
     <div style="text-align:right;margin-top:20px;padding-top:15px;border-top:1px solid #eceef2;">
         <div style="font-size:13px;padding:3px 0;color:#464e62;">
             <span>Ara Toplam:</span>
-            <span style="margin-left:20px;font-weight:600;">{{ number_format($invoice->amount, 2) }} TL</span>
+            <span style="margin-left:20px;font-weight:600;">{{ formatCurrency($invoice->amount) }}</span>
         </div>
         @if($invoice->tax_rate > 0)
         <div style="font-size:13px;padding:3px 0;color:#464e62;">
             <span>KDV ({{ number_format($invoice->tax_rate, 0) }}%):</span>
-            <span style="margin-left:20px;font-weight:600;">{{ number_format($invoice->tax_amount, 2) }} TL</span>
+            <span style="margin-left:20px;font-weight:600;">{{ formatCurrency($invoice->tax_amount) }}</span>
         </div>
         @endif
         <div class="total">
-            Toplam: {{ number_format($invoice->amount + $invoice->tax_amount, 2) }} TL
+            Toplam: {{ formatCurrency($invoice->amount + $invoice->tax_amount) }}
         </div>
     </div>
 

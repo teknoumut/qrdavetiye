@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold text-night-900 dark:text-cream-100 tracking-tight">Davetiyelerim</h1>
-                <p class="text-sm text-night-400 dark:text-cream-400 mt-1">Tüm davetiyelerini yönet</p>
+                <h1 class="text-xl sm:text-2xl font-bold text-night-900 dark:text-cream-100 tracking-tight">{{ __('Davetiyelerim') }}</h1>
+                <p class="text-sm text-night-400 dark:text-cream-400 mt-1">{{ __('Tüm davetiyelerini yönet') }}</p>
             </div>
             <a href="{{ route('user.invitations.create') }}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 shadow-lg shadow-gold-200/50 dark:shadow-gold-500/20 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                Yeni Davetiye
+                {{ __('Yeni Davetiye') }}
             </a>
         </div>
     </x-slot>
@@ -18,11 +18,11 @@
                 <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-gold-100 to-rose-100 dark:from-gold-500/20 dark:to-rose-500/10 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold-200/30 dark:shadow-gold-500/10">
                     <span class="text-5xl">💌</span>
                 </div>
-                <h2 class="text-2xl font-bold text-night-900 dark:text-cream-100 mb-2">Henüz Davetiye Yok</h2>
-                <p class="text-night-400 dark:text-cream-400 mb-10 max-w-sm mx-auto">İlk dijital davetiyeni oluştur ve sevdiklerinle paylaş!</p>
+                <h2 class="text-2xl font-bold text-night-900 dark:text-cream-100 mb-2">{{ __('Henüz Davetiye Yok') }}</h2>
+                <p class="text-night-400 dark:text-cream-400 mb-10 max-w-sm mx-auto">{{ __('İlk dijital davetiyeni oluştur ve sevdiklerinle paylaş!') }}</p>
                 <a href="{{ route('user.invitations.create') }}" class="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl text-base font-bold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 shadow-lg shadow-gold-200/50 dark:shadow-gold-500/20 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                    İlk Davetiyeni Oluştur
+                    {{ __('İlk Davetiyeni Oluştur') }}
                 </a>
             </div>
         @else
@@ -35,7 +35,7 @@
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                                 <div class="absolute top-3 right-3 flex gap-1.5">
                                     <span class="text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm {{ $inv->is_published ? 'bg-emerald-500/80 text-white' : 'bg-night-800/60 text-white' }}">
-                                        {{ $inv->is_published ? 'Yayında' : 'Taslak' }}
+                                        {{ $inv->is_published ? __('Yayında') : __('Taslak') }}
                                     </span>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                 <span class="text-5xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-rose-400">{{ $eType === 'corporate' ? substr($inv->groom_name, 0, 2) : substr($inv->groom_name, 0, 1) }}{{ $eType === 'corporate' ? '' : ($eType !== 'circumcision' && $eType !== 'birthday' ? substr($inv->bride_name, 0, 1) : '') }}</span>
                                 <div class="absolute top-3 right-3 flex gap-1.5">
                                     <span class="text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm {{ $inv->is_published ? 'bg-emerald-500/80 text-white' : 'bg-night-800/60 text-white' }}">
-                                        {{ $inv->is_published ? 'Yayında' : 'Taslak' }}
+                                        {{ $inv->is_published ? __('Yayında') : __('Taslak') }}
                                     </span>
                                 </div>
                             </div>
@@ -53,8 +53,8 @@
                         <div class="p-5">
                             <div class="mb-3">
                                 @php
-                                    $typeNames = ['wedding'=>'💍 Düğün','engagement'=>'💍 Nişan','circumcision'=>'✂️ Sünnet','birthday'=>'🎂 Doğum Günü','corporate'=>'🏢 Kurumsal'];
-                                    $typeName = $typeNames[$inv->event_type] ?? '💍 Düğün';
+                                    $typeNames = ['wedding'=>'💍 '.__('Düğün'),'engagement'=>'💍 '.__('Nişan'),'circumcision'=>'✂️ '.__('Sünnet'),'birthday'=>'🎂 '.__('Doğum Günü'),'corporate'=>'🏢 '.__('Kurumsal')];
+                                    $typeName = $typeNames[$inv->event_type] ?? '💍 '.__('Düğün');
                                 @endphp
                                 <div class="flex items-center justify-between gap-2 mb-1.5">
                                     <h3 class="font-bold text-night-900 dark:text-cream-100 text-lg leading-tight group-hover:text-gold-700 dark:group-hover:text-gold-400 transition-colors truncate">{{ $inv->title }}</h3>
@@ -75,10 +75,10 @@
                             </div>
                             <div class="flex gap-2.5">
                                 <a href="{{ route('user.invitations.edit', $inv) }}" class="flex-1 text-center px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 transition-all duration-200 shadow-sm shadow-gold-200/30 dark:shadow-gold-500/10">
-                                    Düzenle
+                                    {{ __('Düzenle') }}
                                 </a>
                                 <a href="{{ route('user.invitations.show', $inv) }}" class="flex-1 text-center px-4 py-2.5 rounded-xl text-sm font-semibold text-night-500 dark:text-cream-300 bg-cream-50 dark:bg-night-900 border border-cream-200 dark:border-night-700 hover:border-gold-200 dark:hover:border-gold-500/30 hover:text-gold-700 dark:hover:text-gold-400 transition-all duration-200">
-                                    İstatistik
+                                    {{ __('İstatistik') }}
                                 </a>
                             </div>
                         </div>

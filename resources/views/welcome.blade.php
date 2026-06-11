@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="senin 💝 davetiyen - Özel günleriniz için modern ve şık davetiyeler">
-    <title>Dijital Davetiye Platformu</title>
+    <x-seo title="Dijital Davetiye Platformu - senin 💝 davetiyen" description="Özel günleriniz için modern ve şık QR kodlu dijital davetiyeler. Müzik, video, fotoğraf galerisi ve RSVP takibi ile sevdiklerinizi büyüleyin." />
+    <meta name="keywords" content="dijital davetiye, online davetiye, QR kod davetiye, düğün davetiyesi, nişan davetiyesi, sünnet davetiyesi, doğum günü davetiyesi">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|playfair-display:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -548,16 +548,17 @@
         </a>
 
         <div class="hidden md:flex items-center gap-1">
-            <a href="#how" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Nasıl Çalışır?</a>
-            <a href="#features" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Özellikler</a>
-            <a href="#pricing" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">Fiyatlandırma</a>
-            <a href="#faq" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">SSS</a>
-            <a href="#contact" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">İletişim</a>
+            <a href="#how" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('Nasıl Çalışır?') }}</a>
+            <a href="#features" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('Özellikler') }}</a>
+            <a href="#pricing" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('Fiyatlandırma') }}</a>
+            <a href="#faq" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('SSS') }}</a>
+            <a href="#contact" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('İletişim') }}</a>
+
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ route('dashboard') }}" class="ml-2 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
+                    <a href="{{ route('dashboard') }}" class="ml-2 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">{{ __('Panel') }}</a>
                 @else
-                    <a href="{{ route('login') }}" class="ml-2 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
+                    <a href="{{ route('login') }}" class="ml-2 px-5 py-2 text-sm font-semibold no-underline rounded-lg text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">{{ __('Giriş Yap') }}</a>
                 @endauth
             @endif
         </div>
@@ -570,16 +571,17 @@
     </nav>
 
     <div id="mobileMenu" class="mobile-menu fixed left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-b border-black/[0.04] shadow-lg px-4 py-4 flex flex-col gap-1" style="top:0; padding-top:70px;">
-        <a href="#how" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">Nasıl Çalışır?</a>
-        <a href="#features" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">Özellikler</a>
-        <a href="#pricing" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">Fiyatlandırma</a>
-        <a href="#faq" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">SSS</a>
-        <a href="#contact" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">İletişim</a>
+        <a href="#how" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('Nasıl Çalışır?') }}</a>
+        <a href="#features" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('Özellikler') }}</a>
+        <a href="#pricing" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('Fiyatlandırma') }}</a>
+        <a href="#faq" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('SSS') }}</a>
+        <a href="#contact" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('İletişim') }}</a>
+
         @if (Route::has('login'))
             @auth
-                <a href="{{ route('dashboard') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Panel</a>
+                <a href="{{ route('dashboard') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">{{ __('Panel') }}</a>
             @else
-                <a href="{{ route('login') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">Giriş Yap</a>
+                <a href="{{ route('login') }}" class="block mt-2 py-3 px-4 rounded-lg text-base font-bold no-underline text-white text-center transition-all hover:opacity-90" style="background:linear-gradient(135deg,var(--site-primary),var(--site-secondary))">{{ __('Giriş Yap') }}</a>
             @endauth
         @endif
     </div>
@@ -623,16 +625,16 @@
             <div class="orb" style="width:250px;height:250px;bottom:15%;right:10%;background:var(--site-secondary);animation-delay:-3s;"></div>
             <div class="orb" style="width:200px;height:200px;top:40%;left:60%;background:#6366f1;animation-delay:-5s;"></div>
         </div>
-        <div class="hero-badge"><span class="dot"></span> Yeni Nesil Davetiye</div>
-        <h1>Özel Günlerin İçin<br><span class="highlight">Dijital Davetiye</span></h1>
-        <p>QR kodlu, müzikli, fotoğraflı modern davetiyelerle sevdiklerini büyüle. Paylaşması kolay, etkisi büyük.</p>
+        <div class="hero-badge"><span class="dot"></span> {{ __('Yeni Nesil Davetiye') }}</div>
+        <h1>{{ __('Özel Günlerin İçin') }}<br><span class="highlight">{{ __('Dijital Davetiye') }}</span></h1>
+        <p>{{ __('QR kodlu, müzikli, fotoğraflı modern davetiyelerle sevdiklerini büyüle. Paylaşması kolay, etkisi büyük.') }}</p>
         <div class="btns">
-            <a href="#contact" class="primary">Şimdi Başla</a>
-            <a href="#how" class="secondary">Nasıl Çalışır?</a>
+            <a href="#contact" class="primary">{{ __('Şimdi Başla') }}</a>
+            <a href="#how" class="secondary">{{ __('Nasıl Çalışır?') }}</a>
         </div>
         <div class="hero-scroll" id="heroScroll" onclick="document.getElementById('envSection').scrollIntoView({behavior:'smooth'})">
             <div class="mouse"></div>
-            <span>Kaydır</span>
+            <span>{{ __('Kaydır') }}</span>
         </div>
     </section>
 
@@ -723,7 +725,7 @@
         <div class="burst-confetti" id="confettiContainer"></div>
         <div class="env-scene" id="envScene">
             <div class="env-label" id="envLabel">
-                <span class="arrow">↓</span> Zarfı Açmak İçin Kaydır <span class="arrow">↓</span>
+                <span class="arrow">↓</span> {{ __('Zarfı Açmak İçin Kaydır') }} <span class="arrow">↓</span>
             </div>
             <div class="env-3d" id="env3d">
                 <div class="card-body"><div class="gold-shimmer"></div></div>
@@ -752,48 +754,48 @@
 
     <div class="env-section" id="envSection">
         <div class="how-section" id="how">
-            <div class="section-title animate-reveal">Nasıl Çalışır?</div>
-            <div class="section-sub animate-reveal">Birkaç adımda davetiyeni oluştur, QR kodla paylaşmaya başla</div>
+            <div class="section-title animate-reveal">{{ __('Nasıl Çalışır?') }}</div>
+            <div class="section-sub animate-reveal">{{ __('Birkaç adımda davetiyeni oluştur, QR kodla paylaşmaya başla') }}</div>
             <div class="steps">
                 <div class="step animate-step">
                     <div class="num">1</div>
-                    <h3>Bize Ulaş</h3>
-                    <p>Formdan mesaj gönder, sana özel hesabını oluşturalım</p>
+                    <h3>{{ __('Bize Ulaş') }}</h3>
+                    <p>{{ __('Formdan mesaj gönder, sana özel hesabını oluşturalım') }}</p>
                     <div class="step-bg">📞</div>
                 </div>
                 <div class="step animate-step" style="transition-delay:0.1s">
                     <div class="num">2</div>
-                    <h3>Davetiyeni Tasarla</h3>
-                    <p>Renk, fotoğraf, müzik ve yazılarınla kişiselleştir</p>
+                    <h3>{{ __('Davetiyeni Tasarla') }}</h3>
+                    <p>{{ __('Renk, fotoğraf, müzik ve yazılarınla kişiselleştir') }}</p>
                     <div class="step-bg">🎨</div>
                 </div>
                 <div class="step animate-step" style="transition-delay:0.2s">
                     <div class="num">3</div>
-                    <h3>QR Kodla Paylaş</h3>
-                    <p>WhatsApp, Instagram veya SMS ile davetlilere ulaştır</p>
+                    <h3>{{ __('QR Kodla Paylaş') }}</h3>
+                    <p>{{ __('WhatsApp, Instagram veya SMS ile davetlilere ulaştır') }}</p>
                     <div class="step-bg">📱</div>
                 </div>
                 <div class="step animate-step" style="transition-delay:0.3s">
                     <div class="num">4</div>
-                    <h3>Takip Et</h3>
-                    <p>Kim katılıyor, kim katılmıyor panelden canlı izle</p>
+                    <h3>{{ __('Takip Et') }}</h3>
+                    <p>{{ __('Kim katılıyor, kim katılmıyor panelden canlı izle') }}</p>
                     <div class="step-bg">📊</div>
                 </div>
             </div>
         </div>
 
         <div class="features-section" id="features">
-            <div class="section-title animate-reveal">Tüm Özellikler</div>
-            <div class="section-sub animate-reveal">İhtiyacın olan her şey bu platformda</div>
+            <div class="section-title animate-reveal">{{ __('Tüm Özellikler') }}</div>
+            <div class="section-sub animate-reveal">{{ __('İhtiyacın olan her şey bu platformda') }}</div>
             <div class="features-grid">
-                <div class="feature-card animate-feature"><div class="ficon" style="background:#fdf8ed">📱</div><div class="ftext"><h4>QR Kod</h4><p>Her davetiye için otomatik QR kod, PNG/SVG indir</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.05s"><div class="ficon" style="background:#fdf2f4">🎵</div><div class="ftext"><h4>Müzik Desteği</h4><p>YouTube embed ya da MP3 ile arka plan müziği</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.1s"><div class="ficon" style="background:#fdf8ed">🖼️</div><div class="ftext"><h4>Fotoğraf Galerisi</h4><p>Özel anılarını galeri şeklinde paylaş</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.15s"><div class="ficon" style="background:#fdf2f4">🎨</div><div class="ftext"><h4>Tema & Renk</h4><p>Tamamen özelleştirilebilir tasarım</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.2s"><div class="ficon" style="background:#fdf8ed">⏱️</div><div class="ftext"><h4>Geri Sayım</h4><p>Etkinlik tarihine otomatik sayaç</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.25s"><div class="ficon" style="background:#fdf2f4">📍</div><div class="ftext"><h4>Konum</h4><p>Harita entegrasyonu ile adres göster</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.3s"><div class="ficon" style="background:#fdf8ed">💬</div><div class="ftext"><h4>RSVP Sistemi</h4><p>Katılım takibi, anlık bildirim</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.35s"><div class="ficon" style="background:#fdf2f4">🎬</div><div class="ftext"><h4>Video Desteği</h4><p>YouTube videoları ile zenginleştir</p></div></div>
+                <div class="feature-card animate-feature"><div class="ficon" style="background:#fdf8ed">📱</div><div class="ftext"><h4>{{ __('QR Kod') }}</h4><p>{{ __('Her davetiye için otomatik QR kod, PNG/SVG indir') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.05s"><div class="ficon" style="background:#fdf2f4">🎵</div><div class="ftext"><h4>{{ __('Müzik Desteği') }}</h4><p>{{ __('YouTube embed ya da MP3 ile arka plan müziği') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.1s"><div class="ficon" style="background:#fdf8ed">🖼️</div><div class="ftext"><h4>{{ __('Fotoğraf Galerisi') }}</h4><p>{{ __('Özel anılarını galeri şeklinde paylaş') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.15s"><div class="ficon" style="background:#fdf2f4">🎨</div><div class="ftext"><h4>{{ __('Tema & Renk') }}</h4><p>{{ __('Tamamen özelleştirilebilir tasarım') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.2s"><div class="ficon" style="background:#fdf8ed">⏱️</div><div class="ftext"><h4>{{ __('Geri Sayım') }}</h4><p>{{ __('Etkinlik tarihine otomatik sayaç') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.25s"><div class="ficon" style="background:#fdf2f4">📍</div><div class="ftext"><h4>{{ __('Konum') }}</h4><p>{{ __('Harita entegrasyonu ile adres göster') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.3s"><div class="ficon" style="background:#fdf8ed">💬</div><div class="ftext"><h4>{{ __('RSVP Sistemi') }}</h4><p>{{ __('Katılım takibi, anlık bildirim') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.35s"><div class="ficon" style="background:#fdf2f4">🎬</div><div class="ftext"><h4>{{ __('Video Desteği') }}</h4><p>{{ __('YouTube videoları ile zenginleştir') }}</p></div></div>
             </div>
         </div>
 
@@ -830,35 +832,35 @@
             @media (max-width: 768px) { .pricing-grid { grid-template-columns: 1fr; } }
         </style>
         <div class="pricing-section" id="pricing">
-            <div class="section-title animate-reveal">Plan ve Fiyatlandırma</div>
-            <div class="section-sub animate-reveal">İhtiyacına uygun planı seç, hemen başla</div>
+            <div class="section-title animate-reveal">{{ __('Plan ve Fiyatlandırma') }}</div>
+            <div class="section-sub animate-reveal">{{ __('İhtiyacına uygun planı seç, hemen başla') }}</div>
 
             <div class="pricing-toggle">
-                <span class="active" id="toggleMonthlyLabel">Aylık</span>
+                <span class="active" id="toggleMonthlyLabel">{{ __('Aylık') }}</span>
                 <div class="toggle-switch" id="pricingToggle" onclick="togglePricing()"></div>
-                <span id="toggleYearlyLabel">Yıllık</span>
+                <span id="toggleYearlyLabel">{{ __('Yıllık') }}</span>
             </div>
 
             <div class="pricing-grid">
                 @foreach ($plans as $plan)
                 <div class="pricing-card animate-feature {{ $plan->name === 'Standart' ? 'featured' : '' }}">
-                    @if ($plan->name === 'Standart')<div class="badge">Popüler</div>@endif
+                    @if ($plan->name === 'Standart')<div class="badge">{{ __('Popüler') }}</div>@endif
                     <h3>{{ $plan->name }}</h3>
                     <p class="desc">{{ $plan->description }}</p>
-                    <div class="p-price"><span class="monthly-price">{{ number_format($plan->monthly_price, 2) }}</span><span class="yearly-price" style="display:none">{{ number_format($plan->yearly_price, 2) }}</span><span class="cur"> TL</span></div>
-                    <div class="p-period"><span class="monthly-period">/ ay</span><span class="yearly-period" style="display:none">/ yıl</span></div>
+                    <div class="p-price"><span class="monthly-price">{{ formatCurrency($plan->monthly_price) }}</span><span class="yearly-price" style="display:none">{{ formatCurrency($plan->yearly_price) }}</span></div>
+                    <div class="p-period"><span class="monthly-period">/ {{ __('ay') }}</span><span class="yearly-period" style="display:none">/ {{ __('yıl') }}</span></div>
                     <ul class="p-features">
-                        <li><span class="check">✓</span> {{ $plan->max_invitations == -1 ? 'Sınırsız davetiye' : 'En fazla '.$plan->max_invitations.' davetiye' }}</li>
-                        <li><span class="check">✓</span> Davetiye başına {{ $plan->max_images_per_invitation == -1 ? 'sınırsız' : $plan->max_images_per_invitation }} fotoğraf</li>
-                        <li><span class="{{ $plan->music_feature ? 'check' : 'cross' }}">{{ $plan->music_feature ? '✓' : '✗' }}</span> Müzik desteği</li>
-                        <li><span class="{{ $plan->video_feature ? 'check' : 'cross' }}">{{ $plan->video_feature ? '✓' : '✗' }}</span> Video desteği</li>
-                        <li><span class="{{ $plan->rsvp_feature ? 'check' : 'cross' }}">{{ $plan->rsvp_feature ? '✓' : '✗' }}</span> RSVP katılım takibi</li>
-                        <li><span class="{{ $plan->qr_download ? 'check' : 'cross' }}">{{ $plan->qr_download ? '✓' : '✗' }}</span> QR kod indirme</li>
+                        <li><span class="check">✓</span> {{ $plan->max_invitations == -1 ? __('Sınırsız davetiye') : __('En fazla :count davetiye', ['count' => $plan->max_invitations]) }}</li>
+                        <li><span class="check">✓</span> {{ __('Davetiye başına') }} {{ $plan->max_images_per_invitation == -1 ? __('sınırsız') : $plan->max_images_per_invitation }} {{ __('fotoğraf') }}</li>
+                        <li><span class="{{ $plan->music_feature ? 'check' : 'cross' }}">{{ $plan->music_feature ? '✓' : '✗' }}</span> {{ __('Müzik desteği') }}</li>
+                        <li><span class="{{ $plan->video_feature ? 'check' : 'cross' }}">{{ $plan->video_feature ? '✓' : '✗' }}</span> {{ __('Video desteği') }}</li>
+                        <li><span class="{{ $plan->rsvp_feature ? 'check' : 'cross' }}">{{ $plan->rsvp_feature ? '✓' : '✗' }}</span> {{ __('RSVP katılım takibi') }}</li>
+                        <li><span class="{{ $plan->qr_download ? 'check' : 'cross' }}">{{ $plan->qr_download ? '✓' : '✗' }}</span> {{ __('QR kod indirme') }}</li>
                     </ul>
                     @auth
-                        <a href="{{ route('payment.eft.checkout', $plan) }}" class="p-btn {{ $plan->monthly_price == 0 ? 'p-btn-outline' : '' }}">Satın Al</a>
+                        <a href="{{ route('payment.eft.checkout', $plan) }}" class="p-btn {{ $plan->monthly_price == 0 ? 'p-btn-outline' : '' }}">{{ __('Satın Al') }}</a>
                     @else
-                        <a href="{{ route('register', ['purchase' => 1]) }}" class="p-btn p-btn-outline">Satın Al</a>
+                        <a href="{{ route('register', ['purchase' => 1]) }}" class="p-btn p-btn-outline">{{ __('Satın Al') }}</a>
                     @endauth
                 </div>
                 @endforeach
@@ -892,8 +894,8 @@
             .review-card .review-content { font-size: 0.9rem; color: #464e62; line-height: 1.7; }
         </style>
         <div class="reviews-section" id="reviews">
-            <div class="section-title animate-reveal">Kullanıcı Yorumları</div>
-            <div class="section-sub animate-reveal">senin 💝 davetiyen kullanıcılarının deneyimleri</div>
+            <div class="section-title animate-reveal">{{ __('Kullanıcı Yorumları') }}</div>
+            <div class="section-sub animate-reveal">{{ __('senin 💝 davetiyen kullanıcılarının deneyimleri') }}</div>
             <div class="reviews-grid">
                 @foreach ($reviews as $review)
                     <div class="review-card animate-feature">
@@ -917,8 +919,8 @@
         @endif
 
         <div class="faq-section" id="faq">
-            <div class="section-title animate-reveal">Sık Sorulan Sorular</div>
-            <div class="section-sub animate-reveal">Merak ettiğin her şeyin cevabı burada</div>
+            <div class="section-title animate-reveal">{{ __('Sık Sorulan Sorular') }}</div>
+            <div class="section-sub animate-reveal">{{ __('Merak ettiğin her şeyin cevabı burada') }}</div>
 
             <div class="faq-grid">
                 <details class="faq-item" id="faq1">
@@ -962,48 +964,48 @@
         </style>
 
         <div class="contact-section" id="contact">
-            <div class="section-title animate-reveal">Biz Size Ulaşalım</div>
-            <div class="section-sub animate-reveal">Formu doldurun, size özel davetiyenizi birlikte oluşturalım</div>
+            <div class="section-title animate-reveal">{{ __('Bize Ulaşın') }}</div>
+            <div class="section-sub animate-reveal">{{ __('Formu doldurun, size özel davetiyenizi birlikte oluşturalım') }}</div>
             <div class="contact-wrap">
                 <div class="contact-form" id="contactFormCard">
                     <form id="contactForm" action="{{ route('contact.store') }}" method="POST">
                         @csrf
                         <div class="form-header">
                             <div class="icon">✉️</div>
-                            <h3>Mesaj Gönder</h3>
-                            <p>Size en kısa sürede dönüş yapalım</p>
+                            <h3>{{ __('Mesaj Gönder') }}</h3>
+                            <p>{{ __('Size nasıl yardımcı olabiliriz?') }}</p>
                         </div>
                         <div class="field-group">
                             <div class="field">
-                                <label>Ad Soyad</label>
+                                <label>{{ __('Adınız') }}</label>
                                 <span class="input-icon">👤</span>
-                                <input type="text" name="name" required placeholder="Adın ve soyadın">
+                                <input type="text" name="name" required placeholder="{{ __('Adınız') }}">
                             </div>
                             <div class="field">
-                                <label>Telefon</label>
+                                <label>{{ __('Telefon') }}</label>
                                 <span class="input-icon">📞</span>
                                 <input type="tel" name="phone" placeholder="0555 555 55 55">
                             </div>
                         </div>
                         <div class="field full">
-                            <label>E-posta</label>
+                            <label>{{ __('E-posta') }}</label>
                             <span class="input-icon">📧</span>
                             <input type="email" name="email" placeholder="ornek@email.com">
                         </div>
                         <div class="field full">
-                            <label>Mesajın</label>
+                            <label>{{ __('Mesajınız') }}</label>
                             <span class="input-icon">💬</span>
-                            <textarea name="message" rows="3" required placeholder="Merhaba, dijital davetiye hakkında bilgi almak istiyorum..."></textarea>
+                            <textarea name="message" rows="3" required placeholder="{{ __('Size nasıl yardımcı olabiliriz?') }}"></textarea>
                         </div>
                         <button type="submit">
-                            <span>Mesajı Gönder</span>
+                            <span>{{ __('Mesaj Gönder') }}</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         </button>
                     </form>
                     <div class="success-state" id="contactSuccess">
                         <div class="check">✓</div>
-                        <h4>Mesajın Alındı!</h4>
-                        <p>En kısa sürede sana dönüş yapacağız.<br>Teşekkür ederiz 🎉</p>
+                        <h4>{{ __('Mesajınız başarıyla gönderildi!') }}</h4>
+                        <p>{{ __('En kısa sürede size dönüş yapacağız.') }}<br>🎉</p>
                     </div>
                 </div>
             </div>
@@ -1012,13 +1014,13 @@
         <footer>
             <div class="flex flex-col items-center gap-3">
                 <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-                    <a href="{{ route('legal.gizlilik') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">Gizlilik Politikası</a>
-                    <a href="{{ route('legal.kvkk') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">KVKK Aydınlatma Metni</a>
-                    <a href="{{ route('legal.kullanim') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">Kullanım Koşulları</a>
-                    <a href="{{ route('legal.iade') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">İade ve İptal Politikası</a>
-                    <a href="{{ route('legal.mesafeli') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">Mesafeli Satış Sözleşmesi</a>
+                    <a href="{{ route('legal.gizlilik') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">{{ __('Gizlilik Politikası') }}</a>
+                    <a href="{{ route('legal.kvkk') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">KVKK</a>
+                    <a href="{{ route('legal.kullanim') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">{{ __('Kullanım Koşulları') }}</a>
+                    <a href="{{ route('legal.iade') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">{{ __('İade Politikası') }}</a>
+                    <a href="{{ route('legal.mesafeli') }}" class="text-night-400 hover:text-gold-500 no-underline transition-colors">{{ __('Mesafeli Satış') }}</a>
                 </div>
-                <div>&copy; {{ date('Y') }} senin 💝 davetiyen. Tüm hakları saklıdır.</div>
+                <div>&copy; {{ date('Y') }} senin 💝 davetiyen. {{ __('Tüm hakları saklıdır.') }}</div>
             </div>
         </footer>
     </div>

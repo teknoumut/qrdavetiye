@@ -63,6 +63,12 @@
                                         {{ $user->is_active ? 'Pasif Yap' : 'Aktif Yap' }}
                                     </button>
                                 </form>
+                                <form action="{{ route('admin.users.toggle-admin', $user) }}" method="POST" class="inline" onsubmit="return confirm('{{ $user->is_admin ? 'Admin yetkisini almak istediğinize emin misiniz?' : 'Bu kullanıcıya admin yetkisi vermek istediğinize emin misiniz?' }}')">
+                                    @csrf
+                                    <button type="submit" class="btn-ghost text-xs px-2 py-1.5 {{ $user->is_admin ? 'text-orange-600 border-orange-200 hover:bg-orange-50' : 'text-indigo-600 border-indigo-200 hover:bg-indigo-50' }}">
+                                        {{ $user->is_admin ? 'Admini Kaldır' : 'Admin Yap' }}
+                                    </button>
+                                </form>
                                 @if(!$user->is_admin)
                                     <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Emin misiniz?')">
                                         @csrf @method('DELETE')

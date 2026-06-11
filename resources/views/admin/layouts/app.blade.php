@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'senin 💝 davetiyen') }} - Admin Panel</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Yönetim Paneli - {{ config('app.name', 'senin 💝 davetiyen') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -378,6 +380,28 @@
             .admin-topbar { padding: 0 16px; }
             .admin-body { padding: 20px 16px; }
             .admin-topbar .user-badge .user-text { display: none; }
+        }
+        @media (max-width: 768px) {
+            .stat-card { padding: 16px; }
+            .stat-card .stat-value { font-size: 1.4rem; }
+            .table-wrap th, .table-wrap td { padding: 8px 10px; font-size: 0.75rem; }
+            .table-wrap td:last-child { white-space: normal; }
+            .admin-body { padding: 14px 10px; }
+            .admin-topbar .page-title { font-size: 0.95rem; }
+            .admin-topbar .right .user-badge .user-text { display: none; }
+        }
+        @media (max-width: 480px) {
+            .stat-card { padding: 12px; }
+            .stat-card .stat-value { font-size: 1.15rem; }
+            .stat-card .stat-label { font-size: 0.65rem; }
+            .table-wrap th, .table-wrap td { padding: 6px 6px; font-size: 0.7rem; }
+            .table-wrap td .btn-ghost, .table-wrap td .btn-primary { font-size: 0.65rem; padding: 4px 8px; }
+            .table-wrap td:last-child .flex { flex-wrap: wrap; justify-content: flex-end; gap: 2px; }
+            .admin-body { padding: 10px 6px; }
+            .admin-topbar { height: 56px; padding: 0 10px; }
+            .admin-topbar .page-title { font-size: 0.85rem; }
+            .glass-card { border-radius: 10px; }
+            .pagination { font-size: 0.7rem; }
         }
     </style>
 </head>

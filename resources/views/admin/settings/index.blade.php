@@ -8,7 +8,7 @@
             <span class="sub">Platform genel ayarlarını yapılandırın</span>
         </div>
     </x-slot>
-    <div class="bg-white border border-gray-200 rounded-2xl p-8 max-w-4xl">
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6 md:p-8 max-w-4xl">
         <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'senin 💝 davetiyen') }}</title>
+        <x-seo />
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|playfair-display:400,500,600,700&display=swap" rel="stylesheet" />
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -50,14 +50,14 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="text-sm text-night-400 dark:text-night-500">
-                        &copy; {{ date('Y') }} senin 💝 davetiyen. Tüm hakları saklıdır.
+                        &copy; {{ date('Y') }} {{ __('senin 💝 davetiyen') }}. {{ __('Tüm hakları saklıdır.') }}
                     </div>
                     <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
-                        <a href="{{ route('legal.gizlilik') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">Gizlilik Politikası</a>
-                        <a href="{{ route('legal.kvkk') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">KVKK</a>
-                        <a href="{{ route('legal.kullanim') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">Kullanım Koşulları</a>
-                        <a href="{{ route('legal.iade') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">İade Politikası</a>
-                        <a href="{{ route('legal.mesafeli') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">Mesafeli Satış</a>
+                        <a href="{{ route('legal.gizlilik') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">{{ __('Gizlilik Politikası') }}</a>
+                        <a href="{{ route('legal.kvkk') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">{{ __('KVKK') }}</a>
+                        <a href="{{ route('legal.kullanim') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">{{ __('Kullanım Koşulları') }}</a>
+                        <a href="{{ route('legal.iade') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">{{ __('İade Politikası') }}</a>
+                        <a href="{{ route('legal.mesafeli') }}" class="text-night-400 dark:text-night-500 hover:text-gold-500 dark:hover:text-gold-400 no-underline transition-colors">{{ __('Mesafeli Satış') }}</a>
                     </div>
                 </div>
             </div>

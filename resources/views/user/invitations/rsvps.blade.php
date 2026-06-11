@@ -2,17 +2,17 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold text-night-900 dark:text-cream-100 tracking-tight">RSVP Kayıtları</h1>
+                <h1 class="text-xl sm:text-2xl font-bold text-night-900 dark:text-cream-100 tracking-tight">{{ __('RSVP Kayıtları') }}</h1>
                 <p class="text-sm text-night-400 dark:text-cream-400 mt-1">{{ $invitation->title }} · {{ $invitation->groom_name }} & {{ $invitation->bride_name }}</p>
             </div>
             <div class="flex gap-2">
                 <a href="{{ route('user.invitations.edit', $invitation) }}" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-night-500 dark:text-cream-300 bg-white dark:bg-night-800 border border-cream-200 dark:border-night-700 hover:border-gold-300 hover:text-gold-700 dark:hover:border-gold-500/30 dark:hover:text-gold-400 transition-all shadow-sm">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    Davetiye
+                    {{ __('Davetiye') }}
                 </a>
                 <a href="{{ route('user.invitations.rsvps-export', $invitation) }}" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-200/50 dark:shadow-emerald-500/20 transition-all duration-300 hover:-translate-y-0.5">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    Excel
+                    {{ __('Excel') }}
                 </a>
             </div>
         </div>
@@ -25,22 +25,22 @@
                     <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-gold-50 to-rose-50 dark:from-gold-500/10 dark:to-rose-500/5 flex items-center justify-center mx-auto mb-5">
                         <span class="text-3xl">💌</span>
                     </div>
-                    <p class="text-night-400 dark:text-cream-400 text-sm font-medium">Henüz RSVP kaydı bulunmuyor.</p>
-                    <p class="text-xs text-night-300 dark:text-night-500 mt-1">Davetiyeni yayınladığında katılımcıların yanıtları burada listelenecek</p>
+                    <p class="text-night-400 dark:text-cream-400 text-sm font-medium">{{ __('Henüz RSVP kaydı bulunmuyor.') }}</p>
+                    <p class="text-xs text-night-300 dark:text-night-500 mt-1">{{ __('Davetiyeni yayınladığında katılımcıların yanıtları burada listelenecek') }}</p>
                 </div>
             @else
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
                             <tr class="bg-gradient-to-r from-gold-50 to-rose-50 dark:from-gold-500/5 dark:to-rose-500/5 border-b border-cream-100 dark:border-night-700">
-                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">Ad</th>
-                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">E-posta</th>
-                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">Telefon</th>
-                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">Durum</th>
-                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">Kişi</th>
-                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">Mesaj</th>
-                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">Tarih</th>
-                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">Onay</th>
+                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">{{ __('Ad') }}</th>
+                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">{{ __('E-posta') }}</th>
+                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">{{ __('Telefon') }}</th>
+                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">{{ __('Durum') }}</th>
+                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">{{ __('Kişi') }}</th>
+                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">{{ __('Mesaj') }}</th>
+                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">{{ __('Tarih') }}</th>
+                                <th class="text-left px-6 py-4 text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider">{{ __('Onay') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-cream-50 dark:divide-night-700/50">
@@ -54,9 +54,9 @@
                                         @if($rsvp->status === 'attending') bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
                                         @elseif($rsvp->status === 'not_attending') bg-red-50 dark:bg-red-500/10 text-red-500 dark:text-red-400 border border-red-200 dark:border-red-500/20
                                         @else bg-gold-50 dark:bg-gold-500/10 text-gold-700 dark:text-gold-400 border border-gold-200 dark:border-gold-500/20 @endif">
-                                        @if($rsvp->status === 'attending') Katılıyor
-                                        @elseif($rsvp->status === 'not_attending') Katılamıyor
-                                        @else Belki @endif
+                                        @if($rsvp->status === 'attending') {{ __('Katılıyor') }}
+                                        @elseif($rsvp->status === 'not_attending') {{ __('Katılamıyor') }}
+                                        @else {{ __('Belki') }} @endif
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-bold text-night-700 dark:text-cream-300 tabular-nums">{{ $rsvp->guest_count }}</td>
@@ -67,23 +67,23 @@
                                         @if(!$rsvp->is_confirmed)
                                             <form method="POST" action="{{ route('user.rsvps.confirm', $rsvp) }}" class="inline">
                                                 @csrf
-                                                <button class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-colors" title="Onayla">
+                                                <button class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-colors" title="{{ __('Onayla') }}">
                                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                                 </button>
                                             </form>
                                             <form method="POST" action="{{ route('user.rsvps.reject', $rsvp) }}" class="inline">
                                                 @csrf
-                                                <button class="p-1.5 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors" title="Reddet">
+                                                <button class="p-1.5 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors" title="{{ __('Reddet') }}">
                                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                                 </button>
                                             </form>
                                         @else
-                                            <span class="inline-flex text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">Onaylı</span>
+                                            <span class="inline-flex text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">{{ __('Onaylı') }}</span>
                                         @endif
-                                        <form method="POST" action="{{ route('user.rsvps.destroy', $rsvp) }}" class="inline" onsubmit="return confirm('Bu katılımcıyı silmek istediğine emin misin?')">
+                                        <form method="POST" action="{{ route('user.rsvps.destroy', $rsvp) }}" class="inline" onsubmit="return confirm('{{ __('Bu katılımcıyı silmek istediğine emin misin?') }}')">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="p-1.5 rounded-lg bg-gray-50 dark:bg-night-700 text-gray-400 dark:text-cream-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400 transition-colors" title="Sil">
+                                            <button class="p-1.5 rounded-lg bg-gray-50 dark:bg-night-700 text-gray-400 dark:text-cream-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400 transition-colors" title="{{ __('Sil') }}">
                                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                             </button>
                                         </form>

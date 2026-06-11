@@ -30,10 +30,12 @@
             </div>
 
             <div class="space-y-4 mb-6">
+                @if($bankName)
                 <div>
                     <label class="block text-xs font-semibold text-night-400 dark:text-night-500 uppercase tracking-wider mb-1.5">Banka</label>
                     <div class="p-3 sm:p-4 rounded-xl bg-night-50 dark:bg-night-700/50 border border-cream-200 dark:border-night-700 font-semibold text-night-900 dark:text-cream-100 text-sm sm:text-base">{{ $bankName }}</div>
                 </div>
+                @endif
                 <div>
                     <label class="block text-xs font-semibold text-night-400 dark:text-night-500 uppercase tracking-wider mb-1.5">IBAN</label>
                     <div class="p-3 sm:p-4 rounded-xl bg-night-50 dark:bg-night-700/50 border border-cream-200 dark:border-night-700 font-mono font-bold text-night-900 dark:text-cream-100 text-sm sm:text-base select-all cursor-pointer" onclick="navigator.clipboard.writeText(this.textContent.trim()).then(() => showCopiedToast())">{{ $iban }}</div>

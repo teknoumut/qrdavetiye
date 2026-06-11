@@ -7,6 +7,8 @@ use App\Http\Services\SubscriptionService;
 use App\Models\Invoice;
 use App\Models\Plan;
 use App\Models\Setting;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -43,6 +45,13 @@ class PaymentController extends Controller
             return redirect()->route('home')->with('error', $error);
         }
 
+        $user = auth()->user();
+        if ($user && $user->subscription_status === User::STATUS_ACTIVE
+            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
+        ) {
+            return redirect()->route('home')->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+        }
+
         return view('checkout', compact('plan'));
     }
 
@@ -60,6 +69,13 @@ class PaymentController extends Controller
         $user = auth()->user();
         if (! $user) {
             return redirect()->route('login');
+        }
+
+        if ($user->subscription_status === User::STATUS_ACTIVE
+            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
+        ) {
+            return redirect()->route('payment.fail', ['plan' => $plan->id])
+                ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
         }
 
         $price = $this->getPrice($plan, $interval);
@@ -150,6 +166,14 @@ class PaymentController extends Controller
         }
 
         $user = auth()->user();
+
+        if ($user->subscription_status === User::STATUS_ACTIVE
+            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
+        ) {
+            return redirect()->route('payment.fail', ['plan' => $plan->id])
+                ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+        }
+
         $price = $this->getPrice($plan, $interval);
 
         if (is_null($price) || $price < 0) {

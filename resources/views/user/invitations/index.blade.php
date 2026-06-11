@@ -53,7 +53,7 @@
                         <div class="p-5">
                             <div class="mb-3">
                                 @php
-                                    $typeNames = ['wedding'=>'💍 '.__('Düğün'),'engagement'=>'💍 '.__('Nişan'),'circumcision'=>'✂️ '.__('Sünnet'),'birthday'=>'🎂 '.__('Doğum Günü'),'corporate'=>'🏢 '.__('Kurumsal')];
+                                    $typeNames = ['wedding'=>'💍 '.__('Düğün'),'engagement'=>'💍 '.__('Nişan'),'circumcision'=>'✂️ '.__('Sünnet'),'birthday'=>'🎂 '.__('Doğum Günü'),'corporate'=>'🏢 '.__('Kurumsal'),'graduation'=>'🎓 '.__('Mezuniyet')];
                                     $typeName = $typeNames[$inv->event_type] ?? '💍 '.__('Düğün');
                                 @endphp
                                 <div class="flex items-center justify-between gap-2 mb-1.5">

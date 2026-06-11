@@ -38,8 +38,7 @@ class DashboardController extends Controller
             'recent_invitations' => Invitation::with('user')->latest()->take(5)->get(),
             'pending_payments' => PaymentNotification::pending()->count(),
             'recent_payments' => PaymentNotification::with(['user', 'plan'])->pending()->latest()->take(5)->get(),
-            'total_revenue' => Invoice::where('status', 'paid')->sum('amount')
-                + PaymentNotification::approved()->sum('amount'),
+            'total_revenue' => PaymentNotification::approved()->sum('amount'),
             'recent_invoices' => Invoice::with(['user', 'plan'])
                 ->latest()
                 ->take(5)

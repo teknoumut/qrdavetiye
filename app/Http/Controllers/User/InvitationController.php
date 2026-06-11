@@ -79,7 +79,7 @@ class InvitationController extends Controller
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'event_type' => 'nullable|string|in:wedding,engagement,circumcision,birthday,corporate',
+            'event_type' => 'nullable|string|in:wedding,engagement,circumcision,birthday,corporate,graduation',
             'short_link' => 'nullable|string|max:60|unique:invitations,short_link|regex:/^[a-z0-9-]+$/',
             'plan_id' => 'nullable|exists:plans,id',
             'groom_name' => 'required|string|max:255',
@@ -172,7 +172,7 @@ class InvitationController extends Controller
 
         $data = $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            'event_type' => 'nullable|string|in:wedding,engagement,circumcision,birthday,corporate',
+            'event_type' => 'nullable|string|in:wedding,engagement,circumcision,birthday,corporate,graduation',
             'short_link' => 'nullable|string|max:60|unique:invitations,short_link,'.$invitation->id.'|regex:/^[a-z0-9-]+$/',
             'plan_id' => 'nullable|exists:plans,id',
             'groom_name' => 'sometimes|required|string|max:255',

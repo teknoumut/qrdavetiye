@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\PaymentNotification;
 use App\Models\Plan;
 use App\Models\Setting;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -27,6 +29,14 @@ class EftPaymentController extends Controller
 
         if (! $plan->is_active) {
             return redirect()->route('home')->with('error', 'Bu plan şu anda aktif değil.');
+        }
+
+        $user = auth()->user();
+        if ($user && $user->subscription_status === User::STATUS_ACTIVE
+            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
+        ) {
+            return redirect()->route('payment.eft.checkout', $plan)
+                ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
         }
 
         $price = $interval === 'yearly' ? $plan->yearly_price : $plan->monthly_price;

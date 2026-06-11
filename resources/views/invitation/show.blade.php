@@ -18,6 +18,7 @@
         'circumcision' => ['title' => 'Sünnet Davetiyesi', 'slug' => 'Sünnet', 'sub' => 'Bizimle Kutlayın', 'couple' => false, 'parents' => true, 'showStory' => false, 'locationLabel' => 'Etkinlik Yeri', 'countdownLabel' => 'Sünnet Günü', 'rsvpIcon' => '🎊'],
         'birthday' => ['title' => 'Doğum Günü Davetiyesi', 'slug' => 'Doğum Günü', 'sub' => 'Kutlamaya Davetlisiniz', 'couple' => false, 'parents' => true, 'showStory' => false, 'locationLabel' => 'Parti Yeri', 'countdownLabel' => 'Doğum Günü', 'rsvpIcon' => '🎂'],
         'corporate' => ['title' => 'Kurumsal Davetiye', 'slug' => 'Kurumsal', 'sub' => 'Davetimize Hoş Geldiniz', 'couple' => false, 'parents' => false, 'showStory' => false, 'locationLabel' => 'Etkinlik Yeri', 'countdownLabel' => 'Etkinlik Günü', 'rsvpIcon' => '📋'],
+        'graduation' => ['title' => 'Mezuniyet Davetiyesi', 'slug' => 'Mezuniyet', 'sub' => 'Mezuniyet Sevincini Paylaşın', 'couple' => false, 'parents' => true, 'showStory' => false, 'locationLabel' => 'Mezuniyet Yeri', 'countdownLabel' => 'Mezuniyet Günü', 'rsvpIcon' => '🎓'],
     ];
     $ev = $eventLabels[$eventType] ?? $eventLabels['wedding'];
 @endphp
@@ -1555,7 +1556,11 @@
                 letter.classList.add('show');
 
                 createParticles(screen);
+                @if($eventType === 'graduation')
+                createGraduationCaps(screen);
+                @else
                 createConfetti(screen);
+                @endif
 
                 @if($showMusic && $musicFile)
                 setTimeout(function() {
@@ -1731,6 +1736,61 @@
 
             setTimeout(function() {
                 container.querySelectorAll('.confetti-piece').forEach(function(el) { el.remove(); });
+            }, 4000);
+        }
+
+        function createGraduationCaps(container) {
+            var rect = container.getBoundingClientRect();
+            var cx = rect.width / 2;
+
+            for (var i = 0; i < 30; i++) {
+                var cap = document.createElement('div');
+                cap.className = 'particle';
+                cap.innerHTML = '🎓';
+                cap.style.fontSize = (18 + Math.random() * 20) + 'px';
+                cap.style.background = 'none';
+                cap.style.width = 'auto';
+                cap.style.height = 'auto';
+                cap.style.left = (cx + (Math.random() - 0.5) * 200) + 'px';
+                cap.style.top = (rect.height / 2 + 20) + 'px';
+                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.8;
+                var dist = 100 + Math.random() * 300;
+                cap.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                cap.style.setProperty('--ty', Math.sin(angle) * dist - 100 + 'px');
+                cap.style.animationDelay = (Math.random() * 0.5) + 's';
+                cap.style.animationDuration = (1.5 + Math.random() * 1) + 's';
+                container.appendChild(cap);
+                requestAnimationFrame(function() { cap.classList.add('burst'); });
+            }
+
+            for (var i = 0; i < 15; i++) {
+                var conf = document.createElement('div');
+                conf.className = 'confetti-piece';
+                var colors = ['#ffd700', '#ff6b6b', '#48dbfb', '#feca57', '#a29bfe', '#2ed573', '#1e90ff'];
+                conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+                var w = 3 + Math.random() * 6;
+                var h = 3 + Math.random() * 6;
+                conf.style.width = w + 'px';
+                conf.style.height = h + 'px';
+                conf.style.left = (cx + (Math.random() - 0.5) * 180) + 'px';
+                conf.style.top = (rect.height / 2 + (Math.random() - 0.5) * 100) + 'px';
+                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.9;
+                var dist = 80 + Math.random() * 300;
+                conf.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                conf.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                conf.style.animationDelay = (Math.random() * 0.6) + 's';
+                conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                if (Math.random() > 0.6) {
+                    conf.style.width = h * 2 + 'px';
+                    conf.style.height = h + 'px';
+                    conf.style.borderRadius = '0';
+                }
+                container.appendChild(conf);
+                requestAnimationFrame(function() { conf.classList.add('burst'); });
+            }
+
+            setTimeout(function() {
+                container.querySelectorAll('.particle, .confetti-piece').forEach(function(el) { el.remove(); });
             }, 4000);
         }
 

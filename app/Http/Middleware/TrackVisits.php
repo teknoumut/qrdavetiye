@@ -32,14 +32,18 @@ class TrackVisits
                 return null;
             });
 
-            PageVisit::create([
-                'ip' => $ip,
-                'user_agent' => $request->userAgent(),
-                'url' => $request->fullUrl(),
-                'country' => $location['country'] ?? null,
-                'city' => $location['city'] ?? null,
-                'isp' => $location['isp'] ?? null,
-            ]);
+            $existing = PageVisit::where('ip', $ip)->whereDate('created_at', today())->exists();
+
+            if (! $existing) {
+                PageVisit::create([
+                    'ip' => $ip,
+                    'user_agent' => $request->userAgent(),
+                    'url' => $request->fullUrl(),
+                    'country' => $location['country'] ?? null,
+                    'city' => $location['city'] ?? null,
+                    'isp' => $location['isp'] ?? null,
+                ]);
+            }
         }
 
         return $next($request);

@@ -10,6 +10,13 @@ class SubscriptionService
 {
     public function activate(User $user, Plan $plan, string $interval = 'monthly'): void
     {
+        if ($user->subscription_status === User::STATUS_ACTIVE
+            && $user->subscription_end
+            && Carbon::parse($user->subscription_end)->isFuture()
+        ) {
+            throw new \RuntimeException('Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+        }
+
         $now = Carbon::now();
         $start = $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
             ? Carbon::parse($user->subscription_end)

@@ -39,6 +39,7 @@
                                         <option value="circumcision" {{ old('event_type') === 'circumcision' ? 'selected' : '' }}>{{ __('✂️ Sünnet') }}</option>
                                         <option value="birthday" {{ old('event_type') === 'birthday' ? 'selected' : '' }}>{{ __('🎂 Doğum Günü') }}</option>
                                         <option value="corporate" {{ old('event_type') === 'corporate' ? 'selected' : '' }}>{{ __('🏢 Kurumsal') }}</option>
+                                        <option value="graduation" {{ old('event_type') === 'graduation' ? 'selected' : '' }}>{{ __('🎓 Mezuniyet') }}</option>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-night-400 dark:text-cream-400">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>

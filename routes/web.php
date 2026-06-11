@@ -132,6 +132,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('payment-notifications', [AdminPaymentNotificationController::class, 'index'])->name('payment-notifications.index');
     Route::post('payment-notifications/{notification}/approve', [AdminPaymentNotificationController::class, 'approve'])->name('payment-notifications.approve');
     Route::post('payment-notifications/{notification}/reject', [AdminPaymentNotificationController::class, 'reject'])->name('payment-notifications.reject');
+    Route::delete('payment-notifications/{notification}', [AdminPaymentNotificationController::class, 'destroy'])->name('payment-notifications.destroy');
 
     Route::get('refund-requests', [RefundController::class, 'index'])->name('refund-requests.index');
     Route::post('refund-requests/{invoice}/approve', [RefundController::class, 'approve'])->name('refund-requests.approve');

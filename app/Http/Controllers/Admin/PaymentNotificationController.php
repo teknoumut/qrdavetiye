@@ -113,4 +113,16 @@ class PaymentNotificationController extends Controller
 
         return back()->with('success', 'Ödeme bildirimi reddedildi.');
     }
+
+    public function destroy(PaymentNotification $notification)
+    {
+        $notification->delete();
+
+        Log::info('Payment notification deleted', [
+            'notification_id' => $notification->id,
+            'deleted_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Ödeme bildirimi silindi.');
+    }
 }

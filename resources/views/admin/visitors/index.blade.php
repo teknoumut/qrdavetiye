@@ -40,17 +40,21 @@
                         <tr>
                             <td><span class="font-mono text-xs">{{ $visit->ip }}</span></td>
                             <td>
-                                @if($visit->city || $visit->country)
-                                    <span title="{{ $visit->country }}">
-                                        {{ $visit->city ? $visit->city.', ' : '' }}{{ $visit->country ?? '-' }}
-                                    </span>
+                                @php
+                                    $parts = [];
+                                    if ($visit->city) $parts[] = $visit->city;
+                                    if ($visit->country) $parts[] = $visit->country;
+                                    $location = implode(', ', $parts);
+                                @endphp
+                                @if($location)
+                                    <span title="{{ $location }}">{{ $location }}</span>
                                 @else
                                     <span class="text-gray-400">-</span>
                                 @endif
                             </td>
                             <td class="text-xs text-gray-500">{{ $visit->isp ?? '-' }}</td>
                             <td class="max-w-[200px] truncate" title="{{ $visit->url }}">
-                                <a href="{{ $visit->url }}" target="_blank" class="text-indigo-600 hover:underline text-xs">{{ Str::limit($visit->url, 60) }}</a>
+                                <a href="{{ $visit->url }}" target="_blank" class="text-indigo-600 hover:underline text-xs">{{ \Illuminate\Support\Str::limit($visit->url, 60) }}</a>
                             </td>
                             <td class="whitespace-nowrap text-xs text-gray-500">{{ $visit->created_at->format('d.m.Y H:i') }}</td>
                         </tr>

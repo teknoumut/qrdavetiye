@@ -104,6 +104,11 @@
                                         @elseif($n->status === 'rejected')
                                             <span class="text-xs text-night-400">{{ $n->approved_at?->format('d.m.Y H:i') }}</span>
                                         @endif
+                                        <form method="POST" action="{{ route('admin.payment-notifications.destroy', $n) }}" class="inline" onsubmit="return confirm('Bu ödeme kaydını silmek istediğinize emin misiniz?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="px-2 py-1 rounded text-xs font-semibold text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors" title="Sil">🗑️</button>
+                                        </form>
                                         @if($n->notes)
                                             <div class="text-xs text-night-400 mt-1 max-w-[200px] truncate" title="{{ $n->notes }}">📝 {{ $n->notes }}</div>
                                         @endif
@@ -169,9 +174,11 @@
                                         </span>
                                     </td>
                                     <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                                        <a href="{{ route('invoices.show', $inv) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-xs font-semibold transition-colors" target="_blank">
-                                            Görüntüle
-                                        </a>
+                                        <div class="flex items-center justify-end gap-2">
+                                            <a href="{{ route('invoices.show', $inv) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-xs font-semibold transition-colors" target="_blank">
+                                                Görüntüle
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

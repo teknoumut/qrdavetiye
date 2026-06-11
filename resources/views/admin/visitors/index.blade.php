@@ -1,0 +1,71 @@
+<x-admin-layout>
+    <x-slot name="header">
+        Ziyaretçiler
+        <span class="sub">Siteyi ziyaret eden IP'ler ve konum bilgileri</span>
+    </x-slot>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div class="stat-card">
+            <div class="stat-value">{{ number_format($stats['total']) }}</div>
+            <div class="stat-label">Toplam Ziyaret</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ number_format($stats['unique_ips']) }}</div>
+            <div class="stat-label">Tekil IP</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ $stats['today'] }}</div>
+            <div class="stat-label">Bugün</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ $stats['countries'] }}</div>
+            <div class="stat-label">Ülke</div>
+        </div>
+    </div>
+
+    <div class="glass-card overflow-hidden">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>IP</th>
+                        <th>Konum</th>
+                        <th>ISS</th>
+                        <th>Sayfa</th>
+                        <th>Tarih</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($visits as $visit)
+                        <tr>
+                            <td><span class="font-mono text-xs">{{ $visit->ip }}</span></td>
+                            <td>
+                                @if($visit->city || $visit->country)
+                                    <span title="{{ $visit->country }}">
+                                        {{ $visit->city ? $visit->city.', ' : '' }}{{ $visit->country ?? '-' }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-400">-</span>
+                                @endif
+                            </td>
+                            <td class="text-xs text-gray-500">{{ $visit->isp ?? '-' }}</td>
+                            <td class="max-w-[200px] truncate" title="{{ $visit->url }}">
+                                <a href="{{ $visit->url }}" target="_blank" class="text-indigo-600 hover:underline text-xs">{{ Str::limit($visit->url, 60) }}</a>
+                            </td>
+                            <td class="whitespace-nowrap text-xs text-gray-500">{{ $visit->created_at->format('d.m.Y H:i') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-10 text-gray-400">Henüz ziyaretçi kaydı yok</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($visits->hasPages())
+            <div class="px-6 py-3 border-t border-gray-100">
+                {{ $visits->links() }}
+            </div>
+        @endif
+    </div>
+</x-admin-layout>

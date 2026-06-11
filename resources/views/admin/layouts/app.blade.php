@@ -415,6 +415,9 @@
                 <span class="nav-icon">✉️</span> Mesajlar
             </a>
             <div class="nav-section">Sistem</div>
+            <a href="{{ route('admin.visitors.index') }}" class="nav-item {{ request()->routeIs('admin.visitors*') ? 'active' : '' }}">
+                <span class="nav-icon">🌐</span> Ziyaretçiler
+            </a>
             <a href="{{ route('admin.refund-requests.index') }}" class="nav-item {{ request()->routeIs('admin.refund-requests*') ? 'active' : '' }}">
                 <span class="nav-icon">🔄</span> İade Talepleri
                 @php $refundCount = \App\Models\Invoice::where('refund_status', 'requested')->count(); @endphp

@@ -137,6 +137,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('refund-requests/{invoice}/approve', [RefundController::class, 'approve'])->name('refund-requests.approve');
     Route::post('refund-requests/{invoice}/reject', [RefundController::class, 'reject'])->name('refund-requests.reject');
 
+    Route::get('visitors', [VisitorController::class, 'index'])->name('visitors.index');
+
 });
 
 require __DIR__.'/auth.php';

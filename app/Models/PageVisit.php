@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class PageVisit extends Model
 {
-    protected $fillable = ['ip', 'user_agent', 'url'];
+    protected $fillable = ['ip', 'user_agent', 'url', 'country', 'city', 'isp'];
 }

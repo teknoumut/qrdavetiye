@@ -1820,30 +1820,33 @@
         function createGraduationCaps(container) {
             var rect = container.getBoundingClientRect();
             var cx = rect.width / 2;
+            var caps = ['🎓', '🎓', '🎓', '📜', '🎓', '🎓', '🎓', '⭐'];
 
-            for (var i = 0; i < 50; i++) {
+            for (var i = 0; i < 60; i++) {
                 var cap = document.createElement('div');
                 cap.className = 'particle';
-                cap.innerHTML = '🎓';
-                cap.style.fontSize = (28 + Math.random() * 28) + 'px';
+                cap.innerHTML = caps[Math.floor(Math.random() * caps.length)];
+                var size = 36 + Math.random() * 36;
+                cap.style.fontSize = size + 'px';
                 cap.style.background = 'none';
                 cap.style.width = 'auto';
                 cap.style.height = 'auto';
-                cap.style.left = (cx + (Math.random() - 0.5) * 240) + 'px';
-                cap.style.top = (rect.height / 2 + 30) + 'px';
+                cap.style.textShadow = '0 0 20px rgba(255,215,0,0.4), 0 0 40px rgba(255,215,0,0.2)';
+                cap.style.left = (cx + (Math.random() - 0.5) * 260) + 'px';
+                cap.style.top = (rect.height / 2 + 20) + 'px';
                 var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.8;
-                var dist = 150 + Math.random() * 350;
+                var dist = 180 + Math.random() * 380;
                 cap.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-                cap.style.setProperty('--ty', Math.sin(angle) * dist - 140 + 'px');
+                cap.style.setProperty('--ty', Math.sin(angle) * dist - 160 + 'px');
                 cap.style.animationDelay = (Math.random() * 0.3) + 's';
-                cap.style.animationDuration = (1.8 + Math.random() * 1.2) + 's';
+                cap.style.animationDuration = (2 + Math.random() * 1.2) + 's';
                 container.appendChild(cap);
                 requestAnimationFrame(function() { cap.classList.add('burst'); });
             }
 
             setTimeout(function() {
                 container.querySelectorAll('.particle').forEach(function(el) { el.remove(); });
-            }, 4500);
+            }, 5000);
         }
 
         function createBirthdayCake(container) {

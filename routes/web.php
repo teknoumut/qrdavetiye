@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\ThemeController as AdminThemeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\VisitorController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EftPaymentController;
 use App\Http\Controllers\InvitationPublicController;

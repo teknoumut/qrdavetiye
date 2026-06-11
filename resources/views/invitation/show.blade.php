@@ -1821,29 +1821,29 @@
             var rect = container.getBoundingClientRect();
             var cx = rect.width / 2;
 
-            for (var i = 0; i < 40; i++) {
+            for (var i = 0; i < 50; i++) {
                 var cap = document.createElement('div');
                 cap.className = 'particle';
                 cap.innerHTML = '🎓';
-                cap.style.fontSize = (20 + Math.random() * 22) + 'px';
+                cap.style.fontSize = (28 + Math.random() * 28) + 'px';
                 cap.style.background = 'none';
                 cap.style.width = 'auto';
                 cap.style.height = 'auto';
-                cap.style.left = (cx + (Math.random() - 0.5) * 220) + 'px';
-                cap.style.top = (rect.height / 2 + 20) + 'px';
-                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.7;
-                var dist = 120 + Math.random() * 320;
+                cap.style.left = (cx + (Math.random() - 0.5) * 240) + 'px';
+                cap.style.top = (rect.height / 2 + 30) + 'px';
+                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.8;
+                var dist = 150 + Math.random() * 350;
                 cap.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-                cap.style.setProperty('--ty', Math.sin(angle) * dist - 120 + 'px');
-                cap.style.animationDelay = (Math.random() * 0.4) + 's';
-                cap.style.animationDuration = (1.5 + Math.random() * 1) + 's';
+                cap.style.setProperty('--ty', Math.sin(angle) * dist - 140 + 'px');
+                cap.style.animationDelay = (Math.random() * 0.3) + 's';
+                cap.style.animationDuration = (1.8 + Math.random() * 1.2) + 's';
                 container.appendChild(cap);
                 requestAnimationFrame(function() { cap.classList.add('burst'); });
             }
 
             setTimeout(function() {
                 container.querySelectorAll('.particle').forEach(function(el) { el.remove(); });
-            }, 4000);
+            }, 4500);
         }
 
         function createBirthdayCake(container) {

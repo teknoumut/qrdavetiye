@@ -1245,8 +1245,8 @@
                 </div>
                 <div class="envelope-seal">♥</div>
                     <div class="envelope-inner" @if($customPatternUrl) style="background-image: linear-gradient(160deg, rgba(255,253,247,0.75), rgba(255,255,255,0.75)), url('{{ $customPatternUrl }}'); background-size: auto, cover; background-position: 0% 0%, center;" @endif>
-                        <div class="heart">💖</div>
-                        <div class="names">@if($ev['couple']){{ $fixName($invitation->groom_name) }} <span class="ampersand">&</span> {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif</div>
+                        <div class="heart">@if($eventType === 'birthday')🎂 @else 💖 @endif</div>
+                        <div class="names">@if($ev['couple']){{ $fixName($invitation->groom_name) }} <span class="ampersand">&</span> {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@if($eventType === 'birthday' && $invitation->bride_name) <span style="font-size:0.5em;opacity:0.6;display:block;margin-top:2px;">{{ $invitation->bride_name }} Yaşında</span>@endif @endif</div>
                         <div class="sub">{{ $ev['title'] }}</div>
                         @if($invitation->welcome_message)
                             <div class="env-message">{{ Str::limit(strip_tags($invitation->welcome_message), 120) }}</div>
@@ -1255,8 +1255,8 @@
             </div>
             <div class="envelope-glow"></div>
             <div class="floating-letter" id="floatingLetter">
-                <div class="heart-icon">💕</div>
-                <div class="letter-names">@if($ev['couple']){{ $fixName($invitation->groom_name) }}<br><span class="ampersand">&</span><br>{{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif</div>
+                <div class="heart-icon">@if($eventType === 'birthday') 🎂 @else 💕 @endif</div>
+                <div class="letter-names">@if($ev['couple']){{ $fixName($invitation->groom_name) }}<br><span class="ampersand">&</span><br>{{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@if($eventType === 'birthday' && $invitation->bride_name)<br><span style="font-size:0.7rem;opacity:0.6;">{{ $invitation->bride_name }} Yaşında</span>@endif @endif</div>
                 <div class="letter-sub">{{ $ev['sub'] }}</div>
                 @if($invitation->welcome_message)
                     <div class="letter-msg">{{ Str::limit(strip_tags($invitation->welcome_message), 100) }}</div>

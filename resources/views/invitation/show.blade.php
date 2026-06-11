@@ -1555,11 +1555,14 @@
                 envelope.classList.add('open');
                 letter.classList.add('show');
 
-                createParticles(screen);
-                @if($eventType === 'graduation')
+                @if($eventType === 'wedding' || $eventType === 'engagement')
+                createWeddingMagic(screen);
+                @elseif($eventType === 'graduation')
                 createGraduationCaps(screen);
                 @elseif($eventType === 'birthday')
                 createBirthdayCake(screen);
+                @elseif($eventType === 'circumcision')
+                createConfetti(screen);
                 @else
                 createConfetti(screen);
                 @endif
@@ -1704,6 +1707,62 @@
             setTimeout(function() {
                 container.querySelectorAll('.particle').forEach(function(el) { el.remove(); });
             }, 3000);
+        }
+
+        function createWeddingMagic(container) {
+            var rect = container.getBoundingClientRect();
+            var cx = rect.width / 2;
+            var cy = rect.height / 2;
+            var colors = ['#ffd700', '#ff6b6b', '#ff9ff3', '#f48fb1', '#f06292', '#ec407a', '#ffd54f', '#ffcc02', '#fff176', '#ce93d8'];
+
+            for (var i = 0; i < 45; i++) {
+                var p = document.createElement('div');
+                p.className = 'particle';
+                var size = 3 + Math.random() * 8;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                p.style.left = (cx + (Math.random() - 0.5) * 60) + 'px';
+                p.style.top = (cy + (Math.random() - 0.5) * 60) + 'px';
+                var angle = Math.random() * Math.PI * 2;
+                var dist = 60 + Math.random() * 280;
+                p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                p.style.animationDelay = (Math.random() * 0.4) + 's';
+                p.style.animationDuration = (1.2 + Math.random() * 0.8) + 's';
+                if (Math.random() > 0.7) {
+                    p.style.borderRadius = '50%';
+                    p.style.width = size * 2 + 'px';
+                    p.style.height = size * 2 + 'px';
+                    p.style.opacity = '0.6';
+                }
+                container.appendChild(p);
+                requestAnimationFrame(function() { p.classList.add('burst'); });
+            }
+
+            for (var i = 0; i < 14; i++) {
+                var h = document.createElement('div');
+                h.className = 'particle';
+                h.textContent = ['❤️', '💕', '💗', '💖', '💝', '✨'][Math.floor(Math.random() * 6)];
+                h.style.fontSize = (14 + Math.random() * 18) + 'px';
+                h.style.background = 'none';
+                h.style.width = 'auto';
+                h.style.height = 'auto';
+                h.style.left = (cx + (Math.random() - 0.5) * 100) + 'px';
+                h.style.top = (cy + (Math.random() - 0.5) * 80) + 'px';
+                var angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.6;
+                var dist = 100 + Math.random() * 260;
+                h.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                h.style.setProperty('--ty', Math.sin(angle) * dist - 100 + 'px');
+                h.style.animationDelay = (Math.random() * 0.4) + 's';
+                h.style.animationDuration = (1.5 + Math.random() * 1) + 's';
+                container.appendChild(h);
+                requestAnimationFrame(function() { h.classList.add('burst'); });
+            }
+
+            setTimeout(function() {
+                container.querySelectorAll('.particle').forEach(function(el) { el.remove(); });
+            }, 3500);
         }
 
         function createConfetti(container) {

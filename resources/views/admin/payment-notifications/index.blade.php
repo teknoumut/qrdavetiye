@@ -4,6 +4,12 @@
             <h1 class="text-2xl font-extrabold text-night-900 dark:text-cream-100">Tüm Ödemeler</h1>
             <p class="text-sm text-night-400 dark:text-night-500 mt-1">Kartlı ve EFT/Havale ödemelerini görüntüleyin.</p>
         </div>
+        <form method="POST" action="{{ route('admin.payment-notifications.reset-revenue') }}" onsubmit="return confirm('Tüm ödeme kayıtları ve faturalar silinecek! Gelir sıfırlanacak! Emin misiniz?')">
+            @csrf
+            <button type="submit" class="px-4 py-2 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 text-sm font-semibold transition-all flex items-center gap-2">
+                🗑️ Gelir Kayıtlarını Sıfırla
+            </button>
+        </form>
     </div>
 
     @if(session('success'))

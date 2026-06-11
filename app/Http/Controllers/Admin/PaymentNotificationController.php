@@ -114,6 +114,24 @@ class PaymentNotificationController extends Controller
         return back()->with('success', 'Ödeme bildirimi reddedildi.');
     }
 
+    public function resetRevenue()
+    {
+        DB::beginTransaction();
+        try {
+            Invoice::truncate();
+            PaymentNotification::truncate();
+            DB::commit();
+
+            Log::warning('All payment records reset', ['by' => auth()->id()]);
+
+            return redirect()->route('admin.payment-notifications.index')->with('success', 'Tüm ödeme kayıtları ve faturalar silindi. Gelir sıfırlandı.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return back()->with('error', 'Sıfırlama sırasında hata: '.$e->getMessage());
+        }
+    }
+
     public function destroy(PaymentNotification $notification)
     {
         $notification->delete();

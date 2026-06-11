@@ -38,6 +38,11 @@ class SettingController extends Controller
             'iyzico_api_key' => 'nullable|string',
             'iyzico_secret_key' => 'nullable|string',
             'iyzico_base_url' => 'nullable|string',
+
+            'tax_rate' => 'nullable|numeric|min:0|max:100',
+            'bank_name' => 'nullable|string|max:255',
+            'bank_holder' => 'nullable|string|max:255',
+            'bank_iban' => 'nullable|string|max:50',
         ]);
 
         foreach ($data as $key => $value) {

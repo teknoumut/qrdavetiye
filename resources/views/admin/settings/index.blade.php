@@ -179,6 +179,33 @@
                 </div>
             </div>
 
+            <div class="flex items-center gap-3 mb-6 pb-6 border-b border-gray-100">
+                <span class="section-icon">💳</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 text-sm">Banka Havale/EFT Ayarları</h3>
+                    <p class="text-xs text-gray-400">EFT/Havale ödeme yönteminde gösterilecek bilgiler</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                <div>
+                    <label>KDV Oranı (%)</label>
+                    <input type="number" name="tax_rate" value="{{ old('tax_rate', $settings['tax_rate'] ?? '20') }}" min="0" max="100" step="0.1">
+                </div>
+                <div>
+                    <label>Banka Adı</label>
+                    <input type="text" name="bank_name" value="{{ old('bank_name', $settings['bank_name'] ?? '') }}" placeholder="Yapı Kredi Bankası">
+                </div>
+                <div>
+                    <label>Alıcı Adı</label>
+                    <input type="text" name="bank_holder" value="{{ old('bank_holder', $settings['bank_holder'] ?? '') }}" placeholder="UMUT UÇAR">
+                </div>
+                <div>
+                    <label>IBAN</label>
+                    <input type="text" name="bank_iban" value="{{ old('bank_iban', $settings['bank_iban'] ?? '') }}" placeholder="TR450006701000000048863426">
+                </div>
+            </div>
+
             <div class="flex justify-end pt-4 border-t border-gray-100">
                 <button type="submit" class="btn-primary">Ayarları Kaydet</button>
             </div>

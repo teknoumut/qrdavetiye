@@ -15,6 +15,11 @@ class Invoice extends Model
         'tax_rate',
         'tax_amount',
         'status',
+        'refund_status',
+        'refund_requested_at',
+        'refunded_at',
+        'refunded_by',
+        'refund_reason',
         'gateway',
         'transaction_id',
         'billing_name',
@@ -27,7 +32,24 @@ class Invoice extends Model
         'amount' => 'decimal:2',
         'tax_rate' => 'decimal:2',
         'tax_amount' => 'decimal:2',
+        'refund_requested_at' => 'datetime',
+        'refunded_at' => 'datetime',
     ];
+
+    public function refundApprover()
+    {
+        return $this->belongsTo(User::class, 'refunded_by');
+    }
+
+    public function scopeRefundRequested($query)
+    {
+        return $query->where('refund_status', 'requested');
+    }
+
+    public function scopeRefunded($query)
+    {
+        return $query->where('refund_status', 'refunded');
+    }
 
     public function user()
     {

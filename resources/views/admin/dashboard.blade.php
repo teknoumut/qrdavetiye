@@ -58,6 +58,15 @@
             <div class="stat-label">QR Tarama</div>
             <div class="stat-bar"><div class="stat-bar-fill" style="width:{{ $total_qr_scans > 0 ? min(($total_qr_scans/500)*100,100) : 0 }}%;background:linear-gradient(90deg,#db2777,#f472b6)"></div></div>
         </div>
+        <div class="stat-card">
+            <div class="flex items-center justify-between mb-4">
+                <div class="stat-icon" style="background:#f0fdf4;color:#16a34a">🌐</div>
+                <span class="badge" style="background:#f8fafc;color:#94a3b8">{{ $today_visits }} bugün</span>
+            </div>
+            <div class="stat-value">{{ number_format($total_visits) }}</div>
+            <div class="stat-label">Site Ziyareti</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:{{ $total_visits > 0 ? min(($total_visits/10000)*100,100) : 0 }}%;background:linear-gradient(90deg,#16a34a,#4ade80)"></div></div>
+        </div>
     </div>
 
     @php
@@ -122,12 +131,12 @@
         </div>
         <div class="stat-card">
             <div class="flex items-center justify-between mb-4">
-                <div class="stat-icon" style="background:#fdf2f8;color:#db2777">👁️</div>
-                <span class="badge" style="background:#f8fafc;color:#94a3b8">{{ $total_invitations > 0 ? round($total_views / $total_invitations, 1) : 0 }} ort.</span>
+                <div class="stat-icon" style="background:#f0fdf4;color:#16a34a">🌐</div>
+                <span class="badge" style="background:#f0fdf4;color:#16a34a">{{ $unique_visitors }} tekil</span>
             </div>
-            <div class="stat-value">{{ $total_views }}</div>
-            <div class="stat-label">Toplam Görüntülenme</div>
-            <div class="stat-bar"><div class="stat-bar-fill" style="width:{{ $total_views > 0 ? min(($total_views/1000)*100,100) : 0 }}%;background:linear-gradient(90deg,#db2777,#f472b6)"></div></div>
+            <div class="stat-value">{{ number_format($total_visits) }}</div>
+            <div class="stat-label">Site Ziyareti</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="width:{{ $total_visits > 0 ? min(($total_visits/10000)*100,100) : 0 }}%;background:linear-gradient(90deg,#16a34a,#4ade80)"></div></div>
         </div>
     </div>
 

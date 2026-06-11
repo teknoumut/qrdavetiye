@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Invitation;
 use App\Models\Invoice;
+use App\Models\PageVisit;
 use App\Models\PaymentNotification;
 use App\Models\Rsvp;
 use App\Models\User;
@@ -29,6 +30,10 @@ class DashboardController extends Controller
             'total_views' => Invitation::sum('views'),
             'total_qr_scans' => Invitation::sum('qr_scans'),
             'total_rsvps' => Rsvp::count(),
+            'total_visits' => PageVisit::count(),
+            'unique_visitors' => PageVisit::distinct('ip')->count('ip'),
+            'today_visits' => PageVisit::whereDate('created_at', today())->count(),
+            'pending_refunds' => Invoice::where('refund_status', 'requested')->count(),
             'recent_users' => User::latest()->take(5)->get(),
             'recent_invitations' => Invitation::with('user')->latest()->take(5)->get(),
             'pending_payments' => PaymentNotification::pending()->count(),

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PaymentNotificationController as AdminPaymentNotificationController;
 use App\Http\Controllers\Admin\PlanController as AdminPlanController;
+use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\ThemeController as AdminThemeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -62,6 +63,7 @@ Route::middleware(['auth', 'throttle:10,1'])->group(function () {
 
     Route::get('/faturalar/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
     Route::get('/faturalar/{invoice}/indir', [InvoiceController::class, 'download'])->name('invoices.download');
+    Route::post('/faturalar/{invoice}/iade-talep', [InvoiceController::class, 'requestRefund'])->name('invoices.refund-request');
 });
 
 Route::middleware(['throttle:10,1'])->group(function () {
@@ -130,6 +132,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('payment-notifications', [AdminPaymentNotificationController::class, 'index'])->name('payment-notifications.index');
     Route::post('payment-notifications/{notification}/approve', [AdminPaymentNotificationController::class, 'approve'])->name('payment-notifications.approve');
     Route::post('payment-notifications/{notification}/reject', [AdminPaymentNotificationController::class, 'reject'])->name('payment-notifications.reject');
+
+    Route::get('refund-requests', [RefundController::class, 'index'])->name('refund-requests.index');
+    Route::post('refund-requests/{invoice}/approve', [RefundController::class, 'approve'])->name('refund-requests.approve');
+    Route::post('refund-requests/{invoice}/reject', [RefundController::class, 'reject'])->name('refund-requests.reject');
 
 });
 

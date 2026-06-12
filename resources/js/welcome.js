@@ -180,11 +180,14 @@
         var el = document.getElementById('pricingToggle');
         if (!el) return;
         var isYearly = el.classList.toggle('active');
-        document.getElementById('toggleMonthlyLabel').classList.toggle('active', !isYearly);
-        document.getElementById('toggleYearlyLabel').classList.toggle('active', isYearly);
+        var monthlyLabel = document.getElementById('toggleMonthlyLabel');
+        var yearlyLabel = document.getElementById('toggleYearlyLabel');
+        if (monthlyLabel) monthlyLabel.classList.toggle('active', !isYearly);
+        if (yearlyLabel) yearlyLabel.classList.toggle('active', isYearly);
         document.querySelectorAll('.monthly-price, .monthly-period').forEach(function(e) { e.style.display = isYearly ? 'none' : ''; });
         document.querySelectorAll('.yearly-price, .yearly-period').forEach(function(e) { e.style.display = isYearly ? '' : 'none'; });
     }
+    window.togglePricing = togglePricing;
 
     function spawnConfetti() {
         var container = document.getElementById('confettiContainer');

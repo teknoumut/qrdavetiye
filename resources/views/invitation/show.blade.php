@@ -5,6 +5,7 @@
     $g = max(0, hexdec(substr($hex, 2, 2)) - 20);
     $b = max(0, hexdec(substr($hex, 4, 2)) - 30);
     $primaryDark = sprintf('#%02x%02x%02x', $r, $g, $b);
+    $fontFamily = $invitation->font_family ?: 'Playfair Display';
     $isBlacksword = str_contains($fontFamily, 'Blacksword');
     $fixText = function($txt) use ($isBlacksword) {
         return $isBlacksword ? str_replace(['ı', 'İ'], ['i', 'İ'], $txt ?? '') : ($txt ?? '');
@@ -21,8 +22,6 @@
         'graduation' => ['title' => 'Mezuniyet Davetiyesi', 'slug' => 'Mezuniyet', 'sub' => 'Mezuniyet Sevincini Paylaşın', 'couple' => false, 'parents' => true, 'showStory' => false, 'locationLabel' => 'Mezuniyet Yeri', 'countdownLabel' => 'Mezuniyet Günü', 'rsvpIcon' => '🎓'],
     ];
     $ev = $eventLabels[$eventType] ?? $eventLabels['wedding'];
-
-    $fontFamily = $invitation->font_family ?: 'Playfair Display';
 
     $googleFontParams = [
         'Cormorant Garamond' => 'ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500',

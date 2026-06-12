@@ -654,9 +654,11 @@
             max-width: 90%;
             font-family: 'Montserrat', sans-serif;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 6;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
         .envelope-inner .deco-line {
             width: 50px;
@@ -707,7 +709,7 @@
         .floating-letter .letter-names { font-family: var(--font-display); font-size: 1rem; color: #555; }
         .floating-letter .letter-names .ampersand { font-family: 'Anydore', cursive; font-size: 1.4rem; color: var(--primary); display: inline-block; line-height: 1; }
         .floating-letter .letter-sub { font-size: 0.6rem; color: #999; letter-spacing: 3px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; margin-top: 6px; font-weight: 500; }
-        .floating-letter .letter-msg { font-size: 0.6rem; color: #888; line-height: 1.5; margin-top: 6px; max-width: 85%; font-family: 'Montserrat', sans-serif; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .floating-letter .letter-msg { font-size: 0.6rem; color: #888; line-height: 1.5; margin-top: 6px; max-width: 85%; font-family: 'Montserrat', sans-serif; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: break-word; word-break: break-word; }
         .floating-letter .letter-deco {
             width: 36px; height: 1.5px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
@@ -1010,12 +1012,14 @@
             .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 16px; }
             .envelope-inner .names { font-size: 1.8rem; }
             .envelope-inner .heart { font-size: 2.4rem; }
+            .envelope-inner .env-message { font-size: 0.6rem; -webkit-line-clamp: 5; }
             .envelope.open { transform: scale(1.5) translateY(-50px) rotateX(5deg); }
             .envelope-body .gusset-left,
             .envelope-body .gusset-right { width: 18px; }
             .envelope-body .bottom-fold { height: 14px; }
-            .floating-letter { width: 220px; height: 150px; }
+            .floating-letter { width: 220px; height: 150px; padding: 16px; }
             .floating-letter .letter-names { font-size: 0.9rem; }
+            .floating-letter .letter-msg { font-size: 0.55rem; -webkit-line-clamp: 4; }
             .parents-grid { gap: 24px; }
             .parent-card { min-width: 160px; }
             .gallery { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
@@ -1031,8 +1035,10 @@
             .envelope-inner .heart { font-size: 2rem; }
             .envelope-inner .names { font-size: 1.8rem; }
             .envelope-inner .sub { font-size: 0.6rem; }
+            .envelope-inner .env-message { font-size: 0.55rem; -webkit-line-clamp: 4; }
             .envelope.open { transform: scale(1.3) translateY(-40px) rotateX(4deg); }
             .floating-letter { width: 190px; height: 125px; padding: 14px; }
+            .floating-letter .letter-msg { font-size: 0.5rem; -webkit-line-clamp: 3; }
             .floating-letter.show { transform: translateY(-40px) scale(1) rotate(0deg); }
         }
 
@@ -1331,7 +1337,7 @@
                 <div class="letter-names">@if($ev['couple']){{ $fixName($invitation->groom_name) }}<br><span class="ampersand">&</span><br>{{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@if($eventType === 'birthday' && $invitation->bride_name)<br><span style="font-size:0.7rem;opacity:0.6;">{{ $invitation->bride_name }} Yaşında</span>@endif @endif</div>
                 <div class="letter-sub">{{ $ev['sub'] }}</div>
                 @if($invitation->welcome_message)
-                    <div class="letter-msg">{{ Str::limit(strip_tags($invitation->welcome_message), 180) }}</div>
+                    <div class="letter-msg">{{ Str::limit(strip_tags($invitation->welcome_message), 120) }}</div>
                 @endif
             </div>
         </div>

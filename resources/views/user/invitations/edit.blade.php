@@ -594,7 +594,7 @@
                                                 <input type="file" name="video_file" accept="video/mp4,video/webm,video/quicktime"
                                                     class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:text-white file:bg-gradient-to-r file:from-gold-500 file:to-rose-500 hover:file:from-gold-600 hover:file:to-rose-600 file:cursor-pointer cursor-pointer focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                             </div>
-                                            <p class="text-xs text-night-400 dark:text-cream-500 mt-1">{{ __('MP4, WebM veya MOV - maks. 50MB') }}</p>
+                                            <p class="text-xs text-night-400 dark:text-cream-500 mt-1">{{ __('MP4, WebM veya MOV - maks. 100MB') }}</p>
                                         </div>
                                         <div class="flex gap-2">
                                             <input type="text" name="caption" placeholder="{{ __('Video açıklaması') }}"

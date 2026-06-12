@@ -371,7 +371,7 @@ class InvitationController extends Controller
         }
 
         $rules = [
-            'video_file' => 'nullable|file|mimes:mp4,webm,mov|max:51200',
+            'video_file' => 'nullable|file|mimes:mp4,webm,mov|max:102400',
             'type' => 'nullable|in:youtube,vimeo,upload',
             'caption' => 'nullable|string|max:255',
         ];
@@ -383,8 +383,12 @@ class InvitationController extends Controller
         $data = $request->validate($rules);
 
         if ($request->hasFile('video_file')) {
-            $data['file_path'] = $request->file('video_file')
-                ->store('invitations/videos', 'public');
+            $path = $request->file('video_file')->store('invitations/videos', 'public');
+            if (!$path) {
+                \Log::error('Video store failed', ['invitation_id' => $invitation->id]);
+                return back()->with('error', 'Video yüklenirken bir hata oluştu. Sunucu deposu kontrol edin.');
+            }
+            $data['file_path'] = $path;
             $data['type'] = 'upload';
             unset($data['url']);
         } elseif ($request->filled('url')) {

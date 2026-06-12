@@ -17,6 +17,19 @@
             <form action="{{ route('user.invitations.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
+                @php
+                    $etype = old('event_type', 'wedding');
+                    $elabels = [
+                        'wedding' => ['groomLabel'=>'👨 Damat Adı','groomPlaceholder'=>'Ahmet','brideLabel'=>'👰 Gelin Adı','bridePlaceholder'=>'Ayşe','groomParentTitle'=>'Damat Ailesi','brideParentTitle'=>'Gelin Ailesi','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Mehmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'Baba Adı','brideFatherPlaceholder'=>'Ahmet','brideMotherLabel'=>'Anne Adı','brideMotherPlaceholder'=>'Fatma','showBride'=>true,'showBrideParents'=>true,'showStory'=>true,'titleHint'=>'Düğün Davetiyesi'],
+                        'engagement' => ['groomLabel'=>'👨 Damat Adı','groomPlaceholder'=>'Ahmet','brideLabel'=>'👰 Gelin Adı','bridePlaceholder'=>'Ayşe','groomParentTitle'=>'Erkek Ailesi','brideParentTitle'=>'Kız Ailesi','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Mehmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'Baba Adı','brideFatherPlaceholder'=>'Ahmet','brideMotherLabel'=>'Anne Adı','brideMotherPlaceholder'=>'Fatma','showBride'=>true,'showBrideParents'=>true,'showStory'=>true,'titleHint'=>'Nişan Davetiyesi'],
+                        'circumcision' => ['groomLabel'=>'✂️ Çocuk Adı','groomPlaceholder'=>'Mehmet','brideLabel'=>'','bridePlaceholder'=>'','groomParentTitle'=>'Aile Bilgileri','brideParentTitle'=>'','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Ahmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'','brideFatherPlaceholder'=>'','brideMotherLabel'=>'','brideMotherPlaceholder'=>'','showBride'=>false,'showBrideParents'=>false,'showStory'=>false,'titleHint'=>'Sünnet Davetiyesi'],
+                        'birthday' => ['groomLabel'=>'🎂 Doğum Günü Kişisi','groomPlaceholder'=>'Ayşe','brideLabel'=>'Yaş','bridePlaceholder'=>'25','groomParentTitle'=>'Aile Bilgileri','brideParentTitle'=>'','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Ahmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'','brideFatherPlaceholder'=>'','brideMotherLabel'=>'','brideMotherPlaceholder'=>'','showBride'=>true,'showBrideParents'=>false,'showStory'=>false,'titleHint'=>'Doğum Günü Davetiyesi'],
+                        'corporate' => ['groomLabel'=>'🏢 Şirket / Organizasyon Adı','groomPlaceholder'=>'ACME Şirketi','brideLabel'=>'İletişim Kişisi','bridePlaceholder'=>'Ahmet Yılmaz','groomParentTitle'=>'Adres Bilgisi','brideParentTitle'=>'','groomFatherLabel'=>'Adres','groomFatherPlaceholder'=>'Mecidiyeköy, İstanbul','groomMotherLabel'=>'','groomMotherPlaceholder'=>'','brideFatherLabel'=>'','brideFatherPlaceholder'=>'','brideMotherLabel'=>'','brideMotherPlaceholder'=>'','showBride'=>true,'showBrideParents'=>false,'showStory'=>false,'titleHint'=>'Kurumsal Davetiye'],
+                        'graduation' => ['groomLabel'=>'🎓 Mezun Olan Kişi','groomPlaceholder'=>'Ali','brideLabel'=>'','bridePlaceholder'=>'','groomParentTitle'=>'Aile Bilgileri','brideParentTitle'=>'','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Ahmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'','brideFatherPlaceholder'=>'','brideMotherLabel'=>'','brideMotherPlaceholder'=>'','showBride'=>false,'showBrideParents'=>false,'showStory'=>false,'titleHint'=>'Mezuniyet Davetiyesi'],
+                    ];
+                    $el = $elabels[$etype] ?? $elabels['wedding'];
+                @endphp
+
                 <div class="bg-white dark:bg-night-800 rounded-2xl shadow-sm border border-cream-200 dark:border-night-700 overflow-hidden">
                     <div class="px-6 sm:px-8 pt-6 sm:pt-8 pb-4 border-b border-cream-100 dark:border-night-700 bg-gradient-to-r from-cream-50 to-gold-50/30 dark:from-night-800 dark:to-gold-500/5">
                         <div class="flex items-center gap-3">
@@ -50,48 +63,48 @@
                             <div id="coupleFields">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                     <div>
-                                        <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5" id="groomLabel">{{ __('👨 Damat Adı') }}</label>
+                                        <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5" id="groomLabel">{{ $el['groomLabel'] }}</label>
                                         <input type="text" name="groom_name" value="{{ old('groom_name') }}" required
-                                            class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" id="groomInput" placeholder="Ahmet">
+                                            class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" id="groomInput" placeholder="{{ $el['groomPlaceholder'] }}">
                                     </div>
-                                    <div id="brideField">
-                                        <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5" id="brideLabel">{{ __('👰 Gelin Adı') }}</label>
-                                        <input type="text" name="bride_name" value="{{ old('bride_name') }}" required
-                                            class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" id="brideInput" placeholder="Ayşe">
+                                    <div id="brideField" @if(!$el['showBride']) style="display:none" @endif>
+                                        <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5" id="brideLabel">{{ $el['brideLabel'] }}</label>
+                                        <input type="text" name="bride_name" value="{{ old('bride_name') }}" @if($el['showBride']) required @endif
+                                            class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" id="brideInput" placeholder="{{ $el['bridePlaceholder'] }}">
                                     </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mt-4 sm:mt-5" id="groomParents">
                                     <div class="bg-cream-50 dark:bg-night-900/50 rounded-2xl p-4 sm:p-5 border border-cream-100 dark:border-night-700">
                                         <p class="text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                            <span>👪</span> <span id="groomParentTitle">{{ __('Damat Ailesi') }}</span>
+                                            <span>👪</span> <span id="groomParentTitle">{{ $el['groomParentTitle'] }}</span>
                                         </p>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div>
-                                                <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="groomFatherLabel">{{ __('Baba Adı') }}</label>
-                                                <input type="text" name="groom_father" value="{{ old('groom_father') }}" placeholder="Mehmet"
+                                                <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="groomFatherLabel">{{ $el['groomFatherLabel'] }}</label>
+                                                <input type="text" name="groom_father" value="{{ old('groom_father') }}" placeholder="{{ $el['groomFatherPlaceholder'] }}"
                                                     class="w-full px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                             </div>
                                             <div>
-                                                <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="groomMotherLabel">{{ __('Anne Adı') }}</label>
-                                                <input type="text" name="groom_mother" value="{{ old('groom_mother') }}" placeholder="Ayşe"
+                                                <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="groomMotherLabel">{{ $el['groomMotherLabel'] }}</label>
+                                                <input type="text" name="groom_mother" value="{{ old('groom_mother') }}" placeholder="{{ $el['groomMotherPlaceholder'] }}"
                                                     class="w-full px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="bg-cream-50 dark:bg-night-900/50 rounded-2xl p-4 sm:p-5 border border-cream-100 dark:border-night-700" id="brideParents">
+                                    <div class="bg-cream-50 dark:bg-night-900/50 rounded-2xl p-4 sm:p-5 border border-cream-100 dark:border-night-700" id="brideParents" @if(!$el['showBrideParents']) style="display:none" @endif>
                                         <p class="text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                            <span>👪</span> <span id="brideParentTitle">{{ __('Gelin Ailesi') }}</span>
+                                            <span>👪</span> <span id="brideParentTitle">{{ $el['brideParentTitle'] }}</span>
                                         </p>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div>
-                                                <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="brideFatherLabel">{{ __('Baba Adı') }}</label>
-                                                <input type="text" name="bride_father" value="{{ old('bride_father') }}" placeholder="Ahmet"
+                                                <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="brideFatherLabel">{{ $el['brideFatherLabel'] }}</label>
+                                                <input type="text" name="bride_father" value="{{ old('bride_father') }}" placeholder="{{ $el['brideFatherPlaceholder'] }}"
                                                     class="w-full px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                             </div>
                                             <div>
-                                                <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="brideMotherLabel">{{ __('Anne Adı') }}</label>
-                                                <input type="text" name="bride_mother" value="{{ old('bride_mother') }}" placeholder="Fatma"
+                                                <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="brideMotherLabel">{{ $el['brideMotherLabel'] }}</label>
+                                                <input type="text" name="bride_mother" value="{{ old('bride_mother') }}" placeholder="{{ $el['brideMotherPlaceholder'] }}"
                                                     class="w-full px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                             </div>
                                         </div>
@@ -102,7 +115,7 @@
                             <div>
                                 <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Başlık') }}</label>
                                 <input type="text" name="title" value="{{ old('title') }}" required
-                                    class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" placeholder="{{ __('Düğün Davetiyesi') }}">
+                                    class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" placeholder="{{ $el['titleHint'] }}">
                             </div>
 
                             <div>
@@ -140,7 +153,7 @@
                                     class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all resize-none" placeholder="Sevgili dostlarımız...">{{ old('welcome_message') }}</textarea>
                             </div>
 
-                            <div id="storyField">
+                            <div id="storyField" @if(!$el['showStory']) style="display:none" @endif>
                                 <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('💕 Hikayeniz') }}</label>
                                 <textarea name="story" rows="3"
                                     class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all resize-none" placeholder="Birlikte geçirdiğiniz güzel günlerden bahsedin...">{{ old('story') }}</textarea>
@@ -467,7 +480,7 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        function initEventFields() {
             var select = document.getElementById('eventTypeSelect');
             if (select) {
                 updateEventTypeFields(select.value);
@@ -481,7 +494,12 @@
                     this.dataset.userEdited = '1';
                 });
             }
-        });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initEventFields);
+        } else {
+            initEventFields();
+        }
     </script>
     <script>
         window.themes = @json($themes);

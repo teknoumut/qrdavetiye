@@ -86,6 +86,18 @@
                         <div class="px-6 sm:px-8 py-6 sm:py-8">
                             <form action="{{ route('user.invitations.update', $invitation) }}" method="POST">
                                 @csrf @method('PUT')
+                                @php
+                                    $etype = old('event_type', $invitation->event_type) ?: 'wedding';
+                                    $elabels = [
+                                        'wedding' => ['groomLabel'=>'👨 Damat Adı','groomPlaceholder'=>'Ahmet','brideLabel'=>'👰 Gelin Adı','bridePlaceholder'=>'Ayşe','groomParentTitle'=>'Damat Ailesi','brideParentTitle'=>'Gelin Ailesi','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Mehmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'Baba Adı','brideFatherPlaceholder'=>'Ahmet','brideMotherLabel'=>'Anne Adı','brideMotherPlaceholder'=>'Fatma','showBride'=>true,'showBrideParents'=>true,'showStory'=>true,'titleHint'=>'Düğün Davetiyesi'],
+                                        'engagement' => ['groomLabel'=>'👨 Damat Adı','groomPlaceholder'=>'Ahmet','brideLabel'=>'👰 Gelin Adı','bridePlaceholder'=>'Ayşe','groomParentTitle'=>'Erkek Ailesi','brideParentTitle'=>'Kız Ailesi','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Mehmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'Baba Adı','brideFatherPlaceholder'=>'Ahmet','brideMotherLabel'=>'Anne Adı','brideMotherPlaceholder'=>'Fatma','showBride'=>true,'showBrideParents'=>true,'showStory'=>true,'titleHint'=>'Nişan Davetiyesi'],
+                                        'circumcision' => ['groomLabel'=>'✂️ Çocuk Adı','groomPlaceholder'=>'Mehmet','brideLabel'=>'','bridePlaceholder'=>'','groomParentTitle'=>'Aile Bilgileri','brideParentTitle'=>'','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Ahmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'','brideFatherPlaceholder'=>'','brideMotherLabel'=>'','brideMotherPlaceholder'=>'','showBride'=>false,'showBrideParents'=>false,'showStory'=>false,'titleHint'=>'Sünnet Davetiyesi'],
+                                        'birthday' => ['groomLabel'=>'🎂 Doğum Günü Kişisi','groomPlaceholder'=>'Ayşe','brideLabel'=>'Yaş','bridePlaceholder'=>'25','groomParentTitle'=>'Aile Bilgileri','brideParentTitle'=>'','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Ahmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'','brideFatherPlaceholder'=>'','brideMotherLabel'=>'','brideMotherPlaceholder'=>'','showBride'=>true,'showBrideParents'=>false,'showStory'=>false,'titleHint'=>'Doğum Günü Davetiyesi'],
+                                        'corporate' => ['groomLabel'=>'🏢 Şirket Adı','groomPlaceholder'=>'ACME Şirketi','brideLabel'=>'İletişim Kişisi','bridePlaceholder'=>'Ahmet Yılmaz','groomParentTitle'=>'Adres','brideParentTitle'=>'','groomFatherLabel'=>'Adres','groomFatherPlaceholder'=>'Mecidiyeköy, İstanbul','groomMotherLabel'=>'','groomMotherPlaceholder'=>'','brideFatherLabel'=>'','brideFatherPlaceholder'=>'','brideMotherLabel'=>'','brideMotherPlaceholder'=>'','showBride'=>true,'showBrideParents'=>false,'showStory'=>false,'titleHint'=>'Kurumsal Davetiye'],
+                                        'graduation' => ['groomLabel'=>'🎓 Mezun Olan Kişi','groomPlaceholder'=>'Ali','brideLabel'=>'','bridePlaceholder'=>'','groomParentTitle'=>'Aile Bilgileri','brideParentTitle'=>'','groomFatherLabel'=>'Baba Adı','groomFatherPlaceholder'=>'Ahmet','groomMotherLabel'=>'Anne Adı','groomMotherPlaceholder'=>'Ayşe','brideFatherLabel'=>'','brideFatherPlaceholder'=>'','brideMotherLabel'=>'','brideMotherPlaceholder'=>'','showBride'=>false,'showBrideParents'=>false,'showStory'=>false,'titleHint'=>'Mezuniyet Davetiyesi'],
+                                    ];
+                                    $el = $elabels[$etype] ?? $elabels['wedding'];
+                                @endphp
                                 <div class="space-y-6">
                                     <div>
                                         <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('🎪 Etkinlik Türü') }}</label>
@@ -108,48 +120,48 @@
                                     <div id="editCoupleFields">
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                             <div>
-                                                <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5" id="editGroomLabel">{{ __('👨 Damat Adı') }}</label>
+                                                <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5" id="editGroomLabel">{{ $el['groomLabel'] }}</label>
                                                 <input type="text" name="groom_name" value="{{ old('groom_name', $invitation->groom_name) }}" required
-                                                    class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" id="editGroomInput">
+                                                    class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" id="editGroomInput" placeholder="{{ $el['groomPlaceholder'] }}">
                                             </div>
-                                            <div id="editBrideField">
-                                                <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5" id="editBrideLabel">{{ __('👰 Gelin Adı') }}</label>
-                                                <input type="text" name="bride_name" value="{{ old('bride_name', $invitation->bride_name) }}" required
-                                                    class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" id="editBrideInput">
+                                            <div id="editBrideField" @if(!$el['showBride']) style="display:none" @endif>
+                                                <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5" id="editBrideLabel">{{ $el['brideLabel'] }}</label>
+                                                <input type="text" name="bride_name" value="{{ old('bride_name', $invitation->bride_name) }}" @if($el['showBride']) required @endif
+                                                    class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" id="editBrideInput" placeholder="{{ $el['bridePlaceholder'] }}">
                                             </div>
                                         </div>
 
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mt-4 sm:mt-5" id="editGroomParents">
                                             <div class="bg-cream-50 dark:bg-night-900/50 rounded-2xl p-4 sm:p-5 border border-cream-100 dark:border-night-700">
                                                 <p class="text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                                    <span>👪</span> <span id="editGroomParentTitle">{{ __('Damat Ailesi') }}</span>
+                                                    <span>👪</span> <span id="editGroomParentTitle">{{ $el['groomParentTitle'] }}</span>
                                                 </p>
                                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                     <div>
-                                                        <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="editGroomFatherLabel">{{ __('Baba Adı') }}</label>
-                                                        <input type="text" name="groom_father" value="{{ old('groom_father', $invitation->groom_father) }}" placeholder="Mehmet"
+                                                        <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="editGroomFatherLabel">{{ $el['groomFatherLabel'] }}</label>
+                                                        <input type="text" name="groom_father" value="{{ old('groom_father', $invitation->groom_father) }}" placeholder="{{ $el['groomFatherPlaceholder'] }}"
                                                             class="w-full px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                                     </div>
                                                     <div id="editGroomMotherField">
-                                                        <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="editGroomMotherLabel">{{ __('Anne Adı') }}</label>
-                                                        <input type="text" name="groom_mother" value="{{ old('groom_mother', $invitation->groom_mother) }}" placeholder="Ayşe"
+                                                        <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="editGroomMotherLabel">{{ $el['groomMotherLabel'] }}</label>
+                                                        <input type="text" name="groom_mother" value="{{ old('groom_mother', $invitation->groom_mother) }}" placeholder="{{ $el['groomMotherPlaceholder'] }}"
                                                             class="w-full px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="bg-cream-50 dark:bg-night-900/50 rounded-2xl p-4 sm:p-5 border border-cream-100 dark:border-night-700" id="editBrideParents">
+                                            <div class="bg-cream-50 dark:bg-night-900/50 rounded-2xl p-4 sm:p-5 border border-cream-100 dark:border-night-700" id="editBrideParents" @if(!$el['showBrideParents']) style="display:none" @endif>
                                                 <p class="text-xs font-bold text-night-400 dark:text-cream-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                                    <span>👪</span> <span id="editBrideParentTitle">{{ __('Gelin Ailesi') }}</span>
+                                                    <span>👪</span> <span id="editBrideParentTitle">{{ $el['brideParentTitle'] }}</span>
                                                 </p>
                                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                     <div id="editBrideFatherField">
-                                                        <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="editBrideFatherLabel">{{ __('Baba Adı') }}</label>
-                                                        <input type="text" name="bride_father" value="{{ old('bride_father', $invitation->bride_father) }}" placeholder="Ahmet"
+                                                        <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="editBrideFatherLabel">{{ $el['brideFatherLabel'] }}</label>
+                                                        <input type="text" name="bride_father" value="{{ old('bride_father', $invitation->bride_father) }}" placeholder="{{ $el['brideFatherPlaceholder'] }}"
                                                             class="w-full px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                                     </div>
                                                     <div id="editBrideMotherField">
-                                                        <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="editBrideMotherLabel">{{ __('Anne Adı') }}</label>
-                                                        <input type="text" name="bride_mother" value="{{ old('bride_mother', $invitation->bride_mother) }}" placeholder="Fatma"
+                                                        <label class="block text-xs font-medium text-night-500 dark:text-cream-300 mb-1" id="editBrideMotherLabel">{{ $el['brideMotherLabel'] }}</label>
+                                                        <input type="text" name="bride_mother" value="{{ old('bride_mother', $invitation->bride_mother) }}" placeholder="{{ $el['brideMotherPlaceholder'] }}"
                                                             class="w-full px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
                                                     </div>
                                                 </div>
@@ -160,7 +172,7 @@
                                     <div>
                                         <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Başlık') }}</label>
                                         <input type="text" name="title" value="{{ old('title', $invitation->title) }}" required
-                                            class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" placeholder="{{ __('Düğün Davetiyesi') }}">
+                                            class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all" placeholder="{{ $el['titleHint'] }}">
                                     </div>
 
                                     <div>
@@ -200,7 +212,7 @@
                                             class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all resize-none">{{ old('welcome_message', $invitation->welcome_message) }}</textarea>
                                     </div>
 
-                                    <div id="editStoryField">
+                                    <div id="editStoryField" @if(!$el['showStory']) style="display:none" @endif>
                                         <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('💕 Hikayeniz') }}</label>
                                         <textarea name="story" rows="4"
                                             class="w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all resize-none">{{ old('story', $invitation->story) }}</textarea>
@@ -868,13 +880,18 @@
             if (bi) bi.required = l.showBride;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        function initEditEventFields() {
             var sel = document.getElementById('editEventTypeSelect');
             if (sel) {
                 updateEditEventFields(sel.value);
                 sel.addEventListener('change', function() { updateEditEventFields(this.value); });
             }
-        });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initEditEventFields);
+        } else {
+            initEditEventFields();
+        }
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

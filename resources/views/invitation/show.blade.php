@@ -704,7 +704,10 @@
             opacity: 1;
             transform: translateY(-70px) scale(1) rotate(0deg);
             box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+            pointer-events: auto;
         }
+        .envelope-inner { user-select: text; }
+        .floating-letter { user-select: text; }
         .floating-letter .heart-icon { font-size: 1.6rem; margin-bottom: 8px; animation: heartBeat 2s ease-in-out infinite; }
         .floating-letter .letter-names { font-family: var(--font-display); font-size: 1rem; color: #555; }
         .floating-letter .letter-names .ampersand { font-family: 'Anydore', cursive; font-size: 1.4rem; color: var(--primary); display: inline-block; line-height: 1; }

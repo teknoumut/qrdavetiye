@@ -370,12 +370,17 @@ class InvitationController extends Controller
             return back()->with('error', 'Planınız video özelliğini desteklemiyor.');
         }
 
-        $data = $request->validate([
-            'url' => 'nullable|url',
+        $rules = [
             'video_file' => 'nullable|file|mimes:mp4,webm,mov|max:51200',
             'type' => 'nullable|in:youtube,vimeo,upload',
             'caption' => 'nullable|string|max:255',
-        ]);
+        ];
+
+        if ($request->filled('url')) {
+            $rules['url'] = 'url';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('video_file')) {
             $data['file_path'] = $request->file('video_file')

@@ -1405,7 +1405,7 @@
                         @if($video->file_path)
                             <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.06);background:#000;">
                                 <video controls style="position:absolute;top:0;left:0;width:100%;height:100%;" preload="metadata">
-                                    <source src="{{ \Illuminate\Support\Facades\Storage::url($video->file_path) }}" type="video/mp4">
+                                    <source src="{{ \Illuminate\Support\Facades\Storage::url($video->file_path) }}" type="{{ $video->file_path ? (str_ends_with($video->file_path, '.webm') ? 'video/webm' : (str_ends_with($video->file_path, '.mov') ? 'video/quicktime' : 'video/mp4')) : 'video/mp4' }}">
                                 </video>
                             </div>
                         @else

@@ -9,7 +9,7 @@ class PlanSeeder extends Seeder
 {
     public function run(): void
     {
-        Plan::firstOrCreate(
+        Plan::updateOrCreate(
             ['name' => 'Temel'],
             [
                 'name' => 'Temel',
@@ -26,7 +26,7 @@ class PlanSeeder extends Seeder
             ]
         );
 
-        Plan::firstOrCreate(
+        Plan::updateOrCreate(
             ['name' => 'Standart'],
             [
                 'name' => 'Standart',
@@ -43,7 +43,7 @@ class PlanSeeder extends Seeder
             ]
         );
 
-        Plan::firstOrCreate(
+        Plan::updateOrCreate(
             ['name' => 'Premium'],
             [
                 'name' => 'Premium',

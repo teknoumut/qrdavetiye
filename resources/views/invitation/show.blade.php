@@ -104,7 +104,7 @@
         .divider { width: 60px; height: 2px; margin: 20px auto; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); }
         .story-text { font-size: 1.05rem; line-height: 1.9; max-width: 560px; margin: 0 auto; opacity: 0.75; }
         .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 20px; }
-        .gallery img { width: 100%; height: 280px; object-fit: cover; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease; }
+        .gallery img { width: 100%; height: 280px; object-fit: contain; background: rgba(0,0,0,0.03); border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease; }
         .gallery img:hover { transform: scale(1.04) translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
         .rsvp-form {
             max-width: 520px; margin: 0 auto; text-align: left;
@@ -953,35 +953,35 @@
             .countdown { gap: 12px; flex-wrap: wrap; }
             .countdown-item { min-width: 60px; padding: 12px 8px; }
             .countdown-number { font-size: 1.8rem; }
-            .envelope { width: 250px; height: 175px; }
-            .envelope-flap { top: -52px; height: 60px; }
-            .envelope-seal { top: -30px; width: 28px; height: 28px; font-size: 0.6rem; }
-            .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 14px; }
-            .envelope-inner .names { font-size: 1.6rem; }
-            .envelope-inner .heart { font-size: 2.2rem; }
+            .envelope { width: 320px; height: 224px; }
+            .envelope-flap { top: -68px; height: 76px; }
+            .envelope-seal { top: -40px; width: 36px; height: 36px; font-size: 0.75rem; }
+            .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 16px; }
+            .envelope-inner .names { font-size: 1.8rem; }
+            .envelope-inner .heart { font-size: 2.4rem; }
             .envelope.open { transform: scale(1.5) translateY(-50px) rotateX(5deg); }
             .envelope-body .gusset-left,
-            .envelope-body .gusset-right { width: 14px; }
-            .envelope-body .bottom-fold { height: 10px; }
-            .floating-letter { width: 200px; height: 130px; }
-            .floating-letter .letter-names { font-size: 0.85rem; }
+            .envelope-body .gusset-right { width: 18px; }
+            .envelope-body .bottom-fold { height: 14px; }
+            .floating-letter { width: 220px; height: 150px; }
+            .floating-letter .letter-names { font-size: 0.9rem; }
             .parents-grid { gap: 24px; }
             .parent-card { min-width: 160px; }
             .gallery { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-            .gallery img { height: 200px; }
+            .gallery img { height: 200px; object-fit: contain; }
             .rsvp-form { padding: 24px; }
         }
 
         @media (max-width: 420px) {
-            .envelope { width: 200px; height: 145px; }
-            .envelope-flap { top: -44px; height: 50px; }
-            .envelope-seal { top: -26px; width: 24px; height: 24px; font-size: 0.5rem; }
+            .envelope { width: 270px; height: 196px; }
+            .envelope-flap { top: -60px; height: 66px; }
+            .envelope-seal { top: -36px; width: 32px; height: 32px; font-size: 0.65rem; }
             .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 14px; }
-            .envelope-inner .heart { font-size: 1.8rem; }
-            .envelope-inner .names { font-size: 1.6rem; }
-            .envelope-inner .sub { font-size: 0.55rem; }
+            .envelope-inner .heart { font-size: 2rem; }
+            .envelope-inner .names { font-size: 1.8rem; }
+            .envelope-inner .sub { font-size: 0.6rem; }
             .envelope.open { transform: scale(1.3) translateY(-40px) rotateX(4deg); }
-            .floating-letter { width: 170px; height: 110px; padding: 14px; }
+            .floating-letter { width: 190px; height: 125px; padding: 14px; }
             .floating-letter.show { transform: translateY(-40px) scale(1) rotate(0deg); }
         }
 

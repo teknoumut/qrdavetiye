@@ -7,7 +7,7 @@
     </x-slot>
     <div class="bg-white border border-gray-200 rounded-2xl p-8 max-w-2xl">
         <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-            <div class="relative">
+            <div class="relative group">
                 @if($user->photo_url)
                     <img src="{{ $user->photo_url }}" alt="{{ $user->name }}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200">
                 @else
@@ -18,25 +18,40 @@
                 @if($user->isOnline())
                     <span class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></span>
                 @endif
+                <div class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" onclick="document.getElementById('adminPhotoUpload').click()">
+                    <span class="text-white text-xs font-semibold">Değiştir</span>
+                </div>
+                <form action="{{ route('admin.users.photo.upload', $user) }}" method="POST" enctype="multipart/form-data" class="hidden">
+                    @csrf
+                    <input type="file" name="photo" id="adminPhotoUpload" accept="image/jpg,image/jpeg,image/png,image/webp" onchange="this.form.submit()">
+                </form>
             </div>
             <div>
                 <div class="text-lg font-bold text-gray-900">{{ $user->name }}</div>
                 <div class="text-sm text-gray-500">{{ $user->email }}</div>
-                @if($user->isOnline())
-                    <span class="inline-flex items-center gap-1 mt-1 text-xs font-semibold text-emerald-600">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                        Çevrimiçi
-                    </span>
-                @else
-                    <span class="inline-flex items-center gap-1 mt-1 text-xs font-semibold text-gray-400">
-                        <span class="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
-                        @if($user->last_seen_at)
-                            {{ $user->last_seen_at->diffForHumans() }}
-                        @else
-                            Hiç çevrimiçi olmadı
-                        @endif
-                    </span>
-                @endif
+                <div class="flex items-center gap-2 mt-1">
+                    @if($user->isOnline())
+                        <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            Çevrimiçi
+                        </span>
+                    @else
+                        <span class="inline-flex items-center gap-1 text-xs font-semibold text-gray-400">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
+                            @if($user->last_seen_at)
+                                {{ $user->last_seen_at->diffForHumans() }}
+                            @else
+                                Hiç çevrimiçi olmadı
+                            @endif
+                        </span>
+                    @endif
+                    @if($user->profile_photo_path)
+                        <form action="{{ route('admin.users.photo.delete', $user) }}" method="POST" onsubmit="return confirm('Fotoğrafı kaldırmak istediğinize emin misiniz?')" class="inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-xs text-red-500 hover:text-red-700 font-semibold">Kaldır</button>
+                        </form>
+                    @endif
+                </div>
             </div>
         </div>
         <form action="{{ route('admin.users.update', $user) }}" method="POST">

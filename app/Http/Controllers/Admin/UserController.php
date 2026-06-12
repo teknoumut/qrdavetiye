@@ -127,4 +127,32 @@ class UserController extends Controller
 
         return view('admin.users.invitations', compact('user', 'invitations'));
     }
+
+    public function uploadPhoto(Request $request, User $user)
+    {
+        $request->validate([
+            'photo' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        if ($user->profile_photo_path) {
+            Storage::delete($user->profile_photo_path);
+        }
+
+        $path = $request->file('photo')->store('profile-photos', 'public');
+        $user->profile_photo_path = $path;
+        $user->save();
+
+        return back()->with('success', 'Profil resmi güncellendi.');
+    }
+
+    public function deletePhoto(User $user)
+    {
+        if ($user->profile_photo_path) {
+            Storage::delete($user->profile_photo_path);
+            $user->profile_photo_path = null;
+            $user->save();
+        }
+
+        return back()->with('success', 'Profil resmi kaldırıldı.');
+    }
 }

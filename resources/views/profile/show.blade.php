@@ -2,13 +2,22 @@
     <div class="max-w-4xl mx-auto py-8">
         <div class="bg-white dark:bg-night-800 rounded-2xl shadow-sm border border-cream-200 dark:border-night-700 p-8 mb-8">
             <div class="flex items-center gap-5">
-                <span class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden">
-                    @if($user->photo_url)
-                        <img src="{{ $user->photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
-                    @else
-                        <span class="w-full h-full bg-gradient-to-br from-gold-300 to-rose-400 flex items-center justify-center">{{ $user->initial }}</span>
-                    @endif
-                </span>
+                <div class="relative">
+                    <span class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden">
+                        @if($user->photo_url)
+                            <img src="{{ $user->photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                        @else
+                            <span class="w-full h-full bg-gradient-to-br from-gold-300 to-rose-400 flex items-center justify-center">{{ $user->initial }}</span>
+                        @endif
+                    </span>
+                    @auth
+                        @if(auth()->id() === $user->id)
+                            <a href="{{ route('profile.edit') }}" class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white dark:bg-night-700 border border-cream-200 dark:border-night-600 flex items-center justify-center text-xs shadow-sm hover:shadow-md transition-shadow" title="Fotoğraf değiştir">
+                                📷
+                            </a>
+                        @endif
+                    @endauth
+                </div>
                 <div>
                     <h1 class="text-2xl font-bold text-night-900 dark:text-cream-100">{{ $user->name }}</h1>
                     <p class="text-night-400 dark:text-cream-400">Üye: {{ $user->created_at->format('d M Y') }}</p>

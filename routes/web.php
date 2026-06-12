@@ -116,6 +116,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('users/{user}/toggle-admin', [AdminUserController::class, 'toggleAdmin'])->name('users.toggle-admin');
     Route::post('users/{user}/extend-subscription', [AdminUserController::class, 'extendSubscription'])->name('users.extend-subscription');
     Route::get('users/{user}/invitations', [AdminUserController::class, 'invitations'])->name('users.invitations');
+    Route::post('users/{user}/photo', [AdminUserController::class, 'uploadPhoto'])->name('users.photo.upload');
+    Route::delete('users/{user}/photo', [AdminUserController::class, 'deletePhoto'])->name('users.photo.delete');
 
     Route::resource('plans', AdminPlanController::class);
     Route::post('plans/{plan}/toggle-active', [AdminPlanController::class, 'toggleActive'])->name('plans.toggle-active');

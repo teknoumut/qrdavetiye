@@ -38,6 +38,10 @@
         <span class="text-sm font-medium" style="color:#1e293b">Video</span>
     </label>
     <label class="flex items-center gap-2.5 cursor-pointer" style="text-transform:none;letter-spacing:normal">
+        <input type="checkbox" name="cover_video_feature" value="1" {{ old('cover_video_feature', $plan->cover_video_feature ?? false) ? 'checked' : '' }} style="width:18px;height:18px;accent-color:#6366f1">
+        <span class="text-sm font-medium" style="color:#1e293b">Kapak Videosu</span>
+    </label>
+    <label class="flex items-center gap-2.5 cursor-pointer" style="text-transform:none;letter-spacing:normal">
         <input type="checkbox" name="rsvp_feature" value="1" {{ old('rsvp_feature', $plan->rsvp_feature ?? true) ? 'checked' : '' }} style="width:18px;height:18px;accent-color:#6366f1">
         <span class="text-sm font-medium" style="color:#1e293b">RSVP</span>
     </label>

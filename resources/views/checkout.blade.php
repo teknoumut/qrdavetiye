@@ -43,6 +43,7 @@
                 <li><span class="check">✓</span> {{ __('Davetiye başına :count fotoğraf', ['count' => $plan->max_images_per_invitation == -1 ? __('sınırsız') : $plan->max_images_per_invitation]) }}</li>
                 <li><span class="{{ $plan->music_feature ? 'check' : 'cross' }}">{{ $plan->music_feature ? '✓' : '✗' }}</span> {{ __('Müzik desteği') }}</li>
                 <li><span class="{{ $plan->video_feature ? 'check' : 'cross' }}">{{ $plan->video_feature ? '✓' : '✗' }}</span> {{ __('Video desteği') }}</li>
+                <li><span class="{{ $plan->cover_video_feature ? 'check' : 'cross' }}">{{ $plan->cover_video_feature ? '✓' : '✗' }}</span> {{ __('Kapak videosu') }}</li>
                 <li><span class="{{ $plan->rsvp_feature ? 'check' : 'cross' }}">{{ $plan->rsvp_feature ? '✓' : '✗' }}</span> {{ __('RSVP katılım takibi') }}</li>
                 <li><span class="{{ $plan->qr_download ? 'check' : 'cross' }}">{{ $plan->qr_download ? '✓' : '✗' }}</span> {{ __('QR kod indirme') }}</li>
             </ul>

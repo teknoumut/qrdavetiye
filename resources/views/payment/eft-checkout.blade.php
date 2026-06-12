@@ -48,6 +48,10 @@
                     {{ __('Video desteği') }}
                 </li>
                 <li class="flex items-center gap-3 text-sm text-night-600 dark:text-cream-300">
+                    <span class="w-5 h-5 rounded-full {{ $plan->cover_video_feature ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-red-100 dark:bg-red-500/20 text-red-500' }} flex items-center justify-center text-xs font-bold shrink-0">{{ $plan->cover_video_feature ? '✓' : '✗' }}</span>
+                    {{ __('Kapak videosu') }}
+                </li>
+                <li class="flex items-center gap-3 text-sm text-night-600 dark:text-cream-300">
                     <span class="w-5 h-5 rounded-full {{ $plan->rsvp_feature ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-red-100 dark:bg-red-500/20 text-red-500' }} flex items-center justify-center text-xs font-bold shrink-0">{{ $plan->rsvp_feature ? '✓' : '✗' }}</span>
                     {{ __('RSVP katılım takibi') }}
                 </li>

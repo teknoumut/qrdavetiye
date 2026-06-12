@@ -30,6 +30,7 @@ class Invitation extends Model
         'story',
         'special_note',
         'cover_image',
+        'cover_video',
         'theme',
         'font_family',
         'primary_color',

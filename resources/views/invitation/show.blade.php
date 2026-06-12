@@ -735,6 +735,10 @@
             transform: scale(1.05);
             transition: transform 0.1s ease-out;
         }
+        .cover-section .cover-video {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; pointer-events: none; z-index: 0;
+        }
         .cover-section .cover-bg::after {
             content: ''; position: absolute; inset: 0;
             background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.5) 100%);
@@ -1278,6 +1282,11 @@
     <div class="invitation-content" id="invitationContent">
         <div class="cover-section">
             <div class="cover-bg"></div>
+            @if($invitation->cover_video)
+                <video class="cover-video" autoplay muted loop playsinline preload="metadata">
+                    <source src="{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_video) }}" type="{{ str_ends_with($invitation->cover_video, '.webm') ? 'video/webm' : (str_ends_with($invitation->cover_video, '.mov') ? 'video/quicktime' : 'video/mp4') }}">
+                </video>
+            @endif
             <div class="cover-overlay"></div>
             <div class="cover-deco"></div>
             <div class="cover-deco"></div>

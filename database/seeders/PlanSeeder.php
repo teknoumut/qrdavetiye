@@ -54,6 +54,7 @@ class PlanSeeder extends Seeder
                 'max_images_per_invitation' => -1,
                 'music_feature' => true,
                 'video_feature' => true,
+                'cover_video_feature' => true,
                 'rsvp_feature' => true,
                 'qr_download' => true,
                 'is_active' => true,

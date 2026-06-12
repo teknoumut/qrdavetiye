@@ -103,6 +103,7 @@ class InvitationController extends Controller
             'primary_color' => 'nullable|string|max:7',
             'secondary_color' => 'nullable|string|max:7',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:131072',
+            'cover_video' => 'nullable|file|mimes:mp4,webm,mov|max:102400',
             'envelope_pattern' => 'nullable|string|max:50',
             'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
             'corner_decoration' => 'nullable|image|mimes:png,webp|max:5120',
@@ -114,6 +115,11 @@ class InvitationController extends Controller
 
         if ($request->hasFile('cover_image')) {
             $data['cover_image'] = $request->file('cover_image')
+                ->store('invitations/covers', 'public');
+        }
+
+        if ($request->hasFile('cover_video')) {
+            $data['cover_video'] = $request->file('cover_video')
                 ->store('invitations/covers', 'public');
         }
 
@@ -196,6 +202,7 @@ class InvitationController extends Controller
             'primary_color' => 'nullable|string|max:7',
             'secondary_color' => 'nullable|string|max:7',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:131072',
+            'cover_video' => 'nullable|file|mimes:mp4,webm,mov|max:102400',
             'envelope_pattern' => 'nullable|string|max:50',
             'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
             'corner_decoration' => 'nullable|image|mimes:png,webp|max:5120',
@@ -207,6 +214,14 @@ class InvitationController extends Controller
                 Storage::disk('public')->delete($invitation->cover_image);
             }
             $data['cover_image'] = $request->file('cover_image')
+                ->store('invitations/covers', 'public');
+        }
+
+        if ($request->hasFile('cover_video')) {
+            if ($invitation->cover_video) {
+                Storage::disk('public')->delete($invitation->cover_video);
+            }
+            $data['cover_video'] = $request->file('cover_video')
                 ->store('invitations/covers', 'public');
         }
 

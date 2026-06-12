@@ -416,6 +416,28 @@
                                             <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
                                         @enderror
                                     </div>
+
+                                    @if(auth()->user()->plan?->cover_video_feature)
+                                        <div>
+                                            <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Kapak Videosu (Premium)') }}</label>
+                                            @if($invitation->cover_video)
+                                                <div class="mb-3 rounded-xl overflow-hidden shadow-sm border border-cream-200 dark:border-night-700 bg-black/5">
+                                                    <video class="w-full h-48 object-cover" muted loop preload="metadata">
+                                                        <source src="{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_video) }}" type="{{ str_ends_with($invitation->cover_video, '.webm') ? 'video/webm' : (str_ends_with($invitation->cover_video, '.mov') ? 'video/quicktime' : 'video/mp4') }}">
+                                                    </video>
+                                                </div>
+                                            @endif
+                                            <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-cream-200 dark:border-night-700 rounded-xl cursor-pointer bg-cream-50/50 dark:bg-night-900/50 hover:border-gold-400 hover:bg-gold-50/50 dark:hover:bg-gold-500/5 transition-all group">
+                                                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🎬</span>
+                                                <span class="text-sm text-night-400 dark:text-cream-400 font-medium">{{ __('Kapak videosu yükle') }}</span>
+                                                <span class="text-xs text-night-300 dark:text-night-500 mt-0.5">{{ __('MP4, WebM, MOV - maks. 100MB') }}</span>
+                                                <input type="file" name="cover_video" accept="video/mp4,video/webm,video/quicktime" class="hidden" onchange="this.parentElement.querySelectorAll('span')[1].textContent = this.files[0].name">
+                                            </label>
+                                            @error('cover_video')
+                                                <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="flex justify-end pt-6 mt-6 border-t border-cream-100 dark:border-night-700">

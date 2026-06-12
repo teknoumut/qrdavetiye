@@ -727,7 +727,7 @@
             overflow: hidden;
         }
         .cover-section .cover-bg {
-            position: absolute; inset: 0;
+            position: absolute; inset: 0; z-index: 2;
             background: @if($invitation->cover_image) url("{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_image) }}") @else linear-gradient(145deg, #1a1a2e, #0f3460) @endif;
             background-size: cover;
             background-position: center;
@@ -735,23 +735,24 @@
             transform: scale(1.05);
             transition: transform 0.1s ease-out;
         }
+        .cover-section:has(.cover-video) .cover-bg {
+            opacity: 0.55;
+        }
         .cover-section .cover-video {
             position: absolute; inset: 0; width: 100%; height: 100%;
-            object-fit: cover; pointer-events: none; z-index: 0;
+            object-fit: cover; pointer-events: none; z-index: 1;
         }
         .cover-section .cover-bg::after {
-            content: ''; position: absolute; inset: 0;
+            content: ''; position: absolute; inset: 0; z-index: 1;
             background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.5) 100%);
         }
         .cover-section .cover-bg::before {
-            content: ''; position: absolute; inset: 0;
+            content: ''; position: absolute; inset: 0; z-index: 2;
             background: radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(0,0,0,0.2) 100%);
-            z-index: 1;
         }
         .cover-section .cover-overlay {
-            position: absolute; inset: 0;
+            position: absolute; inset: 0; z-index: 5;
             background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.2) 100%);
-            z-index: 1;
         }
         /* Cover dekoratif cizgi */
         .cover-section .cover-deco {

@@ -358,7 +358,7 @@
 
         /* ===== 3D GERCEKCI ZARF ===== */
         .envelope {
-            width: 400px; height: 270px;
+            width: 460px; height: 310px;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s, opacity 0.8s ease 0.2s;
@@ -410,7 +410,7 @@
         .envelope-body .gusset-left,
         .envelope-body .gusset-right {
             position: absolute; top: 0; bottom: 0;
-            width: 24px;
+            width: 28px;
             pointer-events: none;
             z-index: 1;
         }
@@ -437,7 +437,7 @@
         /* Alt kat izi */
         .envelope-body .bottom-fold {
             position: absolute; bottom: 0; left: 0; right: 0;
-            height: 18px;
+            height: 20px;
             background: linear-gradient(0deg, rgba(0,0,0,0.08) 0%, transparent 100%);
             pointer-events: none;
             z-index: 1;
@@ -482,8 +482,8 @@
 
         /* Flap - zarf kapağı (daha gerçekçi egri) */
         .envelope-flap {
-            position: absolute; top: -85px; left: 0; right: 0;
-            height: 98px;
+            position: absolute; top: -95px; left: 0; right: 0;
+            height: 110px;
             background: linear-gradient(168deg, var(--primary), var(--primary-dark));
             clip-path: polygon(2% 0, 50% 97%, 98% 0);
             transform-origin: bottom center;
@@ -544,9 +544,9 @@
         /* Mühür (balmumu) */
         .envelope-seal {
             position: absolute;
-            top: -46px; left: 50%;
+            top: -52px; left: 50%;
             transform: translateX(-50%);
-            width: 52px; height: 52px;
+            width: 56px; height: 56px;
             background: radial-gradient(circle at 35% 35%, color-mix(in srgb, var(--primary) 90%, #fff), var(--primary-dark));
             border: 2px solid rgba(255,255,255,0.15);
             border-radius: 50%;
@@ -554,7 +554,7 @@
             align-items: center;
             justify-content: center;
             z-index: 4;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: rgba(255,255,255,0.85);
             transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
             box-shadow: 0 4px 20px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.15);
@@ -577,14 +577,14 @@
         /* Ic kisim - mektup */
         .envelope-inner {
             position: absolute;
-            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            top: 12px; left: 12px; right: 12px; bottom: 12px;
             background: linear-gradient(160deg, #fffdf7, #fefcf8);
             border-radius: 2px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 22px;
+            padding: 26px;
             text-align: center;
             z-index: 1;
             box-shadow:
@@ -649,7 +649,7 @@
             font-weight: 500;
         }
         .envelope-inner .env-message {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--envelope-text);
             opacity: 0.7;
             margin-top: 10px;
@@ -1012,17 +1012,17 @@
             .countdown { gap: 12px; flex-wrap: wrap; }
             .countdown-item { min-width: 60px; padding: 12px 8px; }
             .countdown-number { font-size: 1.8rem; }
-            .envelope { width: 320px; height: 224px; }
-            .envelope-flap { top: -68px; height: 76px; }
-            .envelope-seal { top: -40px; width: 36px; height: 36px; font-size: 0.75rem; }
-            .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 16px; }
+            .envelope { width: 360px; height: 250px; }
+            .envelope-flap { top: -76px; height: 84px; }
+            .envelope-seal { top: -44px; width: 40px; height: 40px; font-size: 0.8rem; }
+            .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 18px; }
             .envelope-inner .names { font-size: 1.8rem; }
             .envelope-inner .heart { font-size: 2.4rem; }
-            .envelope-inner .env-message { font-size: 0.6rem; -webkit-line-clamp: 5; }
+            .envelope-inner .env-message { font-size: 0.65rem; -webkit-line-clamp: 6; }
             .envelope.open { transform: scale(1.5) translateY(-50px) rotateX(5deg); }
             .envelope-body .gusset-left,
-            .envelope-body .gusset-right { width: 18px; }
-            .envelope-body .bottom-fold { height: 14px; }
+            .envelope-body .gusset-right { width: 20px; }
+            .envelope-body .bottom-fold { height: 16px; }
             .floating-letter { width: 220px; height: 150px; padding: 16px; }
             .floating-letter .letter-names { font-size: 0.9rem; }
             .floating-letter .letter-msg { font-size: 0.55rem; -webkit-line-clamp: 4; }
@@ -1034,14 +1034,14 @@
         }
 
         @media (max-width: 420px) {
-            .envelope { width: 270px; height: 196px; }
-            .envelope-flap { top: -60px; height: 66px; }
-            .envelope-seal { top: -36px; width: 32px; height: 32px; font-size: 0.65rem; }
-            .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 14px; }
+            .envelope { width: 300px; height: 216px; }
+            .envelope-flap { top: -66px; height: 72px; }
+            .envelope-seal { top: -38px; width: 34px; height: 34px; font-size: 0.7rem; }
+            .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 16px; }
             .envelope-inner .heart { font-size: 2rem; }
             .envelope-inner .names { font-size: 1.8rem; }
             .envelope-inner .sub { font-size: 0.6rem; }
-            .envelope-inner .env-message { font-size: 0.55rem; -webkit-line-clamp: 4; }
+            .envelope-inner .env-message { font-size: 0.6rem; -webkit-line-clamp: 5; }
             .envelope.open { transform: scale(1.3) translateY(-40px) rotateX(4deg); }
             .floating-letter { width: 190px; height: 125px; padding: 14px; }
             .floating-letter .letter-msg { font-size: 0.5rem; -webkit-line-clamp: 3; }
@@ -1333,7 +1333,7 @@
                         <div class="names">@if($ev['couple']){{ $fixName($invitation->groom_name) }} <span class="ampersand">&</span> {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@if($eventType === 'birthday' && $invitation->bride_name) <span style="font-size:0.5em;opacity:0.6;display:block;margin-top:2px;">{{ $invitation->bride_name }} Yaşında</span>@endif @endif</div>
                         <div class="sub">{{ $ev['title'] }}</div>
                         @if($invitation->welcome_message)
-                            <div class="env-message">{{ Str::limit(strip_tags($invitation->welcome_message), 200) }}</div>
+                            <div class="env-message">{{ strip_tags($invitation->welcome_message) }}</div>
                         @endif
                     </div>
             </div>
@@ -1343,7 +1343,7 @@
                 <div class="letter-names">@if($ev['couple']){{ $fixName($invitation->groom_name) }}<br><span class="ampersand">&</span><br>{{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@if($eventType === 'birthday' && $invitation->bride_name)<br><span style="font-size:0.7rem;opacity:0.6;">{{ $invitation->bride_name }} Yaşında</span>@endif @endif</div>
                 <div class="letter-sub">{{ $ev['sub'] }}</div>
                 @if($invitation->welcome_message)
-                    <div class="letter-msg">{{ Str::limit(strip_tags($invitation->welcome_message), 120) }}</div>
+                    <div class="letter-msg">{{ strip_tags($invitation->welcome_message) }}</div>
                 @endif
             </div>
         </div>

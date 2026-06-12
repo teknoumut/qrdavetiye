@@ -28,19 +28,25 @@
 
         .login-left {
             flex: 1.1;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)),
-                url("https://images.unsplash.com/photo-1612611450433-360c82a57e01?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-            background-position: center center;
-            background-repeat: none;
-            background-size: cover;
-
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 60px;
-            position: relative;
-            overflow: hidden;
+        }
+
+        .login-left .bg-img {
+            position: absolute;
+            inset: -10px;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(139, 92, 246, 0.15)),
+                url("https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            animation: zoomBg 20s ease-in-out infinite alternate;
+            z-index: 0;
         }
 
         .login-left::before {
@@ -53,6 +59,7 @@
             right: -200px;
             border-radius: 50%;
             animation: pulse 8s ease-in-out infinite;
+            z-index: 1;
         }
 
         .login-left::after {
@@ -65,6 +72,7 @@
             left: -150px;
             border-radius: 50%;
             animation: pulse 10s ease-in-out infinite reverse;
+            z-index: 1;
         }
 
         @keyframes pulse {
@@ -83,7 +91,7 @@
 
         .login-left .content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             text-align: center;
             color: white;
         }
@@ -201,6 +209,11 @@
             100% {
                 transform: translateY(0) rotate(360deg);
             }
+        }
+
+        @keyframes zoomBg {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
         }
 
         .login-right {
@@ -416,6 +429,7 @@
 <body>
     <div class="login-container">
         <div class="login-left hidden md:flex">
+            <div class="bg-img"></div>
             <div class="floating-shapes">
                 <div class="shape"></div>
                 <div class="shape"></div>

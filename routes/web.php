@@ -100,6 +100,9 @@ Route::middleware(['auth', 'subscription'])->group(function () {
 
         Route::post('invitations/{invitation}/music', [UserInvitationController::class, 'uploadMusic'])->name('invitations.music.upload');
         Route::delete('invitations/music/{music}', [UserInvitationController::class, 'deleteMusic'])->name('invitations.music.delete');
+
+        Route::delete('invitations/{invitation}/cover-image', [UserInvitationController::class, 'deleteCoverImage'])->name('invitations.cover-image.delete');
+        Route::delete('invitations/{invitation}/cover-video', [UserInvitationController::class, 'deleteCoverVideo'])->name('invitations.cover-video.delete');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

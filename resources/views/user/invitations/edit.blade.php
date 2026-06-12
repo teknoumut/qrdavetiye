@@ -402,8 +402,15 @@
                                     <div>
                                         <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Kapak Fotoğrafı') }}</label>
                                         @if($invitation->cover_image)
-                                            <div class="mb-3 rounded-xl overflow-hidden shadow-sm border border-cream-200 dark:border-night-700">
+                                            <div class="mb-3 rounded-xl overflow-hidden shadow-sm border border-cream-200 dark:border-night-700 relative group">
                                                 <img src="{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_image) }}" class="w-full h-48 object-cover">
+                                                <form action="{{ route('user.invitations.cover-image.delete', $invitation) }}" method="POST" onsubmit="return confirm('{{ __("Kapak fotoğrafını silmek istediğine emin misin?") }}')" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="p-2 bg-white/90 hover:bg-red-500 hover:text-white rounded-lg shadow-sm transition-all text-red-500">
+                                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                    </button>
+                                                </form>
                                             </div>
                                         @endif
                                         <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-cream-200 dark:border-night-700 rounded-xl cursor-pointer bg-cream-50/50 dark:bg-night-900/50 hover:border-gold-400 hover:bg-gold-50/50 dark:hover:bg-gold-500/5 transition-all group">
@@ -429,7 +436,7 @@
                                         <div>
                                             <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Kapak Videosu (Premium)') }}</label>
                                             @if($cv)
-                                                <div class="mb-3 rounded-xl overflow-hidden shadow-sm border border-cream-200 dark:border-night-700 bg-black/5">
+                                                <div class="mb-3 rounded-xl overflow-hidden shadow-sm border border-cream-200 dark:border-night-700 bg-black/5 relative group">
                                                     @if($cvEmbedUrl)
                                                         <div style="position:relative;padding-bottom:56.25%;height:0;">
                                                             <iframe src="{{ $cvEmbedUrl }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>
@@ -439,6 +446,13 @@
                                                             <source src="{{ \Illuminate\Support\Facades\Storage::url($cv) }}" type="{{ str_ends_with($cv, '.webm') ? 'video/webm' : (str_ends_with($cv, '.mov') ? 'video/quicktime' : 'video/mp4') }}">
                                                         </video>
                                                     @endif
+                                                    <form action="{{ route('user.invitations.cover-video.delete', $invitation) }}" method="POST" onsubmit="return confirm('{{ __("Kapak videosunu silmek istediğine emin misin?") }}')" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="p-2 bg-white/90 hover:bg-red-500 hover:text-white rounded-lg shadow-sm transition-all text-red-500">
+                                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             @endif
                                             <div class="space-y-4">

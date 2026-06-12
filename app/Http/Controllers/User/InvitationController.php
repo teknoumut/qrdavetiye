@@ -446,6 +446,35 @@ class InvitationController extends Controller
         return back()->with('success', 'Video silindi.');
     }
 
+    public function deleteCoverImage(Invitation $invitation)
+    {
+        if ($invitation->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if ($invitation->cover_image) {
+            Storage::disk('public')->delete($invitation->cover_image);
+            $invitation->update(['cover_image' => null]);
+        }
+
+        return back()->with('success', 'Kapak fotoğrafı silindi.');
+    }
+
+    public function deleteCoverVideo(Invitation $invitation)
+    {
+        if ($invitation->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if ($invitation->cover_video && !str_starts_with($invitation->cover_video, 'http')) {
+            Storage::disk('public')->delete($invitation->cover_video);
+        }
+
+        $invitation->update(['cover_video' => null]);
+
+        return back()->with('success', 'Kapak videosu silindi.');
+    }
+
     // Music management
     public function uploadMusic(Request $request, Invitation $invitation)
     {

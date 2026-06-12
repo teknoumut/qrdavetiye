@@ -69,6 +69,8 @@
     if (isset($cdnFontSlugs[$fontFamily])) {
         $cdnFontUrl = 'https://fonts.cdnfonts.com/css/' . $cdnFontSlugs[$fontFamily];
     }
+    // Anydore her zaman yüklensin (& işareti için)
+    $anydoreFontUrl = 'https://fonts.cdnfonts.com/css/anydore';
 @endphp
 <!DOCTYPE html>
 <html lang="tr">
@@ -88,6 +90,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="{{ $gfUrl }}" rel="stylesheet">
     @if($cdnFontUrl)<link href="{{ $cdnFontUrl }}" rel="stylesheet">@endif
+    @if($fontFamily !== 'Anydore')<link href="{{ $anydoreFontUrl }}" rel="stylesheet">@endif
     <link href="{{ asset('css/invitation.css') }}" rel="stylesheet">
     <style>
         :root {

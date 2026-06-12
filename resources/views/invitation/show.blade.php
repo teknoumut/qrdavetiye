@@ -1537,15 +1537,6 @@
             </div>
         @endif
 
-        @if($invitation->special_note)
-            <div class="section animate-on-scroll">
-                <div class="section-subtitle">Not</div>
-                <div class="section-title">Özel Bir Not</div>
-                <div class="divider"></div>
-                <p class="story-text">{{ $invitation->special_note }}</p>
-            </div>
-        @endif
-
         <div class="section animate-on-scroll zoom-in" style="background: rgba(0,0,0,0.015);">
             <div class="section-subtitle">Katılım</div>
             <div class="section-title">RSVP</div>

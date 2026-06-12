@@ -7,6 +7,7 @@
     <meta name="keywords" content="dijital davetiye, online davetiye, QR kod davetiye, düğün davetiyesi, nişan davetiyesi, sünnet davetiyesi, doğum günü davetiyesi">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|playfair-display:400,500,600,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @php
         $sp = \App\Models\Setting::getValue('site_primary_color', '#d4a61e');
@@ -394,7 +395,7 @@
             padding: 36px 24px; border-radius: 20px; text-align: center;
             background: #faf9f7; border: 1px solid #eceef2;
             transition: all 0.5s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden;
-            opacity: 0; transform: translateY(30px);
+            opacity: 0; transform: translateY(30px); user-select: none;
         }
         .step.visible { opacity: 1; transform: translateY(0); }
         .step:hover { transform: translateY(-8px); box-shadow: 0 30px 80px rgba(0,0,0,0.06); border-color: var(--site-primary); }
@@ -407,14 +408,15 @@
         .step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: #0f1119; }
         .step p { color: #8893ac; font-size: 0.85rem; line-height: 1.7; }
         .step .step-bg { position: absolute; right: -15px; bottom: -15px; font-size: 4.5rem; opacity: 0.04; pointer-events: none; transition: all 0.5s; }
-        .step:hover .step-bg { opacity: 0.08; transform: scale(1.1) rotate(-5deg); }
+        .step:hover .step-bg { opacity: 0.08; transform: scale(1.3) rotate(-8deg); }
+        .step .step-bg i { animation: ficonFloat 3s ease-in-out infinite; }
 
         .features-section { padding: 80px 24px; background: #faf9f7; position: relative; z-index: 1; }
         .features-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
         .feature-card {
             padding: 24px; border-radius: 18px; display: flex; gap: 16px; align-items: flex-start;
             background: #fff; border: 1px solid #eceef2; transition: all 0.4s ease;
-            opacity: 0; transform: translateY(20px);
+            opacity: 0; transform: translateY(20px); user-select: none;
         }
         .feature-card.visible { opacity: 1; transform: translateY(0); }
         .feature-card:hover { border-color: var(--site-primary); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.04); }
@@ -423,7 +425,9 @@
             display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;
             transition: transform 0.3s;
         }
-        .feature-card:hover .ficon { transform: scale(1.1) rotate(-5deg); }
+        .feature-card:hover .ficon { transform: scale(1.15) rotate(-8deg); }
+        .feature-card .ficon i { animation: ficonFloat 3s ease-in-out infinite; }
+        @keyframes ficonFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
         .feature-card .ftext h4 { font-size: 0.9rem; font-weight: 700; color: #0f1119; margin-bottom: 4px; }
         .feature-card .ftext p { font-size: 0.8rem; color: #8893ac; line-height: 1.5; }
 
@@ -461,7 +465,7 @@
         }
         .contact-form .form-header .icon {
             width: 56px; height: 56px; border-radius: 16px;
-            background: linear-gradient(135deg, #fdf8ed, #fce7ea);
+            background: linear-gradient(135deg, #fefce8, #fdf8ed);
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 14px; font-size: 1.5rem;
             box-shadow: 0 4px 12px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.08);
@@ -509,35 +513,148 @@
         }
         .contact-form button:hover::before { transform: rotate(45deg) translateX(100%); }
         .contact-form button:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.30); }
-        .contact-form button:active { transform: translateY(0); }
-        .contact-form .success-state {
-            text-align: center; padding: 40px 20px; display: none;
-        }
-        .contact-form .success-state .check {
-            width: 64px; height: 64px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary));
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 16px; font-size: 1.8rem; color: white;
-            box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.20);
-        }
-        .contact-form .success-state h4 { font-size: 1.1rem; font-weight: 800; color: #0f1119; margin-bottom: 6px; }
-        .contact-form .success-state p { font-size: 0.85rem; color: #8893ac; line-height: 1.6; }
+            .contact-form button:active { transform: translateY(0); }
+            .contact-form .success-state {
+                text-align: center; padding: 40px 20px; display: none;
+            }
+            .contact-form .success-state .check {
+                width: 64px; height: 64px; border-radius: 50%;
+                background: linear-gradient(135deg, var(--site-primary), var(--site-secondary));
+                display: flex; align-items: center; justify-content: center;
+                margin: 0 auto 16px; font-size: 1.8rem; color: white;
+                box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.20);
+            }
+            .contact-form .success-state h4 { font-size: 1.1rem; font-weight: 800; color: #0f1119; margin-bottom: 6px; }
+            .contact-form .success-state p { font-size: 0.85rem; color: #8893ac; line-height: 1.6; }
 
-        footer { padding: 36px 24px; text-align: center; color: #b1b8c9; font-size: 0.8rem; background: #fff; border-top: 1px solid #eceef2; position: relative; z-index: 1; }
+            .reklam-slider {
+                background: linear-gradient(135deg, var(--site-primary), var(--site-secondary));
+                padding: 18px 24px;
+                overflow: hidden;
+                position: relative;
+            }
+            .reklam-track {
+                display: flex;
+                animation: reklamScroll 9s ease-in-out infinite;
+                max-width: 750px;
+                margin: 0 auto;
+            }
+            .reklam-slide {
+                min-width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 18px;
+                color: white;
+            }
+            .reklam-img {
+                width: 120px; height: 70px;
+                border-radius: 12px;
+                background-size: cover;
+                background-position: center;
+                flex-shrink: 0;
+                border: 2px solid rgba(255,255,255,0.15);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+            .reklam-text { font-size: 0.92rem; font-weight: 600; line-height: 1.5; }
+            .reklam-dots {
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 10px;
+            }
+            .reklam-dots span {
+                width: 8px; height: 8px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.3);
+                animation: reklamDot 9s ease-in-out infinite;
+            }
+            .reklam-dots span:nth-child(2) { animation-delay: 3s; }
+            .reklam-dots span:nth-child(3) { animation-delay: 6s; }
+            @keyframes reklamScroll {
+                0%, 28% { transform: translateX(0); }
+                33.33%, 61% { transform: translateX(-100%); }
+                66.66%, 94% { transform: translateX(-200%); }
+                100% { transform: translateX(0); }
+            }
+            @keyframes reklamDot {
+                0%, 28% { background: rgba(255,255,255,0.9); }
+                33.33%, 100% { background: rgba(255,255,255,0.3); }
+            }
 
-        @media (max-width: 768px) {
-            .env-3d { width: 260px; height: 195px; }
-            .env-label { font-size: 0.7rem; top: -70px; }
-            .env-3d .letter { padding: 20px; }
-            .env-3d .letter .fig { width: 48px; height: 48px; font-size: 1.5rem; }
-            .env-3d .letter .couple { gap: 16px; }
-            .env-3d.open .letter { top: -60%; }
-            .env-3d .letter .heart-icon { font-size: 1.5rem; }
-            .steps { grid-template-columns: 1fr; }
-            .features-grid { grid-template-columns: 1fr; }
-            .contact-form { padding: 24px; }
-            #navbar { padding: 12px 16px; }
-        }
+            .pricing-section { padding: 80px 24px; background: linear-gradient(180deg, #faf9f7 0%, #fff 50%, #faf9f7 100%); position: relative; z-index: 1; }
+            .pricing-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+            .pricing-card { background: #fff; border-radius: 20px; border: 1px solid #eceef2; padding: 32px 28px; text-align: center; transition: all 0.4s; opacity: 0; transform: translateY(20px); position: relative; overflow: hidden; user-select: none; }
+            .pricing-card.visible { opacity: 1; transform: translateY(0); }
+            .pricing-card:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(0,0,0,0.06); border-color: var(--site-primary); }
+            .pricing-card.featured { border-color: var(--site-primary); box-shadow: 0 0 0 1px var(--site-primary), 0 20px 60px rgba(0,0,0,0.04); }
+            .pricing-card .badge { position: absolute; top: 16px; right: 16px; padding: 4px 12px; border-radius: 100px; font-size: 0.7rem; font-weight: 700; background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: #fff; }
+            .pricing-card h3 { font-size: 1.1rem; font-weight: 800; color: #0f1119; margin-bottom: 4px; }
+            .pricing-card .desc { font-size: 0.8rem; color: #8893ac; margin-bottom: 20px; }
+            .pricing-card .p-price { font-size: 2.2rem; font-weight: 900; color: #0f1119; letter-spacing: -0.03em; margin-bottom: 4px; }
+            .pricing-card .p-price .cur { font-size: 0.85rem; font-weight: 600; color: #8893ac; }
+            .pricing-card .p-period { font-size: 0.8rem; color: #b1b8c9; margin-bottom: 20px; }
+            .pricing-card .p-features { list-style: none; padding: 0; margin: 0 0 24px; text-align: left; }
+            .pricing-card .p-features li { padding: 6px 0; font-size: 0.85rem; color: #464e62; display: flex; align-items: center; gap: 8px; }
+            .pricing-card .p-features li .check { color: #10b981; font-weight: 700; }
+            .pricing-card .p-features li .cross { color: #ef4444; font-weight: 700; }
+            .pricing-card .p-btn { display: inline-block; width: 100%; padding: 14px; border-radius: 14px; font-size: 0.9rem; font-weight: 700; text-decoration: none; background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: #fff; transition: all 0.3s; box-sizing: border-box; }
+            .pricing-card .p-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.25); }
+            .pricing-card .p-btn-outline { background: transparent; color: #0f1119; border: 1.5px solid #eceef2; }
+            .pricing-card .p-btn-outline:hover { border-color: var(--site-primary); background: rgba(212,166,30,0.04); box-shadow: none; }
+            .pricing-toggle { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 40px; }
+            .pricing-toggle span { font-size: 0.85rem; font-weight: 600; color: #8893ac; }
+            .pricing-toggle span.active { color: #0f1119; }
+            .toggle-switch { width: 48px; height: 26px; border-radius: 13px; background: #d5d9e2; cursor: pointer; position: relative; transition: background 0.3s; }
+            .toggle-switch.active { background: var(--site-primary); }
+            .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+            .toggle-switch.active::after { transform: translateX(22px); }
+
+            .reviews-section { padding: 80px 24px; background: #fff; position: relative; z-index: 1; }
+            .reviews-grid { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+            .review-card { background: #faf9f7; border-radius: 18px; border: 1px solid #eceef2; padding: 24px; transition: all 0.3s; opacity: 0; transform: translateY(20px); user-select: none; }
+            .review-card.visible { opacity: 1; transform: translateY(0); }
+            .review-card:hover { border-color: var(--site-primary); box-shadow: 0 8px 32px rgba(0,0,0,0.04); transform: translateY(-2px); }
+            .review-card .review-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+            .review-card .review-avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+            .review-card .review-name { font-weight: 700; font-size: 0.9rem; color: #0f1119; }
+            .review-card .review-date { font-size: 0.75rem; color: #b1b8c9; }
+            .review-card .review-stars { display: flex; gap: 3px; margin-left: auto; }
+            .review-card .review-stars span { font-size: 1rem; }
+            .review-card .review-content { font-size: 0.9rem; color: #464e62; line-height: 1.7; }
+
+            .faq-section { max-width: 720px; margin: 0 auto; padding: 80px 24px; }
+            .faq-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 40px; }
+            .faq-item { display: block; background: #fff; border-radius: 16px; border: 1px solid #eceef2; transition: all 0.3s; user-select: none; }
+            .faq-item[open] { border-color: var(--site-primary); }
+            .faq-item:hover { border-color: var(--site-primary); box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+            .faq-q { display: flex; padding: 18px 22px; font-size: 0.92rem; font-weight: 700; color: #0f1119; align-items: center; justify-content: space-between; user-select: none; cursor: pointer; list-style: none; }
+            .faq-q::-webkit-details-marker { display: none; }
+            .faq-q::after { content: '+'; font-size: 1.3rem; font-weight: 300; color: #b1b8c9; }
+            .faq-item[open] .faq-q::after { content: '−'; }
+            .faq-a { display: block; padding: 0 22px 18px; font-size: 0.85rem; color: #8893ac; line-height: 1.6; }
+
+            footer { padding: 36px 24px; text-align: center; color: #b1b8c9; font-size: 0.8rem; background: #fff; border-top: 1px solid #eceef2; position: relative; z-index: 1; }
+
+            @media (max-width: 640px) {
+                .reklam-img { width: 80px; height: 50px; }
+                .reklam-text { font-size: 0.8rem; }
+                .reklam-slide { gap: 12px; }
+            }
+            @media (max-width: 768px) {
+                .env-3d { width: 260px; height: 195px; }
+                .env-label { font-size: 0.7rem; top: -70px; }
+                .env-3d .letter { padding: 20px; }
+                .env-3d .letter .fig { width: 48px; height: 48px; font-size: 1.5rem; }
+                .env-3d .letter .couple { gap: 16px; }
+                .env-3d.open .letter { top: -60%; }
+                .env-3d .letter .heart-icon { font-size: 1.5rem; }
+                .steps { grid-template-columns: 1fr; }
+                .features-grid { grid-template-columns: 1fr; }
+                .pricing-grid { grid-template-columns: 1fr; }
+                .contact-form { padding: 24px; }
+                #navbar { padding: 12px 16px; }
+            }
     </style>
 </head>
 <body>
@@ -658,68 +775,6 @@
         </div>
     </div>
 
-    <style>
-        .reklam-slider {
-            background: linear-gradient(135deg, var(--site-primary), var(--site-secondary));
-            padding: 18px 24px;
-            overflow: hidden;
-            position: relative;
-        }
-        .reklam-track {
-            display: flex;
-            animation: reklamScroll 9s ease-in-out infinite;
-            max-width: 750px;
-            margin: 0 auto;
-        }
-        .reklam-slide {
-            min-width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 18px;
-            color: white;
-        }
-        .reklam-img {
-            width: 120px; height: 70px;
-            border-radius: 12px;
-            background-size: cover;
-            background-position: center;
-            flex-shrink: 0;
-            border: 2px solid rgba(255,255,255,0.15);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .reklam-text { font-size: 0.92rem; font-weight: 600; line-height: 1.5; }
-        .reklam-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .reklam-dots span {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            animation: reklamDot 9s ease-in-out infinite;
-        }
-        .reklam-dots span:nth-child(2) { animation-delay: 3s; }
-        .reklam-dots span:nth-child(3) { animation-delay: 6s; }
-        @keyframes reklamScroll {
-            0%, 28% { transform: translateX(0); }
-            33.33%, 61% { transform: translateX(-100%); }
-            66.66%, 94% { transform: translateX(-200%); }
-            100% { transform: translateX(0); }
-        }
-        @keyframes reklamDot {
-            0%, 28% { background: rgba(255,255,255,0.9); }
-            33.33%, 100% { background: rgba(255,255,255,0.3); }
-        }
-        @media (max-width: 640px) {
-            .reklam-img { width: 80px; height: 50px; }
-            .reklam-text { font-size: 0.8rem; }
-            .reklam-slide { gap: 12px; }
-        }
-    </style>
-
     <div class="env-sticky" id="envSticky" style="background:linear-gradient(180deg,#faf9f7 0%,#fff 30%,#fdf8ed 70%,#faf9f7 100%);overflow-x:hidden;">
         <div class="env-particles" id="particles"></div>
         <div class="burst-confetti" id="confettiContainer"></div>
@@ -761,25 +816,25 @@
                     <div class="num">1</div>
                     <h3>{{ __('Bize Ulaş') }}</h3>
                     <p>{{ __('Formdan mesaj gönder, sana özel hesabını oluşturalım') }}</p>
-                    <div class="step-bg">📞</div>
+                    <div class="step-bg"><i class="fas fa-phone"></i></div>
                 </div>
                 <div class="step animate-step" style="transition-delay:0.1s">
                     <div class="num">2</div>
                     <h3>{{ __('Davetiyeni Tasarla') }}</h3>
                     <p>{{ __('Renk, fotoğraf, müzik ve yazılarınla kişiselleştir') }}</p>
-                    <div class="step-bg">🎨</div>
+                    <div class="step-bg"><i class="fas fa-palette"></i></div>
                 </div>
                 <div class="step animate-step" style="transition-delay:0.2s">
                     <div class="num">3</div>
                     <h3>{{ __('QR Kodla Paylaş') }}</h3>
                     <p>{{ __('WhatsApp, Instagram veya SMS ile davetlilere ulaştır') }}</p>
-                    <div class="step-bg">📱</div>
+                    <div class="step-bg"><i class="fas fa-mobile-alt"></i></div>
                 </div>
                 <div class="step animate-step" style="transition-delay:0.3s">
                     <div class="num">4</div>
                     <h3>{{ __('Takip Et') }}</h3>
                     <p>{{ __('Kim katılıyor, kim katılmıyor panelden canlı izle') }}</p>
-                    <div class="step-bg">📊</div>
+                    <div class="step-bg"><i class="fas fa-chart-bar"></i></div>
                 </div>
             </div>
         </div>
@@ -788,49 +843,19 @@
             <div class="section-title animate-reveal">{{ __('Tüm Özellikler') }}</div>
             <div class="section-sub animate-reveal">{{ __('İhtiyacın olan her şey bu platformda') }}</div>
             <div class="features-grid">
-                <div class="feature-card animate-feature"><div class="ficon" style="background:#fdf8ed">📱</div><div class="ftext"><h4>{{ __('QR Kod') }}</h4><p>{{ __('Her davetiye için otomatik QR kod, PNG/SVG indir') }}</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.05s"><div class="ficon" style="background:#fdf2f4">🎵</div><div class="ftext"><h4>{{ __('Müzik Desteği') }}</h4><p>{{ __('YouTube embed ya da MP3 ile arka plan müziği') }}</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.1s"><div class="ficon" style="background:#fdf8ed">🖼️</div><div class="ftext"><h4>{{ __('Fotoğraf Galerisi') }}</h4><p>{{ __('Özel anılarını galeri şeklinde paylaş') }}</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.15s"><div class="ficon" style="background:#fdf2f4">🎨</div><div class="ftext"><h4>{{ __('Tema & Renk') }}</h4><p>{{ __('Tamamen özelleştirilebilir tasarım') }}</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.2s"><div class="ficon" style="background:#fdf8ed">⏱️</div><div class="ftext"><h4>{{ __('Geri Sayım') }}</h4><p>{{ __('Etkinlik tarihine otomatik sayaç') }}</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.25s"><div class="ficon" style="background:#fdf2f4">📍</div><div class="ftext"><h4>{{ __('Konum') }}</h4><p>{{ __('Harita entegrasyonu ile adres göster') }}</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.3s"><div class="ficon" style="background:#fdf8ed">💬</div><div class="ftext"><h4>{{ __('RSVP Sistemi') }}</h4><p>{{ __('Katılım takibi, anlık bildirim') }}</p></div></div>
-                <div class="feature-card animate-feature" style="transition-delay:0.35s"><div class="ficon" style="background:#fdf2f4">🎬</div><div class="ftext"><h4>{{ __('Video Desteği') }}</h4><p>{{ __('YouTube videoları ile zenginleştir') }}</p></div></div>
+                <div class="feature-card animate-feature"><div class="ficon" style="background:#eff6ff"><i class="fas fa-qrcode" style="color:#3b82f6"></i></div><div class="ftext"><h4>{{ __('QR Kod') }}</h4><p>{{ __('Her davetiye için otomatik QR kod, PNG/SVG indir') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.05s"><div class="ficon" style="background:#fef2f2"><i class="fas fa-music" style="color:#ef4444"></i></div><div class="ftext"><h4>{{ __('Müzik Desteği') }}</h4><p>{{ __('YouTube embed ya da MP3 ile arka plan müziği') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.1s"><div class="ficon" style="background:#f5f3ff"><i class="fas fa-images" style="color:#8b5cf6"></i></div><div class="ftext"><h4>{{ __('Fotoğraf Galerisi') }}</h4><p>{{ __('Özel anılarını galeri şeklinde paylaş') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.15s"><div class="ficon" style="background:#fdf2f8"><i class="fas fa-palette" style="color:#ec4899"></i></div><div class="ftext"><h4>{{ __('Tema & Renk') }}</h4><p>{{ __('Tamamen özelleştirilebilir tasarım') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.2s"><div class="ficon" style="background:#fefce8"><i class="fas fa-clock" style="color:#eab308"></i></div><div class="ftext"><h4>{{ __('Geri Sayım') }}</h4><p>{{ __('Etkinlik tarihine otomatik sayaç') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.25s"><div class="ficon" style="background:#f3f4f6"><i class="fas fa-map-marker-alt" style="color:#111827"></i></div><div class="ftext"><h4>{{ __('Konum') }}</h4><p>{{ __('Harita entegrasyonu ile adres göster') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.3s"><div class="ficon" style="background:#eff6ff"><i class="fas fa-comment-dots" style="color:#3b82f6"></i></div><div class="ftext"><h4>{{ __('RSVP Sistemi') }}</h4><p>{{ __('Katılım takibi, anlık bildirim') }}</p></div></div>
+                <div class="feature-card animate-feature" style="transition-delay:0.35s"><div class="ficon" style="background:#fef2f2"><i class="fas fa-video" style="color:#ef4444"></i></div><div class="ftext"><h4>{{ __('Video Desteği') }}</h4><p>{{ __('YouTube videoları ile zenginleştir') }}</p></div></div>
             </div>
         </div>
 
         @php $plans = \App\Models\Plan::active()->get(); @endphp
         @if ($plans->count())
-        <style>
-            .pricing-section { padding: 80px 24px; background: linear-gradient(180deg, #faf9f7 0%, #fff 50%, #faf9f7 100%); position: relative; z-index: 1; }
-            .pricing-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-            .pricing-card { background: #fff; border-radius: 20px; border: 1px solid #eceef2; padding: 32px 28px; text-align: center; transition: all 0.4s; opacity: 0; transform: translateY(20px); position: relative; overflow: hidden; }
-            .pricing-card.visible { opacity: 1; transform: translateY(0); }
-            .pricing-card:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(0,0,0,0.06); border-color: var(--site-primary); }
-            .pricing-card.featured { border-color: var(--site-primary); box-shadow: 0 0 0 1px var(--site-primary), 0 20px 60px rgba(0,0,0,0.04); }
-            .pricing-card .badge { position: absolute; top: 16px; right: 16px; padding: 4px 12px; border-radius: 100px; font-size: 0.7rem; font-weight: 700; background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: #fff; }
-            .pricing-card h3 { font-size: 1.1rem; font-weight: 800; color: #0f1119; margin-bottom: 4px; }
-            .pricing-card .desc { font-size: 0.8rem; color: #8893ac; margin-bottom: 20px; }
-            .pricing-card .p-price { font-size: 2.2rem; font-weight: 900; color: #0f1119; letter-spacing: -0.03em; margin-bottom: 4px; }
-            .pricing-card .p-price .cur { font-size: 0.85rem; font-weight: 600; color: #8893ac; }
-            .pricing-card .p-period { font-size: 0.8rem; color: #b1b8c9; margin-bottom: 20px; }
-            .pricing-card .p-features { list-style: none; padding: 0; margin: 0 0 24px; text-align: left; }
-            .pricing-card .p-features li { padding: 6px 0; font-size: 0.85rem; color: #464e62; display: flex; align-items: center; gap: 8px; }
-            .pricing-card .p-features li .check { color: #10b981; font-weight: 700; }
-            .pricing-card .p-features li .cross { color: #ef4444; font-weight: 700; }
-            .pricing-card .p-btn { display: inline-block; width: 100%; padding: 14px; border-radius: 14px; font-size: 0.9rem; font-weight: 700; text-decoration: none; background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); color: #fff; transition: all 0.3s; box-sizing: border-box; }
-            .pricing-card .p-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba({{ $pr }}, {{ $pg }}, {{ $pb }}, 0.25); }
-            .pricing-card .p-btn-outline { background: transparent; color: #0f1119; border: 1.5px solid #eceef2; }
-            .pricing-card .p-btn-outline:hover { border-color: var(--site-primary); background: rgba(212,166,30,0.04); box-shadow: none; }
-            .pricing-toggle { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 40px; }
-            .pricing-toggle span { font-size: 0.85rem; font-weight: 600; color: #8893ac; }
-            .pricing-toggle span.active { color: #0f1119; }
-            .toggle-switch { width: 48px; height: 26px; border-radius: 13px; background: #d5d9e2; cursor: pointer; position: relative; transition: background 0.3s; }
-            .toggle-switch.active { background: var(--site-primary); }
-            .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-            .toggle-switch.active::after { transform: translateX(22px); }
-            @media (max-width: 768px) { .pricing-grid { grid-template-columns: 1fr; } }
-        </style>
         <div class="pricing-section" id="pricing">
             <div class="section-title animate-reveal">{{ __('Plan ve Fiyatlandırma') }}</div>
             <div class="section-sub animate-reveal">{{ __('İhtiyacına uygun planı seç, hemen başla') }}</div>
@@ -879,20 +904,6 @@
         @endif
 
         @if ($reviews->count())
-        <style>
-            .reviews-section { padding: 80px 24px; background: #fff; position: relative; z-index: 1; }
-            .reviews-grid { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
-            .review-card { background: #faf9f7; border-radius: 18px; border: 1px solid #eceef2; padding: 24px; transition: all 0.3s; opacity: 0; transform: translateY(20px); }
-            .review-card.visible { opacity: 1; transform: translateY(0); }
-            .review-card:hover { border-color: var(--site-primary); box-shadow: 0 8px 32px rgba(0,0,0,0.04); transform: translateY(-2px); }
-            .review-card .review-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-            .review-card .review-avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--site-primary), var(--site-secondary)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
-            .review-card .review-name { font-weight: 700; font-size: 0.9rem; color: #0f1119; }
-            .review-card .review-date { font-size: 0.75rem; color: #b1b8c9; }
-            .review-card .review-stars { display: flex; gap: 3px; margin-left: auto; }
-            .review-card .review-stars span { font-size: 1rem; }
-            .review-card .review-content { font-size: 0.9rem; color: #464e62; line-height: 1.7; }
-        </style>
         <div class="reviews-section" id="reviews">
             <div class="section-title animate-reveal">{{ __('Kullanıcı Yorumları') }}</div>
             <div class="section-sub animate-reveal">{{ __('senin 💝 davetiyen kullanıcılarının deneyimleri') }}</div>
@@ -950,18 +961,7 @@
             </div>
         </div>
 
-        <style>
-            .faq-section { max-width: 720px; margin: 0 auto; padding: 80px 24px; }
-            .faq-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 40px; }
-            .faq-item { display: block; background: #fff; border-radius: 16px; border: 1px solid #eceef2; transition: all 0.3s; }
-            .faq-item[open] { border-color: var(--site-primary); }
-            .faq-item:hover { border-color: var(--site-primary); box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
-            .faq-q { display: flex; padding: 18px 22px; font-size: 0.92rem; font-weight: 700; color: #0f1119; align-items: center; justify-content: space-between; user-select: none; cursor: pointer; list-style: none; }
-            .faq-q::-webkit-details-marker { display: none; }
-            .faq-q::after { content: '+'; font-size: 1.3rem; font-weight: 300; color: #b1b8c9; }
-            .faq-item[open] .faq-q::after { content: '−'; }
-            .faq-a { display: block; padding: 0 22px 18px; font-size: 0.85rem; color: #8893ac; line-height: 1.6; }
-        </style>
+
 
         <div class="contact-section" id="contact">
             <div class="section-title animate-reveal">{{ __('Bize Ulaşın') }}</div>
@@ -971,30 +971,30 @@
                     <form id="contactForm" action="{{ route('contact.store') }}" method="POST">
                         @csrf
                         <div class="form-header">
-                            <div class="icon">✉️</div>
+                            <div class="icon"><i class="fas fa-envelope" style="color:#d4a61e"></i></div>
                             <h3>{{ __('Mesaj Gönder') }}</h3>
                             <p>{{ __('Size nasıl yardımcı olabiliriz?') }}</p>
                         </div>
                         <div class="field-group">
                             <div class="field">
                                 <label>{{ __('Adınız') }}</label>
-                                <span class="input-icon">👤</span>
+                                <span class="input-icon"><i class="fas fa-user" style="color:#3b82f6"></i></span>
                                 <input type="text" name="name" required placeholder="{{ __('Adınız') }}">
                             </div>
                             <div class="field">
                                 <label>{{ __('Telefon') }}</label>
-                                <span class="input-icon">📞</span>
+                                <span class="input-icon"><i class="fas fa-phone" style="color:#ef4444"></i></span>
                                 <input type="tel" name="phone" placeholder="0555 555 55 55">
                             </div>
                         </div>
                         <div class="field full">
                             <label>{{ __('E-posta') }}</label>
-                            <span class="input-icon">📧</span>
+                            <span class="input-icon"><i class="fas fa-envelope" style="color:#8b5cf6"></i></span>
                             <input type="email" name="email" placeholder="ornek@email.com">
                         </div>
                         <div class="field full">
                             <label>{{ __('Mesajınız') }}</label>
-                            <span class="input-icon">💬</span>
+                            <span class="input-icon"><i class="fas fa-comment" style="color:#ec4899"></i></span>
                             <textarea name="message" rows="3" required placeholder="{{ __('Size nasıl yardımcı olabiliriz?') }}"></textarea>
                         </div>
                         <button type="submit">

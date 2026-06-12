@@ -143,9 +143,15 @@
                         @forelse($recent_payments as $p)
                             <div class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50 transition-colors">
                                 <div class="flex items-center gap-3.5 min-w-0">
-                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0">
-                                        {{ strtoupper(substr($p->user->name, 0, 1)) }}
-                                    </div>
+                                    <div class="w-9 h-9 rounded-xl shrink-0 overflow-hidden">
+                                    @if($p->user->photo_url)
+                                        <img src="{{ $p->user->photo_url }}" alt="{{ $p->user->name }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                            {{ $p->user->initial }}
+                                        </div>
+                                    @endif
+                                </div>
                                     <div class="min-w-0">
                                         <div class="text-sm font-semibold text-gray-900 truncate">{{ $p->user->name }}</div>
                                         <div class="text-xs text-gray-400 truncate">{{ $p->plan->name }} • {{ $p->interval === 'yearly' ? 'Yıllık' : 'Aylık' }} • {{ number_format($p->amount, 2) }} TL</div>
@@ -177,8 +183,14 @@
                     @forelse($allPayments as $p)
                         <div class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50 transition-colors">
                             <div class="flex items-center gap-3.5 min-w-0">
-                                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0">
-                                    {{ strtoupper(substr($p->user->name, 0, 1)) }}
+                                <div class="w-9 h-9 rounded-xl shrink-0 overflow-hidden">
+                                    @if($p->user->photo_url)
+                                        <img src="{{ $p->user->photo_url }}" alt="{{ $p->user->name }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                            {{ $p->user->initial }}
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="min-w-0">
                                     <div class="text-sm font-semibold text-gray-900 truncate">{{ $p->user->name }}</div>
@@ -215,9 +227,18 @@
                 @forelse($recent_users as $user)
                     <div class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50 transition-colors">
                         <div class="flex items-center gap-3.5 min-w-0">
-                            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0">
-                                {{ strtoupper(substr($user->name, 0, 1)) }}
-                            </div>
+                                <div class="relative shrink-0">
+                                    @if($user->photo_url)
+                                        <img src="{{ $user->photo_url }}" alt="{{ $user->name }}" class="w-9 h-9 rounded-xl object-cover shadow-sm">
+                                    @else
+                                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                            {{ $user->initial }}
+                                        </div>
+                                    @endif
+                                    @if($user->isOnline())
+                                        <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+                                    @endif
+                                </div>
                             <div class="min-w-0">
                                 <div class="text-sm font-semibold text-gray-900 truncate">{{ $user->name }}</div>
                                 <div class="text-xs text-gray-400 truncate">{{ $user->email }}</div>
@@ -241,30 +262,5 @@
             </div>
         </div>
 
-        <div class="glass-card overflow-hidden">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                <h3 class="font-semibold text-sm text-gray-900 flex items-center gap-2.5">
-                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs" style="background:#ecfdf5;color:#059669">💌</span>
-                    Son Davetiyeler
-                </h3>
-                <a href="{{ route('admin.users.index') }}" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">Tümünü Gör →</a>
-            </div>
-            <div class="divide-y divide-gray-50">
-                @forelse($recent_invitations as $inv)
-                    <div class="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50 transition-colors">
-                        <div class="min-w-0">
-                            <div class="text-sm font-semibold text-gray-900 truncate">{{ $inv->title }}</div>
-                            <div class="text-xs text-gray-400 mt-0.5 truncate">{{ $inv->user->name }} • {{ $inv->views }} görüntülenme</div>
-                        </div>
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg shrink-0 {{ $inv->is_published ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-400' }}">
-                            <span class="w-1.5 h-1.5 rounded-full {{ $inv->is_published ? 'bg-emerald-500' : 'bg-gray-300' }}"></span>
-                            {{ $inv->is_published ? 'Yayında' : 'Taslak' }}
-                        </span>
-                    </div>
-                @empty
-                    <div class="px-6 py-10 text-center text-gray-400 text-sm">Henüz davetiye yok</div>
-                @endforelse
-            </div>
-        </div>
     </div>
 </x-admin-layout>

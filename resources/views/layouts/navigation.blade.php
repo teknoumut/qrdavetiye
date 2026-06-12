@@ -33,7 +33,13 @@
 
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" @click.outside="open = false" class="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2 rounded-xl text-sm font-medium text-night-600 dark:text-cream-200 bg-gold-50/50 dark:bg-gold-500/5 hover:bg-gold-50 dark:hover:bg-gold-500/10 border border-gold-200/50 dark:border-gold-500/10 hover:border-gold-300 dark:hover:border-gold-500/20 transition-all duration-200">
-                        <span class="w-7 h-7 rounded-lg bg-gradient-to-br from-gold-300 to-rose-400 flex items-center justify-center text-xs font-bold text-white shadow-sm">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold text-white shadow-sm overflow-hidden">
+                            @if(Auth::user()->photo_url)
+                                <img src="{{ Auth::user()->photo_url }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                            @else
+                                <span class="w-full h-full bg-gradient-to-br from-gold-300 to-rose-400 flex items-center justify-center">{{ Auth::user()->initial }}</span>
+                            @endif
+                        </span>
                         <span class="hidden sm:block">{{ Auth::user()->name }}</span>
                         <svg class="w-4 h-4 text-night-400 dark:text-cream-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>
@@ -86,7 +92,13 @@
         </div>
         <div class="border-t border-cream-200 dark:border-night-700 px-4 py-3">
             <div class="flex items-center gap-3 px-4 mb-3">
-                <span class="w-9 h-9 rounded-lg bg-gradient-to-br from-gold-300 to-rose-400 flex items-center justify-center text-sm font-bold text-white shadow-sm">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                <span class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold text-white shadow-sm overflow-hidden">
+                    @if(Auth::user()->photo_url)
+                        <img src="{{ Auth::user()->photo_url }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                    @else
+                        <span class="w-full h-full bg-gradient-to-br from-gold-300 to-rose-400 flex items-center justify-center">{{ Auth::user()->initial }}</span>
+                    @endif
+                </span>
                 <div>
                     <div class="text-sm font-semibold text-night-900 dark:text-cream-100">{{ Auth::user()->name }}</div>
                     <div class="text-xs text-night-400 dark:text-cream-400">{{ Auth::user()->email }}</div>

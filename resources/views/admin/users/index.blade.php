@@ -26,8 +26,17 @@
                     <tr>
                         <td>
                             <div class="flex items-center gap-3" style="white-space:nowrap">
-                                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0">
-                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                <div class="relative shrink-0">
+                                    @if($user->photo_url)
+                                        <img src="{{ $user->photo_url }}" alt="{{ $user->name }}" class="w-9 h-9 rounded-xl object-cover shadow-sm">
+                                    @else
+                                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                            {{ $user->initial }}
+                                        </div>
+                                    @endif
+                                    @if($user->isOnline())
+                                        <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+                                    @endif
                                 </div>
                                 <div class="font-medium" style="overflow:hidden;text-overflow:ellipsis">{{ $user->name }}</div>
                                 @if($user->is_admin)<span class="text-[10px] font-semibold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full shrink-0">Admin</span>@endif

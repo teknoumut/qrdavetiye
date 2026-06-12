@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -29,6 +30,8 @@ class User extends Authenticatable
         'subscription_status',
         'cancelled_at',
         'renews_at',
+        'profile_photo_path',
+        'last_seen_at',
     ];
 
     public function plan()
@@ -49,6 +52,7 @@ class User extends Authenticatable
         'subscription_end' => 'datetime',
         'cancelled_at' => 'datetime',
         'renews_at' => 'datetime',
+        'last_seen_at' => 'datetime',
     ];
 
     public function invitations()
@@ -131,5 +135,38 @@ class User extends Authenticatable
             self::STATUS_EXPIRED => 'red',
             default => 'gray',
         };
+    }
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if ($this->profile_photo_path) {
+            return Storage::url($this->profile_photo_path);
+        }
+
+        return null;
+    }
+
+    public function getInitialAttribute(): string
+    {
+        return strtoupper(substr($this->name, 0, 1));
+    }
+
+    public function isOnline(int $minutes = 5): bool
+    {
+        return $this->last_seen_at && now()->diffInMinutes($this->last_seen_at) <= $minutes;
+    }
+
+    public function scopeOnline($query, int $minutes = 5)
+    {
+        return $query->whereNotNull('last_seen_at')
+            ->where('last_seen_at', '>=', now()->subMinutes($minutes));
+    }
+
+    public function scopeOffline($query, int $minutes = 5)
+    {
+        return $query->where(function ($q) use ($minutes) {
+            $q->whereNull('last_seen_at')
+                ->orWhere('last_seen_at', '<', now()->subMinutes($minutes));
+        });
     }
 }

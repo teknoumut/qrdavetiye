@@ -2,7 +2,13 @@
     <div class="max-w-4xl mx-auto py-8">
         <div class="bg-white dark:bg-night-800 rounded-2xl shadow-sm border border-cream-200 dark:border-night-700 p-8 mb-8">
             <div class="flex items-center gap-5">
-                <span class="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-300 to-rose-400 flex items-center justify-center text-2xl font-bold text-white shadow-lg">{{ substr($user->name, 0, 1) }}</span>
+                <span class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden">
+                    @if($user->photo_url)
+                        <img src="{{ $user->photo_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                    @else
+                        <span class="w-full h-full bg-gradient-to-br from-gold-300 to-rose-400 flex items-center justify-center">{{ $user->initial }}</span>
+                    @endif
+                </span>
                 <div>
                     <h1 class="text-2xl font-bold text-night-900 dark:text-cream-100">{{ $user->name }}</h1>
                     <p class="text-night-400 dark:text-cream-400">Üye: {{ $user->created_at->format('d M Y') }}</p>

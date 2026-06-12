@@ -6,6 +6,39 @@
         </div>
     </x-slot>
     <div class="bg-white border border-gray-200 rounded-2xl p-8 max-w-2xl">
+        <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
+            <div class="relative">
+                @if($user->photo_url)
+                    <img src="{{ $user->photo_url }}" alt="{{ $user->name }}" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200">
+                @else
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white text-xl font-bold">
+                        {{ $user->initial }}
+                    </div>
+                @endif
+                @if($user->isOnline())
+                    <span class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></span>
+                @endif
+            </div>
+            <div>
+                <div class="text-lg font-bold text-gray-900">{{ $user->name }}</div>
+                <div class="text-sm text-gray-500">{{ $user->email }}</div>
+                @if($user->isOnline())
+                    <span class="inline-flex items-center gap-1 mt-1 text-xs font-semibold text-emerald-600">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        Çevrimiçi
+                    </span>
+                @else
+                    <span class="inline-flex items-center gap-1 mt-1 text-xs font-semibold text-gray-400">
+                        <span class="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
+                        @if($user->last_seen_at)
+                            {{ $user->last_seen_at->diffForHumans() }}
+                        @else
+                            Hiç çevrimiçi olmadı
+                        @endif
+                    </span>
+                @endif
+            </div>
+        </div>
         <form action="{{ route('admin.users.update', $user) }}" method="POST">
             @csrf @method('PUT')
             <div class="mb-5">

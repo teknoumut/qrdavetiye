@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
             VerifyCsrfToken::class,
             SubstituteBindings::class,
             TrackVisits::class,
+            UpdateLastSeen::class,
         ],
 
         'api' => [

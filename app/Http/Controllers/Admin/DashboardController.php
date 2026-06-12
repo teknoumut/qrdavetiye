@@ -35,7 +35,6 @@ class DashboardController extends Controller
             'today_visits' => PageVisit::whereDate('created_at', today())->count(),
             'pending_refunds' => Invoice::where('refund_status', 'requested')->count(),
             'recent_users' => User::latest()->take(5)->get(),
-            'recent_invitations' => Invitation::with('user')->latest()->take(5)->get(),
             'pending_payments' => PaymentNotification::pending()->count(),
             'recent_payments' => PaymentNotification::with(['user', 'plan'])->pending()->latest()->take(5)->get(),
             'total_revenue' => PaymentNotification::approved()->sum('amount'),

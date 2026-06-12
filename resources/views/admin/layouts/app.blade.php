@@ -487,7 +487,16 @@
                         <div class="user-name">{{ Auth::user()->name }}</div>
                         <div class="user-role">Yönetici</div>
                     </div>
-                    <div class="avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
+                    <div class="avatar relative">
+                        @if(Auth::user()->photo_url)
+                            <img src="{{ Auth::user()->photo_url }}" alt="{{ Auth::user()->name }}" class="w-full h-full rounded-[10px] object-cover">
+                        @else
+                            {{ Auth::user()->initial }}
+                        @endif
+                        @if(Auth::user()->isOnline())
+                            <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+                        @endif
+                    </div>
                 </div>
             </div>
         </header>

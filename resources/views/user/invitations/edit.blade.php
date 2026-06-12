@@ -710,7 +710,7 @@
                                 </div>
                                 <div class="flex items-center justify-between py-3">
                                     <span class="text-sm text-night-400 dark:text-cream-400 flex items-center gap-2"><span>💌</span> RSVP</span>
-                                    <span class="text-sm font-bold text-night-900 dark:text-cream-100 tabular-nums">{{ $invitation->rsvps_count ?? $invitation->rsvps()->count() }}</span>
+                                    <span class="text-sm font-bold text-night-900 dark:text-cream-100 tabular-nums">{{ $invitation->rsvps_count }}</span>
                                 </div>
                             </div>
                         </div>

@@ -19,7 +19,8 @@ class InvitationPublicController extends Controller
 
     public function show($slug)
     {
-        $invitation = Invitation::where('slug', $slug)
+        $invitation = Invitation::with(['images', 'videos', 'music'])
+            ->where('slug', $slug)
             ->where('is_published', true)
             ->where('is_active', true)
             ->firstOrFail();

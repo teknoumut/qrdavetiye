@@ -156,6 +156,8 @@ class InvitationController extends Controller
             abort(403);
         }
 
+        $invitation->load(['images', 'videos', 'music'])->loadCount('rsvps');
+
         $themes = InvitationTheme::where('is_active', true)->get();
         $plans = Plan::where('is_active', true)->get();
         $userPlan = auth()->user()->plan;

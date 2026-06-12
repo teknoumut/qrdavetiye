@@ -5,7 +5,7 @@
     $g = max(0, hexdec(substr($hex, 2, 2)) - 20);
     $b = max(0, hexdec(substr($hex, 4, 2)) - 30);
     $primaryDark = sprintf('#%02x%02x%02x', $r, $g, $b);
-    $isBlacksword = $invitation->font_family && str_contains($invitation->font_family, 'Blacksword');
+    $isBlacksword = str_contains($fontFamily, 'Blacksword');
     $fixText = function($txt) use ($isBlacksword) {
         return $isBlacksword ? str_replace(['ı', 'İ'], ['i', 'İ'], $txt ?? '') : ($txt ?? '');
     };
@@ -21,6 +21,55 @@
         'graduation' => ['title' => 'Mezuniyet Davetiyesi', 'slug' => 'Mezuniyet', 'sub' => 'Mezuniyet Sevincini Paylaşın', 'couple' => false, 'parents' => true, 'showStory' => false, 'locationLabel' => 'Mezuniyet Yeri', 'countdownLabel' => 'Mezuniyet Günü', 'rsvpIcon' => '🎓'],
     ];
     $ev = $eventLabels[$eventType] ?? $eventLabels['wedding'];
+
+    $fontFamily = $invitation->font_family ?: 'Playfair Display';
+
+    $googleFontParams = [
+        'Cormorant Garamond' => 'ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500',
+        'Playfair Display' => 'ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+        'Great Vibes' => '',
+        'Montserrat' => 'wght@300;400;500;600',
+        'Lora' => 'ital,wght@0,400;0,500;0,600;1,400;1,500',
+        'Poppins' => 'wght@300;400;500;600;700',
+        'Inter' => 'wght@300;400;500;600;700',
+        'Manrope' => 'wght@300;400;500;600;700',
+        'Outfit' => 'wght@300;400;500;600;700',
+        'Plus Jakarta Sans' => 'wght@300;400;500;600;700',
+        'Cinzel' => 'wght@400;500;600;700',
+        'Bodoni Moda' => 'ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+        'DM Serif Display' => '',
+        'Space Grotesk' => 'wght@300;400;500;600;700',
+        'Sora' => 'wght@300;400;500;600;700',
+        'Exo 2' => 'wght@300;400;500;600;700',
+        'Orbitron' => 'wght@400;500;600;700',
+        'Rajdhani' => 'wght@300;400;500;600;700',
+        'Bebas Neue' => '',
+        'Anton' => '',
+        'League Spartan' => 'wght@300;400;500;600;700',
+        'Oswald' => 'wght@300;400;500;600;700',
+        'Teko' => 'wght@300;400;500;600;700',
+        'Allura' => '',
+        'Parisienne' => '',
+        'Alex Brush' => '',
+    ];
+
+    $gfUrl = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500';
+    if (isset($googleFontParams[$fontFamily])) {
+        $param = $googleFontParams[$fontFamily];
+        $slug = str_replace(' ', '+', $fontFamily);
+        $gfUrl .= '&family=' . $slug . ($param ? ':' . $param : '');
+    }
+    $gfUrl .= '&display=swap';
+
+    $cdnFontSlugs = [
+        'Brittany Signature' => 'brittany-signature',
+        'Anydore' => 'anydore',
+        'Blacksword' => 'blacksword',
+    ];
+    $cdnFontUrl = null;
+    if (isset($cdnFontSlugs[$fontFamily])) {
+        $cdnFontUrl = 'https://fonts.cdnfonts.com/css/' . $cdnFontSlugs[$fontFamily];
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="tr">
@@ -38,10 +87,8 @@
     @endif
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Serif+Display&family=Space+Grotesk:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Bebas+Neue&family=Anton&family=League+Spartan:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&family=Teko:wght@300;400;500;600;700&family=Allura&family=Parisienne&family=Alex+Brush&display=swap" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/brittany-signature" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/anydore" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/blacksword" rel="stylesheet">
+    <link href="{{ $gfUrl }}" rel="stylesheet">
+    @if($cdnFontUrl)<link href="{{ $cdnFontUrl }}" rel="stylesheet">@endif
     <style>
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,7 +98,7 @@
             --primary-dark: {{ $primaryDark }};
             --bg: {{ $invitation->secondary_color ?: '#fefcf8' }};
             --font-body: 'Cormorant Garamond', serif;
-            --font-display: '{{ $invitation->font_family ?: "Playfair Display" }}', serif;
+            --font-display: '{{ $fontFamily }}', serif;
             --envelope-text: {{ $invitation->envelope_text_color ?: '#333333' }};
         }
 
@@ -608,7 +655,7 @@
             max-width: 90%;
             font-family: 'Montserrat', sans-serif;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -661,7 +708,7 @@
         .floating-letter .letter-names { font-family: var(--font-display); font-size: 1rem; color: #555; }
         .floating-letter .letter-names .ampersand { font-family: 'Anydore', cursive; font-size: 1.4rem; color: var(--primary); display: inline-block; line-height: 1; }
         .floating-letter .letter-sub { font-size: 0.6rem; color: #999; letter-spacing: 3px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; margin-top: 6px; font-weight: 500; }
-        .floating-letter .letter-msg { font-size: 0.6rem; color: #888; line-height: 1.5; margin-top: 6px; max-width: 85%; font-family: 'Montserrat', sans-serif; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .floating-letter .letter-msg { font-size: 0.6rem; color: #888; line-height: 1.5; margin-top: 6px; max-width: 85%; font-family: 'Montserrat', sans-serif; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .floating-letter .letter-deco {
             width: 36px; height: 1.5px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
@@ -1263,7 +1310,7 @@
                         <div class="names">@if($ev['couple']){{ $fixName($invitation->groom_name) }} <span class="ampersand">&</span> {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@if($eventType === 'birthday' && $invitation->bride_name) <span style="font-size:0.5em;opacity:0.6;display:block;margin-top:2px;">{{ $invitation->bride_name }} Yaşında</span>@endif @endif</div>
                         <div class="sub">{{ $ev['title'] }}</div>
                         @if($invitation->welcome_message)
-                            <div class="env-message">{{ Str::limit(strip_tags($invitation->welcome_message), 120) }}</div>
+                            <div class="env-message">{{ Str::limit(strip_tags($invitation->welcome_message), 200) }}</div>
                         @endif
                     </div>
             </div>
@@ -1273,7 +1320,7 @@
                 <div class="letter-names">@if($ev['couple']){{ $fixName($invitation->groom_name) }}<br><span class="ampersand">&</span><br>{{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@if($eventType === 'birthday' && $invitation->bride_name)<br><span style="font-size:0.7rem;opacity:0.6;">{{ $invitation->bride_name }} Yaşında</span>@endif @endif</div>
                 <div class="letter-sub">{{ $ev['sub'] }}</div>
                 @if($invitation->welcome_message)
-                    <div class="letter-msg">{{ Str::limit(strip_tags($invitation->welcome_message), 100) }}</div>
+                    <div class="letter-msg">{{ Str::limit(strip_tags($invitation->welcome_message), 180) }}</div>
                 @endif
             </div>
         </div>

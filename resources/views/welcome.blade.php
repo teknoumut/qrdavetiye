@@ -45,6 +45,7 @@
         <div class="hidden md:flex items-center gap-1">
             <a href="#how" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('Nasıl Çalışır?') }}</a>
             <a href="#features" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('Özellikler') }}</a>
+            <a href="#events" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('Etkinlikler') }}</a>
             <a href="#pricing" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('Fiyatlandırma') }}</a>
             <a href="#faq" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('SSS') }}</a>
             <a href="#contact" class="px-3 py-2 text-sm font-medium text-night-500 no-underline rounded-lg transition-all hover:bg-black/5 hover:text-gold-500">{{ __('İletişim') }}</a>
@@ -68,6 +69,7 @@
     <div id="mobileMenu" class="mobile-menu fixed left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-b border-black/[0.04] shadow-lg px-4 py-4 flex flex-col gap-1" style="top:0; padding-top:70px;">
         <a href="#how" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('Nasıl Çalışır?') }}</a>
         <a href="#features" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('Özellikler') }}</a>
+        <a href="#events" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('Etkinlikler') }}</a>
         <a href="#pricing" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('Fiyatlandırma') }}</a>
         <a href="#faq" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('SSS') }}</a>
         <a href="#contact" class="block py-3 px-4 rounded-lg text-base font-medium text-night-500 no-underline transition-colors hover:text-gold-600 hover:bg-gold-50">{{ __('İletişim') }}</a>
@@ -199,6 +201,43 @@
                 <div class="feature-card animate-feature" style="transition-delay:0.25s"><div class="ficon" style="background:#f3f4f6"><i class="fas fa-map-marker-alt" style="color:#111827"></i></div><div class="ftext"><h4>{{ __('Konum') }}</h4><p>{{ __('Harita entegrasyonu ile adres göster') }}</p></div></div>
                 <div class="feature-card animate-feature" style="transition-delay:0.3s"><div class="ficon" style="background:#eff6ff"><i class="fas fa-comment-dots" style="color:#3b82f6"></i></div><div class="ftext"><h4>{{ __('RSVP Sistemi') }}</h4><p>{{ __('Katılım takibi, anlık bildirim') }}</p></div></div>
                 <div class="feature-card animate-feature" style="transition-delay:0.35s"><div class="ficon" style="background:#fef2f2"><i class="fas fa-video" style="color:#ef4444"></i></div><div class="ftext"><h4>{{ __('Video Desteği') }}</h4><p>{{ __('YouTube videoları ile zenginleştir') }}</p></div></div>
+            </div>
+        </div>
+
+        <div class="events-section" id="events">
+            <div class="section-title animate-reveal">{{ __('Etkinlik Türleri') }}</div>
+            <div class="section-sub animate-reveal">{{ __('Her özel gün için özel tasarım') }}</div>
+            <div class="events-grid">
+                <div class="event-card animate-feature" style="--card-accent:#e05278">
+                    <div class="event-icon">💍</div>
+                    <h3>{{ __('Düğün') }}</h3>
+                    <p>{{ __('Aşk dolu bir düğün davetiyesi ile en mutlu gününü sevdiklerinle paylaş') }}</p>
+                </div>
+                <div class="event-card animate-feature" style="--card-accent:#8b5cf6;transition-delay:0.05s">
+                    <div class="event-icon">💍</div>
+                    <h3>{{ __('Nişan') }}</h3>
+                    <p>{{ __('Mutluluğa ilk adımı atan çiftler için şık ve romantik nişan davetiyesi') }}</p>
+                </div>
+                <div class="event-card animate-feature" style="--card-accent:#00b894;transition-delay:0.1s">
+                    <div class="event-icon">✂️</div>
+                    <h3>{{ __('Sünnet') }}</h3>
+                    <p>{{ __('Bu özel günde çocuğun için unutulmaz bir sünnet davetiyesi hazırla') }}</p>
+                </div>
+                <div class="event-card animate-feature" style="--card-accent:#e84393;transition-delay:0.15s">
+                    <div class="event-icon">🎂</div>
+                    <h3>{{ __('Doğum Günü') }}</h3>
+                    <p>{{ __('Renkli ve eğlenceli doğum günü davetiyesi ile kutlamaya herkesi çağır') }}</p>
+                </div>
+                <div class="event-card animate-feature" style="--card-accent:#3b82f6;transition-delay:0.2s">
+                    <div class="event-icon">🏢</div>
+                    <h3>{{ __('Kurumsal') }}</h3>
+                    <p>{{ __('Kurumsal etkinlik, açılış ve organizasyonların için profesyonel davetiye') }}</p>
+                </div>
+                <div class="event-card animate-feature" style="--card-accent:#6c5ce7;transition-delay:0.25s">
+                    <div class="event-icon">🎓</div>
+                    <h3>{{ __('Mezuniyet') }}</h3>
+                    <p>{{ __('Mezuniyet sevincini ailene ve arkadaşlarına özel bir davetiye ile duyur') }}</p>
+                </div>
             </div>
         </div>
 

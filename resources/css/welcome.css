@@ -398,6 +398,20 @@ body { font-family: 'Figtree', sans-serif; overflow-x: hidden; background: #faf9
 .feature-card .ftext h4 { font-size: 0.9rem; font-weight: 700; color: #0f1119; margin-bottom: 4px; }
 .feature-card .ftext p { font-size: 0.8rem; color: #8893ac; line-height: 1.5; }
 
+.events-section { padding: 80px 24px; background: #fff; position: relative; z-index: 1; }
+.events-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.event-card {
+    padding: 32px 24px; border-radius: 18px; text-align: center;
+    background: #faf9f7; border: 1px solid #eceef2;
+    border-top: 3px solid var(--card-accent);
+    transition: all 0.4s ease; opacity: 0; transform: translateY(20px);
+    user-select: none;
+}
+.event-card.visible { opacity: 1; transform: translateY(0); }
+.event-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.06); border-color: var(--card-accent); }
+.event-card .event-icon { font-size: 2.4rem; margin-bottom: 14px; display: block; }
+.event-card h3 { font-size: 1.05rem; font-weight: 700; color: #0f1119; margin-bottom: 8px; }
+.event-card p { font-size: 0.85rem; color: #8893ac; line-height: 1.6; margin: 0; }
 .contact-section {
     padding: 100px 24px; background: #fff; position: relative; z-index: 1;
     overflow: hidden;

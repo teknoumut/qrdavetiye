@@ -88,10 +88,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="{{ $gfUrl }}" rel="stylesheet">
     @if($cdnFontUrl)<link href="{{ $cdnFontUrl }}" rel="stylesheet">@endif
+    <link href="{{ asset('css/invitation.css') }}" rel="stylesheet">
     <style>
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
             --primary: {{ $primaryColor }};
             --primary-dark: {{ $primaryDark }};
@@ -100,8 +98,10 @@
             --font-display: '{{ $fontFamily }}', serif;
             --envelope-text: {{ $invitation->envelope_text_color ?: '#333333' }};
         }
-
+    </style>
+    <style>
         body {
+
             font-family: var(--font-body);
             background: var(--bg);
             color: #2d2a24;
@@ -1276,6 +1276,18 @@
         $envelopeAnim = $invitation->envelope_animation ?: 'classic';
         $envelopePattern = $invitation->envelope_pattern ?: '';
         $customPatternUrl = $invitation->custom_pattern ? \Illuminate\Support\Facades\Storage::url($invitation->custom_pattern) : '';
+        function embedUrl($url) {
+            if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $m)) {
+                return 'https://www.youtube-nocookie.com/embed/'.$m[1];
+            }
+            return $url;
+        }
+        $coverVideoUrl = $invitation->cover_video && str_starts_with($invitation->cover_video, 'http')
+            ? embedUrl($invitation->cover_video) : '';
+        $coverYtId = '';
+        if ($coverVideoUrl && preg_match('/\/embed\/([a-zA-Z0-9_-]+)/', $coverVideoUrl, $m)) {
+            $coverYtId = $m[1];
+        }
         $eventMusicLabels = [
             'wedding' => '🎵 Düğün Şarkısı',
             'engagement' => '🎵 Nişan Şarkısı',
@@ -1330,9 +1342,20 @@
         <div class="cover-section">
             <div class="cover-bg"></div>
             @if($invitation->cover_video)
-                <video class="cover-video" autoplay muted loop playsinline preload="metadata">
-                    <source src="{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_video) }}" type="{{ str_ends_with($invitation->cover_video, '.webm') ? 'video/webm' : (str_ends_with($invitation->cover_video, '.mov') ? 'video/quicktime' : 'video/mp4') }}">
-                </video>
+                @if(str_starts_with($invitation->cover_video, 'http'))
+                    <div class="cover-video">
+                        <iframe src="{{ $coverVideoUrl }}?autoplay=1&mute=1&loop=1&playlist={{ $coverYtId }}&controls=0&showinfo=0&rel=0"
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"
+                            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
+                            referrerpolicy="no-referrer-when-downgrade"
+                            sandbox="allow-same-origin allow-scripts allow-popups allow-presentation">
+                        </iframe>
+                    </div>
+                @else
+                    <video class="cover-video" autoplay muted loop playsinline preload="metadata">
+                        <source src="{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_video) }}" type="{{ str_ends_with($invitation->cover_video, '.webm') ? 'video/webm' : (str_ends_with($invitation->cover_video, '.mov') ? 'video/quicktime' : 'video/mp4') }}">
+                    </video>
+                @endif
             @endif
             <div class="cover-overlay"></div>
             <div class="cover-deco"></div>
@@ -1450,11 +1473,13 @@
                 <div class="divider"></div>
                 <div class="gallery">
                     @php
-                        function nocookieEmbedUrl($url) {
-                            if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $m)) {
-                                return 'https://www.youtube-nocookie.com/embed/'.$m[1];
+                        if (!function_exists('nocookieEmbedUrl')) {
+                            function nocookieEmbedUrl($url) {
+                                if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $m)) {
+                                    return 'https://www.youtube-nocookie.com/embed/'.$m[1];
+                                }
+                                return $url;
                             }
-                            return $url;
                         }
                     @endphp
                     @foreach($invitation->videos as $video)

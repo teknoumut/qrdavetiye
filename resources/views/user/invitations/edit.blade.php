@@ -418,22 +418,53 @@
                                     </div>
 
                                     @if(auth()->user()->plan?->cover_video_feature)
+                                        @php
+                                            $cv = $invitation->cover_video;
+                                            $cvIsUrl = $cv && str_starts_with($cv, 'http');
+                                            $cvEmbedUrl = '';
+                                            if ($cvIsUrl && preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $cv, $m)) {
+                                                $cvEmbedUrl = 'https://www.youtube-nocookie.com/embed/'.$m[1];
+                                            }
+                                        @endphp
                                         <div>
                                             <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Kapak Videosu (Premium)') }}</label>
-                                            @if($invitation->cover_video)
+                                            @if($cv)
                                                 <div class="mb-3 rounded-xl overflow-hidden shadow-sm border border-cream-200 dark:border-night-700 bg-black/5">
-                                                    <video class="w-full h-48 object-cover" muted loop preload="metadata">
-                                                        <source src="{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_video) }}" type="{{ str_ends_with($invitation->cover_video, '.webm') ? 'video/webm' : (str_ends_with($invitation->cover_video, '.mov') ? 'video/quicktime' : 'video/mp4') }}">
-                                                    </video>
+                                                    @if($cvEmbedUrl)
+                                                        <div style="position:relative;padding-bottom:56.25%;height:0;">
+                                                            <iframe src="{{ $cvEmbedUrl }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe>
+                                                        </div>
+                                                    @else
+                                                        <video class="w-full h-48 object-cover" muted loop preload="metadata">
+                                                            <source src="{{ \Illuminate\Support\Facades\Storage::url($cv) }}" type="{{ str_ends_with($cv, '.webm') ? 'video/webm' : (str_ends_with($cv, '.mov') ? 'video/quicktime' : 'video/mp4') }}">
+                                                        </video>
+                                                    @endif
                                                 </div>
                                             @endif
-                                            <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-cream-200 dark:border-night-700 rounded-xl cursor-pointer bg-cream-50/50 dark:bg-night-900/50 hover:border-gold-400 hover:bg-gold-50/50 dark:hover:bg-gold-500/5 transition-all group">
-                                                <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🎬</span>
-                                                <span class="text-sm text-night-400 dark:text-cream-400 font-medium">{{ __('Kapak videosu yükle') }}</span>
-                                                <span class="text-xs text-night-300 dark:text-night-500 mt-0.5">{{ __('MP4, WebM, MOV - maks. 100MB') }}</span>
-                                                <input type="file" name="cover_video" accept="video/mp4,video/webm,video/quicktime" class="hidden" onchange="this.parentElement.querySelectorAll('span')[1].textContent = this.files[0].name">
-                                            </label>
-                                            @error('cover_video')
+                                            <div class="space-y-4">
+                                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-cream-200 dark:border-night-700 rounded-xl cursor-pointer bg-cream-50/50 dark:bg-night-900/50 hover:border-gold-400 hover:bg-gold-50/50 dark:hover:bg-gold-500/5 transition-all group">
+                                                    <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">🎬</span>
+                                                    <span class="text-sm text-night-400 dark:text-cream-400 font-medium">{{ __('Kapak videosu yükle') }}</span>
+                                                    <span class="text-xs text-night-300 dark:text-night-500 mt-0.5">{{ __('MP4, WebM, MOV - maks. 100MB') }}</span>
+                                                    <input type="file" name="cover_video_file" accept="video/mp4,video/webm,video/quicktime" class="hidden" onchange="this.parentElement.querySelectorAll('span')[1].textContent = this.files[0].name">
+                                                </label>
+                                                <div class="flex items-center gap-3">
+                                                    <div class="flex-1 h-px bg-cream-200 dark:border-night-700"></div>
+                                                    <span class="text-xs font-semibold text-night-300 dark:text-cream-500">{{ __('VEYA') }}</span>
+                                                    <div class="flex-1 h-px bg-cream-200 dark:border-night-700"></div>
+                                                </div>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                                                        <span class="text-lg">🔗</span>
+                                                    </div>
+                                                    <input type="url" name="cover_video_url" value="{{ $cvIsUrl ? $cv : '' }}" placeholder="https://www.youtube.com/watch?v=..." class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-700 dark:text-cream-200 placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-200/50 dark:focus:ring-gold-500/20 outline-none transition-all text-sm">
+                                                </div>
+                                                <p class="text-xs text-night-300 dark:text-night-500 text-center -mt-1">{{ __('YouTube video linkini yapıştır, otomatik olarak kapak videon olarak gösterilsin') }}</p>
+                                            </div>
+                                            @error('cover_video_file')
+                                                <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
+                                            @enderror
+                                            @error('cover_video_url')
                                                 <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
                                             @enderror
                                         </div>

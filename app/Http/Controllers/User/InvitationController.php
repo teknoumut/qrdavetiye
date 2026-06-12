@@ -103,7 +103,8 @@ class InvitationController extends Controller
             'primary_color' => 'nullable|string|max:7',
             'secondary_color' => 'nullable|string|max:7',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:131072',
-            'cover_video' => 'nullable|file|mimes:mp4,webm,mov|max:102400',
+            'cover_video_file' => 'nullable|file|mimes:mp4,webm,mov|max:102400',
+            'cover_video_url' => 'nullable|url',
             'envelope_pattern' => 'nullable|string|max:50',
             'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
             'corner_decoration' => 'nullable|image|mimes:png,webp|max:5120',
@@ -118,9 +119,11 @@ class InvitationController extends Controller
                 ->store('invitations/covers', 'public');
         }
 
-        if ($request->hasFile('cover_video')) {
-            $data['cover_video'] = $request->file('cover_video')
+        if ($request->hasFile('cover_video_file')) {
+            $data['cover_video'] = $request->file('cover_video_file')
                 ->store('invitations/covers', 'public');
+        } elseif ($request->filled('cover_video_url')) {
+            $data['cover_video'] = $request->cover_video_url;
         }
 
         if ($request->hasFile('custom_pattern')) {
@@ -204,7 +207,8 @@ class InvitationController extends Controller
             'primary_color' => 'nullable|string|max:7',
             'secondary_color' => 'nullable|string|max:7',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:131072',
-            'cover_video' => 'nullable|file|mimes:mp4,webm,mov|max:102400',
+            'cover_video_file' => 'nullable|file|mimes:mp4,webm,mov|max:102400',
+            'cover_video_url' => 'nullable|url',
             'envelope_pattern' => 'nullable|string|max:50',
             'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
             'corner_decoration' => 'nullable|image|mimes:png,webp|max:5120',
@@ -219,12 +223,19 @@ class InvitationController extends Controller
                 ->store('invitations/covers', 'public');
         }
 
-        if ($request->hasFile('cover_video')) {
-            if ($invitation->cover_video) {
-                Storage::disk('public')->delete($invitation->cover_video);
+        $oldCoverVideo = $invitation->cover_video;
+
+        if ($request->hasFile('cover_video_file')) {
+            if ($oldCoverVideo && !str_starts_with($oldCoverVideo, 'http')) {
+                Storage::disk('public')->delete($oldCoverVideo);
             }
-            $data['cover_video'] = $request->file('cover_video')
+            $data['cover_video'] = $request->file('cover_video_file')
                 ->store('invitations/covers', 'public');
+        } elseif ($request->filled('cover_video_url')) {
+            if ($oldCoverVideo && !str_starts_with($oldCoverVideo, 'http')) {
+                Storage::disk('public')->delete($oldCoverVideo);
+            }
+            $data['cover_video'] = $request->cover_video_url;
         }
 
         if ($request->hasFile('custom_pattern')) {

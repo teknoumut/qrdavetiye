@@ -251,7 +251,7 @@
             color: #4f46e5;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .login-card h2 {
@@ -439,7 +439,24 @@
             }
 
             .login-right {
-                padding: 32px 24px;
+                padding: 24px 24px;
+            }
+
+            .login-right .login-card {
+                text-align: center;
+            }
+
+            .login-right .login-card h2 {
+                margin-bottom: 8px;
+            }
+
+            .login-right .login-card .subtitle {
+                margin-bottom: 24px;
+            }
+
+            .login-right .login-card .form-group {
+                margin-bottom: 16px;
+                text-align: left;
             }
 
             .login-right::before {

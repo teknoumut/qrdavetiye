@@ -27,7 +27,7 @@
         }
 
         .login-left {
-            flex: 1.1;
+            width: 50%;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -215,8 +215,9 @@
         }
 
         .login-right {
-            flex: 0.9;
+            width: 45%;
             display: flex;
+            margin-top:4em;
             align-items: center;
             justify-content: center;
             padding: 60px;
@@ -224,15 +225,7 @@
             position: relative;
         }
 
-        .login-right::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa);
-        }
+
 
         .login-card {
             width: 100%;
@@ -258,13 +251,19 @@
             font-size: 1.65rem;
             font-weight: 800;
             color: #0f172a;
-            margin-bottom: 6px;
+            margin-bottom: 16px;
             letter-spacing: -0.02em;
         }
 
         .login-card .subtitle {
             color: #64748b;
             font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .login-card>p:last-of-type {
+            margin-top: 0 !important;
+            margin-bottom: 16px;
         }
 
         .login-card .form-group {
@@ -438,7 +437,7 @@
             }
 
             .login-right {
-                padding: 8px 24px;
+                padding: 0 24px 16px;
             }
 
             .login-right .login-card {
@@ -446,21 +445,24 @@
             }
 
             .login-right .login-card h2 {
-                margin-bottom: 8px;
+                margin-bottom: 12px;
             }
 
             .login-right .login-card .subtitle {
-                margin-bottom: 24px;
+                margin-bottom: 0;
+            }
+
+            .login-right .login-card p:last-of-type {
+                margin-top: 12px !important;
+                margin-bottom: 12px;
             }
 
             .login-right .login-card .form-group {
-                margin-bottom: 16px;
+                margin-bottom: 20px;
                 text-align: left;
             }
 
-            .login-right::before {
-                display: none;
-            }
+
         }
     </style>
 </head>
@@ -489,11 +491,14 @@
                 </div>
             </div>
         </div>
-        <div class="login-right">
+        <div class="login-right flex justify-center mx-auto">
             <div class="login-card">
-                <h2>Hoş Geldiniz</h2>
+                <div class="flex gap-3 flex-col mb-5">
+                         <h2>Hoş Geldiniz</h2>
                 <p class="subtitle">Hesabınıza giriş yaparak davetiyenizi yönetin</p>
-                <p style="text-align:center;margin-top:4px;font-size:0.75rem;color:#94a3b8">Hesabınız varsa giriş yapın. Hesabınız yoksa yöneticinizle iletişime geçin.</p>
+                <p style="margin-top:4px;font-size:0.75rem;color:#94a3b8">Hesabınız varsa giriş yapın. Hesabınız yoksa yöneticinizle iletişime geçin.</p>
+                </div>
+                
 
                 @if(session('status'))
                 <div class="success-msg">{{ session('status') }}</div>
@@ -507,11 +512,11 @@
                 </div>
                 @endif
 
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('login') }}" class="gap-4 flex flex-col">
                     @csrf
-                    <div class="form-group">
+                    <div class="form-group  ">
                         <label for="email">E-posta Adresi</label>
-                        <div class="input-wrap">
+                        <div class="input-wrap ">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>

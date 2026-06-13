@@ -219,7 +219,7 @@
     <div class="register-wrap">
         <div class="logo">
             <a href="/">
-                <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-7 h-7 object-contain inline-block align-middle">
+                <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-9 h-9 object-contain inline-block align-middle">
                 senin 💝 davetiyen
             </a>
         </div>

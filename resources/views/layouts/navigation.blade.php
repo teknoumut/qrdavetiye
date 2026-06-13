@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
-                <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-8 h-8 sm:w-9 sm:h-9 object-contain">
+                <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-10 h-10 sm:w-11 sm:h-11 object-contain">
                 <span class="font-bold text-base sm:text-lg tracking-tight text-night-900 dark:text-cream-100 hidden sm:block">senin 💝 davetiyen</span>
             </a>
 
@@ -128,7 +128,7 @@
 <div class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-night-800/80 backdrop-blur-xl border-b border-cream-200 dark:border-night-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
-            <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-8 h-8 sm:w-9 sm:h-9 object-contain">
+            <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-10 h-10 sm:w-11 sm:h-11 object-contain">
             <span class="font-bold text-base sm:text-lg tracking-tight text-night-900 dark:text-cream-100 hidden sm:block">senin 💝 davetiyen</span>
         </a>
         <div class="flex items-center gap-3">

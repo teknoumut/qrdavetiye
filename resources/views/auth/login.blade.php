@@ -410,7 +410,29 @@
             }
 
             .login-left {
+                display: flex;
+                min-height: 200px;
+                padding: 32px;
+                flex: none;
+            }
+
+            .login-left .content h1,
+            .login-left .content p,
+            .login-left .features-mini,
+            .login-left::before,
+            .login-left::after,
+            .floating-shapes {
                 display: none;
+            }
+
+            .login-left .content {
+                color: white;
+            }
+
+            .login-left .brand-icon {
+                width: 72px;
+                height: 72px;
+                margin-bottom: 0;
             }
 
             .login-right {
@@ -426,7 +448,7 @@
 
 <body>
     <div class="login-container">
-        <div class="login-left hidden md:flex">
+        <div class="login-left md:flex">
             <div class="bg-img"></div>
             <div class="floating-shapes">
                 <div class="shape"></div>

@@ -1048,6 +1048,11 @@
             .floating-letter.show { transform: translateY(-40px) scale(1) rotate(0deg); }
         }
 
+        @media (max-width: 480px) {
+            .rsvp-form { padding: 24px 16px; }
+            .rsvp-form .status-options { grid-template-columns: 1fr; gap: 6px; }
+        }
+
         /* ===== ENVELOPE PATTERNS (body + flap) ===== */
         .envelope-body.pattern-lace,
         .envelope-flap.pattern-lace {

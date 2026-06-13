@@ -38,7 +38,7 @@
 <body data-site-primary="{{ $sp }}" data-site-secondary="{{ $ss }}">
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-7 py-3 bg-white/75 backdrop-blur-2xl border-b border-black/[0.04] transition-all duration-300">
         <a href="/" class="flex items-center gap-2 font-extrabold text-base text-night-900 no-underline shrink-0">
-            <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-10 h-10 object-contain">
+            <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-14 h-14 object-contain">
             senin 💝 davetiyen
         </a>
 

@@ -15,7 +15,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div class="mb-6">
                 <a href="/" class="inline-flex items-center gap-2 text-lg font-bold text-gray-800 no-underline">
-                    <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-11 h-11 object-contain">
+                    <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-14 h-14 object-contain">
                     senin 💝 davetiyen
                 </a>
             </div>

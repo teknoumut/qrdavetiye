@@ -141,7 +141,7 @@
         .bg-primary { background: var(--primary); }
         .border-primary { border-color: var(--primary); }
 
-        .section { padding: 70px 24px; max-width: 800px; margin: 0 auto; text-align: center; }
+        .section { padding: 70px 24px; max-width: 800px; margin: 0 auto; text-align: center; overflow-x: hidden; }
         .section-title { font-family: var(--font-display); font-size: 3rem; margin-bottom: 16px; line-height: 1.2; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px; }
         .section-subtitle { font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; font-weight: 500; position: relative; display: inline-block; }
         .section-subtitle::before,
@@ -1048,9 +1048,49 @@
             .floating-letter.show { transform: translateY(-40px) scale(1) rotate(0deg); }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 640px) {
+            .section-title { font-size: 1.6rem; }
+            .section { padding: 36px 16px; }
+            .story-text { font-size: 0.92rem; }
+            .parents-grid { gap: 16px; }
+            .parent-card { min-width: 140px; padding: 20px 16px; }
+            .parent-card .name { font-size: 1.2rem; }
+            .parent-card .relation { font-size: 0.75rem; }
+            .countdown { gap: 8px; }
+            .countdown-item { min-width: 48px; padding: 10px 6px; }
+            .countdown-number { font-size: 1.5rem; }
+            .countdown-label { font-size: 0.6rem; }
+            .gallery { padding: 12px; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+            .gallery img { height: 140px; border-radius: 14px; }
+            .map-container { height: 220px; border-radius: 12px; }
             .rsvp-form { padding: 24px 16px; }
             .rsvp-form .status-options { grid-template-columns: 1fr; gap: 6px; }
+            .rsvp-form .status-options label { flex-direction: row; padding: 10px 12px; }
+            .rsvp-form .guest-count-wrapper { gap: 6px; }
+            .rsvp-form .guest-btn { width: 34px; height: 34px; }
+            .rsvp-form input, .rsvp-form select, .rsvp-form textarea { padding: 11px 12px; font-size: 0.9rem; }
+            .rsvp-form label { font-size: 0.75rem; }
+            .cover-section { padding: 16px; }
+            .cover-section .names { font-size: 2rem; }
+            .cover-section .ampersand { font-size: 2.5rem; }
+            .cover-section .date { font-size: 0.65rem; letter-spacing: 2px; margin-top: 10px; }
+            .cover-section .date::before, .cover-section .date::after { margin: 0 4px; }
+            .cover-section .scroll-indicator { bottom: 20px; font-size: 0.6rem; }
+            .footer { padding: 32px 16px; }
+        }
+        @media (max-width: 380px) {
+            .rsvp-form { padding: 16px 12px; }
+            .rsvp-form .guest-count-wrapper { gap: 4px; }
+            .rsvp-form .guest-btn { width: 30px; height: 30px; font-size: 0.9rem; }
+            .section-title { font-size: 1.4rem; }
+            .section { padding: 28px 12px; }
+            .story-text { font-size: 0.85rem; }
+            .parent-card { min-width: 120px; padding: 16px 12px; }
+            .parent-card .name { font-size: 1.1rem; }
+            .countdown-item { min-width: 42px; padding: 8px 4px; }
+            .countdown-number { font-size: 1.2rem; }
+            .gallery { padding: 8px; gap: 6px; grid-template-columns: 1fr; }
+            .gallery img { height: 200px; }
         }
 
         /* ===== ENVELOPE PATTERNS (body + flap) ===== */

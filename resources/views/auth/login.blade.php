@@ -264,7 +264,6 @@
 
         .login-card .subtitle {
             color: #64748b;
-            margin-bottom: 32px;
             font-size: 0.9rem;
         }
 
@@ -439,7 +438,7 @@
             }
 
             .login-right {
-                padding: 24px 24px;
+                padding: 8px 24px;
             }
 
             .login-right .login-card {

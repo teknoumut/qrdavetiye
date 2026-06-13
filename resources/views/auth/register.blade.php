@@ -11,7 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'senin 💝 davetiyen') }} - Kayıt Ol</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|dancing-script:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -220,7 +220,7 @@
         <div class="logo">
             <a href="/">
                 <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-12 h-12 object-contain inline-block align-middle">
-                senin 💝 davetiyen
+                <span style="font-family:'Dancing Script',cursive;font-weight:700;font-size:1.5rem"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></span>
             </a>
         </div>
 

@@ -3,7 +3,7 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('admin.dashboard') }}" class="text-white font-bold text-lg">senin 💝 davetiyen Admin</a>
+                    <a href="{{ route('admin.dashboard') }}" class="text-white font-bold text-lg" style="font-family:'Dancing Script',cursive;font-size:1.7rem;letter-spacing:normal"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span> <span style="color:white">Admin</span></a>
                 </div>
                 <div class="hidden space-x-4 sm:-my-px sm:ms-10 sm:flex">
                     <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 hover:text-white {{ request()->routeIs('admin.dashboard') ? 'text-white border-b-2 border-indigo-400' : '' }}">

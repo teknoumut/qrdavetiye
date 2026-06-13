@@ -4,7 +4,7 @@
         <div class="flex items-center justify-between h-16">
             <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
                 <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-12 h-12 sm:w-14 sm:h-14 object-contain">
-                <span class="font-bold text-base sm:text-lg tracking-tight text-night-900 dark:text-cream-100 hidden sm:block">senin 💝 davetiyen</span>
+                <span class="font-bold hidden sm:block" style="font-family:'Dancing Script',cursive;font-size:1.4rem"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></span>
             </a>
 
             <div class="hidden md:flex items-center gap-1">
@@ -129,7 +129,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
             <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-12 h-12 sm:w-14 sm:h-14 object-contain">
-            <span class="font-bold text-base sm:text-lg tracking-tight text-night-900 dark:text-cream-100 hidden sm:block">senin 💝 davetiyen</span>
+            <span class="font-bold hidden sm:block" style="font-family:'Dancing Script',cursive;font-size:1.4rem"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></span>
         </a>
         <div class="flex items-center gap-3">
             <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-night-600 dark:text-cream-300 hover:text-night-900 dark:hover:text-cream-100 transition-colors">Giriş Yap</a>

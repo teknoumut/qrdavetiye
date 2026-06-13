@@ -8,7 +8,7 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="Yönetim Paneli - {{ config('app.name', 'senin 💝 davetiyen') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800|dancing-script:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -413,7 +413,7 @@
             <a href="{{ route('admin.dashboard') }}">
                 <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-14 h-14 object-contain">
                 <div>
-                    <div class="logo-text">senin 💝 davetiyen</div>
+                    <div class="logo-text" style="font-family:'Dancing Script',cursive;font-weight:700;font-size:1.8rem;letter-spacing:normal"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></div>
                     <div class="logo-sub">Yönetim Paneli</div>
                 </div>
             </a>

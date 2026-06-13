@@ -6,7 +6,7 @@
     <x-seo title="Dijital Davetiye Platformu - senin 💝 davetiyen" description="Özel günleriniz için modern ve şık QR kodlu dijital davetiyeler. Müzik, video, fotoğraf galerisi ve RSVP takibi ile sevdiklerinizi büyüleyin." />
     <meta name="keywords" content="dijital davetiye, online davetiye, QR kod davetiye, düğün davetiyesi, nişan davetiyesi, sünnet davetiyesi, doğum günü davetiyesi">
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|playfair-display:400,500,600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|playfair-display:400,500,600,700|dancing-script:400,500,600,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @php
@@ -39,7 +39,7 @@
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-7 py-3 bg-white/75 backdrop-blur-2xl border-b border-black/[0.04] transition-all duration-300">
         <a href="/" class="flex items-center gap-2 font-extrabold text-base text-night-900 no-underline shrink-0">
             <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-14 h-14 object-contain">
-            senin 💝 davetiyen
+            <span style="font-family:'Dancing Script',cursive;font-weight:700;font-size:1.5rem;color:#06b6d4">Senin</span> <span style="font-family:'Dancing Script',cursive;font-weight:700;font-size:1.5rem;color:#ec4899">Davetiyen</span>
         </a>
 
         <div class="hidden md:flex items-center gap-1">
@@ -144,7 +144,7 @@
                         <div class="heart-icon">💖</div>
                         <div class="fig bride">👩</div>
                     </div>
-                    <div class="title">senin 💝 davetiyen</div>
+                    <div class="title" style="font-family:'Dancing Script',cursive;font-weight:700;font-size:3.2rem"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></div>
                     <div class="sub">Özel Gününüz Kutlu Olsun</div>
                 </div>
                 <div class="env-shadow"></div>

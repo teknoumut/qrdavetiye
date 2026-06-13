@@ -7,7 +7,7 @@
         <x-seo />
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700|dancing-script:400,500,600,700&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -16,7 +16,7 @@
             <div class="mb-6">
                 <a href="/" class="inline-flex items-center gap-2 text-lg font-bold text-gray-800 no-underline">
                     <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-14 h-14 object-contain">
-                    senin 💝 davetiyen
+                    <span style="font-family:'Dancing Script',cursive;font-weight:700;font-size:1.5rem"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></span>
                 </a>
             </div>
 

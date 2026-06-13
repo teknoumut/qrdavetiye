@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'senin 💝 davetiyen') }} - Giriş</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800|dancing-script:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         * {
@@ -99,16 +99,14 @@
         .login-left .brand-icon {
             width: 88px;
             height: 88px;
-            background: rgba(255, 255, 255, 0.06);
+            background: #ffffff;
             border-radius: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 28px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
 
         .login-left h1 {
@@ -440,7 +438,7 @@
                 <div class="brand-icon">
                     <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-20 h-20 object-contain mx-auto">
                 </div>
-                <h1>senin 💝 davetiyen</h1>
+                <h1 style="font-family:'Dancing Script',cursive;font-weight:700;font-size:4.5rem"><span style="color:#06b6d4;background:none;-webkit-text-fill-color:#06b6d4">Senin</span> <span style="color:#ec4899;background:none;-webkit-text-fill-color:#ec4899">Davetiyen</span></h1>
                 
                 <p>Özel günleriniz için dijital davetiyeler oluşturun, QR kodlarla paylaşın.</p>
                 <div class="features-mini">
@@ -452,7 +450,7 @@
         </div>
         <div class="login-right">
             <div class="login-card">
-                <div class="header-badge">✦ senin 💝 davetiyen</div>
+                <div class="header-badge" style="font-family:'Dancing Script',cursive;font-weight:600;font-size:1.1rem">✦ Senin Davetiyen</div>
                 <h2>Hoş Geldiniz</h2>
                 <p class="subtitle">Hesabınıza giriş yaparak davetiyenizi yönetin</p>
                 <p style="text-align:center;margin-top:4px;font-size:0.75rem;color:#94a3b8">Hesabınız varsa giriş yapın. Hesabınız yoksa yöneticinizle iletişime geçin.</p>

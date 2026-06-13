@@ -5,7 +5,7 @@
             <p class="text-gray-600">Son güncelleme: {{ date('d.m.Y') }}</p>
 
             <h2 class="text-xl font-semibold mt-8">1. Abonelik İptali</h2>
-            <p>Kullanıcı, dilediği zaman aboneliğini iptal edebilir. İptal işlemi, hesap ayarlarından veya müşteri hizmetlerimize başvurarak gerçekleştirilebilir. İptal sonrasında:</p>
+            <p>Kullanıcı, dilediği zaman aboneliğini iptal edebilir. İptal sonrasında:</p>
             <ul class="list-disc pl-6 space-y-2">
                 <li>Mevcut davetiyeleriniz yayında kalmaya devam eder.</li>
                 <li>Yeni davetiye oluşturamazsınız.</li>
@@ -15,13 +15,14 @@
             <h2 class="text-xl font-semibold mt-8">2. İade Koşulları</h2>
             <p>Dijital hizmetlerin doğası gereği, abonelik ücretleri için aşağıdaki iade koşulları geçerlidir:</p>
             <ul class="list-disc pl-6 space-y-2">
-                <li><strong>İlk 7 Gün:</strong> Abonelik başlangıcından itibaren 7 gün içinde iptal edilen abonelikler için ücret iadesi yapılır.</li>
-                <li><strong>7 Gün Sonrası:</strong> 7 günü geçen abonelikler için ücret iadesi yapılmaz, ancak hizmet mevcut fatura döneminin sonuna kadar aktif kalır.</li>
-                <li><strong>Yıllık Abonelikler:</strong> Yıllık aboneliklerde, ilk 7 gün içinde iptal halinde yalnızca kullanılmayan ayların ücreti iade edilir.</li>
+                <li><strong>Hizmet Kullanılmamışsa (İlk 7 Gün):</strong> Abonelik başlangıcından itibaren 7 gün içinde ve henüz hiçbir davetiye yayınlanmamış/kullanılmamışsa tam iade yapılır.</li>
+                <li><strong>Hizmet Kullanılmışsa:</strong> Davetiye oluşturulup yayınlandıktan, link paylaşıldıktan veya QR kod dağıtıldıktan sonra hizmet tamamen tüketilmiş sayılır. Bu durumda iade yapılmaz.</li>
+                <li><strong>7 Gün Sonrası:</strong> Abonelik başlangıcından itibaren 7 gün geçtikten sonra iade yapılmaz, ancak hizmet mevcut fatura döneminin sonuna kadar aktif kalır.</li>
+                <li><strong>Yıllık Abonelikler:</strong> Yıllık aboneliklerde iade yalnızca yukarıdaki şartlar sağlanıyorsa ve kullanılmayan aylar oranında yapılır.</li>
             </ul>
 
             <h2 class="text-xl font-semibold mt-8">3. İade Süreci</h2>
-            <p>İade talepleri, e-posta yoluyla alınır ve 7 iş günü içinde sonuçlandırılır. İade, ödemenin yapıldığı kaynağa geri gönderilir.</p>
+            <p>İade talepleri değerlendirilir ve 7 iş günü içinde sonuçlandırılır. İade, ödemenin yapıldığı kaynağa geri gönderilir.</p>
 
             <h2 class="text-xl font-semibold mt-8">4. Hizmet Kesintisi</h2>
             <p>Platform kaynaklı uzun süreli (24 saat üzeri) hizmet kesintilerinde, kesinti süresiyle orantılı olarak hizmet süresi uzatılır veya iade sağlanır.</p>

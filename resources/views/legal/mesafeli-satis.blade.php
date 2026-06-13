@@ -26,7 +26,7 @@
             <p>Ödeme, Platform üzerinden kredi kartı veya banka kartı ile gerçekleştirilir. Dijital hizmet teslimatı, ödeme onayını takiben anında gerçekleşir.</p>
 
             <h2 class="text-xl font-semibold mt-8">7. Cayma Hakkı</h2>
-            <p>Alıcı, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında, abonelik hizmetinin ifasına Alıcı'nın onayı ile başlanması nedeniyle cayma hakkını kullanamayacağını kabul eder. Ancak, abonelik başlangıcından itibaren 7 gün içinde yapılan iptal taleplerinde, kullanılmayan hizmet bedeli iade edilir.</p>
+            <p>Alıcı, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında, dijital hizmetin ifasına Alıcı'nın onayı ile başlanması nedeniyle cayma hakkını kullanamayacağını kabul eder. Abonelik başlangıcından itibaren 7 gün içinde ve henüz hiçbir davetiye yayınlanmamış/kullanılmamışsa kullanılmayan hizmet bedeli iade edilir. Davetiye oluşturulup yayınlandıktan sonra hizmet tamamen tüketilmiş sayılır ve iade yapılmaz.</p>
 
             <h2 class="text-xl font-semibold mt-8">8. Uyuşmazlık Çözümü</h2>
             <p>İşbu Sözleşme'nin uygulanmasından doğabilecek uyuşmazlıklarda Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri yetkilidir.</p>

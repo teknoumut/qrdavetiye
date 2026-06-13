@@ -29,6 +29,7 @@
 
             <h2 class="text-xl font-semibold mt-8">7. Abonelik ve Ödeme</h2>
             <p>Kullanıcı, seçtiği plana ait ücreti ödeyerek hizmeti kullanmaya hak kazanır. Ödemeler, seçilen periyoda (aylık/yıllık) göre tahsil edilir. Abonelik iptali durumunda mevcut davetiyeler yayında kalmaya devam eder ancak yeni davetiye oluşturulamaz.</p>
+            <p>Önemli: Abonelik satın alındıktan sonra davetiye oluşturulup yayınlandığı anda hizmet tüketilmiş sayılır. Bu nedenle, yayınlanmış bir davetiye için iade yapılmaz. İade koşulları hakkında detaylı bilgi için <a href="{{ route('legal.iade') }}" class="text-blue-600 hover:text-blue-800 underline">İade ve İptal Politikası</a>'nı inceleyiniz.</p>
 
             <h2 class="text-xl font-semibold mt-8">8. Hesap Feshi</h2>
             <p>Platform, Kullanıcı'nın bu koşullara aykırı davranması durumunda hesabını askıya alma veya sonlandırma hakkını saklı tutar. Kullanıcı, dilediği zaman hesabını kapatarak hizmeti sonlandırabilir.</p>

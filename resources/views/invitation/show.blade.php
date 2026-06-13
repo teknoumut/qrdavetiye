@@ -1063,13 +1063,14 @@
             .gallery { padding: 12px; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
             .gallery img { height: 140px; border-radius: 14px; }
             .map-container { height: 220px; border-radius: 12px; }
-            .rsvp-form { padding: 24px 16px; }
-            .rsvp-form .status-options { grid-template-columns: 1fr; gap: 6px; }
+            .rsvp-form { padding: 28px 20px; }
+            .rsvp-form .field-group { margin-bottom: 22px; }
+            .rsvp-form .status-options { grid-template-columns: 1fr 1fr; gap: 6px; }
             .rsvp-form .status-options label { flex-direction: row; padding: 10px 12px; }
             .rsvp-form .guest-count-wrapper { gap: 6px; }
-            .rsvp-form .guest-btn { width: 34px; height: 34px; }
-            .rsvp-form input, .rsvp-form select, .rsvp-form textarea { padding: 11px 12px; font-size: 0.9rem; }
-            .rsvp-form label { font-size: 0.75rem; }
+            .rsvp-form .guest-btn { width: 36px; height: 36px; }
+            .rsvp-form input, .rsvp-form select, .rsvp-form textarea { padding: 13px 14px; font-size: 0.95rem; min-height: 48px; box-sizing: border-box; }
+            .rsvp-form label { font-size: 0.78rem; }
             .cover-section { padding: 16px; }
             .cover-section .names { font-size: 2rem; }
             .cover-section .ampersand { font-size: 2.5rem; }
@@ -1078,10 +1079,16 @@
             .cover-section .scroll-indicator { bottom: 20px; font-size: 0.6rem; }
             .footer { padding: 32px 16px; }
         }
+        @media (max-width: 480px) {
+            .rsvp-form { padding: 22px 14px; }
+            .rsvp-form .status-options { grid-template-columns: 1fr; }
+        }
         @media (max-width: 380px) {
-            .rsvp-form { padding: 16px 12px; }
+            .rsvp-form { padding: 18px 12px; }
+            .rsvp-form .field-group { margin-bottom: 18px; }
             .rsvp-form .guest-count-wrapper { gap: 4px; }
-            .rsvp-form .guest-btn { width: 30px; height: 30px; font-size: 0.9rem; }
+            .rsvp-form .guest-btn { width: 32px; height: 32px; font-size: 0.9rem; }
+            .rsvp-form input, .rsvp-form select, .rsvp-form textarea { padding: 11px 10px; font-size: 0.9rem; min-height: 44px; }
             .section-title { font-size: 1.4rem; }
             .section { padding: 28px 12px; }
             .story-text { font-size: 0.85rem; }

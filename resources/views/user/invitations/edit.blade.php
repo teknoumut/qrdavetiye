@@ -177,7 +177,7 @@
 
                                     <div>
                                         <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('🔗 Kısa Link') }}</label>
-                                        <div class="flex items-center gap-2">
+                                        <div class="flex items-center gap-2 flex-wrap">
                                             <span class="text-sm text-night-400 dark:text-cream-400 shrink-0">{{ url('/s/') }}</span>
                                             <input type="text" name="short_link" value="{{ old('short_link', $invitation->short_link) }}"
                                                 class="flex-1 w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all font-mono" placeholder="ozel-davetiyem-2025" pattern="[a-z0-9-]+">
@@ -527,10 +527,10 @@
                                     <span class="text-sm text-night-400 dark:text-cream-400 font-medium">{{ __('Fotoğraf yüklemek için tıkla') }}</span>
                                     <input type="file" name="image" accept="image/*" class="hidden" required onchange="this.parentElement.querySelectorAll('span')[1].textContent = this.files[0].name">
                                 </label>
-                                <div class="flex gap-2">
+                                <div class="flex flex-col sm:flex-row gap-2">
                                     <input type="text" name="caption" placeholder="{{ __('Fotoğraf açıklaması') }}"
-                                        class="flex-1 px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
-                                    <button type="submit" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 transition-all shadow-sm shrink-0">{{ __('Yükle') }}</button>
+                                        class="w-full sm:flex-1 px-4 py-2.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
+                                    <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 transition-all shadow-sm shrink-0">{{ __('Yükle') }}</button>
                                 </div>
                             </form>
                             @if($invitation->images->count() > 0)
@@ -675,11 +675,12 @@
                                             </div>
                                             <p class="text-xs text-night-400 dark:text-cream-500 mt-1">{{ __('MP4, WebM veya MOV - maks. 100MB') }}</p>
                                         </div>
-                                        <div class="flex gap-2">
+                                        <div class="flex flex-col sm:flex-row gap-2">
                                             <input type="text" name="caption" placeholder="{{ __('Video açıklaması') }}"
-                                                class="flex-1 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
-                                            <button type="submit" class="px-5 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 transition-all shadow-sm shrink-0 flex items-center gap-1.5">
+                                                class="w-full sm:flex-1 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all">
+                                            <button type="submit" class="w-full sm:w-auto px-5 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 transition-all shadow-sm shrink-0 flex items-center justify-center gap-1.5">
                                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                                <span class="sm:hidden">{{ __('Ekle') }}</span>
                                                 <span class="hidden sm:inline">{{ __('Ekle') }}</span>
                                             </button>
                                         </div>

@@ -120,7 +120,7 @@
 
                             <div>
                                 <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('🔗 Kısa Link') }}</label>
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-2 flex-wrap">
                                     <span class="text-sm text-night-400 dark:text-cream-400 shrink-0">{{ url('/s/') }}</span>
                                     <input type="text" name="short_link" value="{{ old('short_link') }}"
                                         class="flex-1 w-full px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-900 dark:text-cream-100 text-sm placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-100 dark:focus:ring-gold-500/20 outline-none transition-all font-mono" placeholder="ozel-davetiyem-2025" pattern="[a-z0-9-]+">
@@ -195,7 +195,7 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4 sm:gap-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                             <div>
                                 <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Zarf Animasyonu') }}</label>
                                 <div class="relative">

@@ -416,7 +416,6 @@
                 flex: none;
             }
 
-            .login-left .content h1,
             .login-left .content p,
             .login-left .features-mini,
             .login-left::before,
@@ -432,7 +431,11 @@
             .login-left .brand-icon {
                 width: 72px;
                 height: 72px;
-                margin-bottom: 0;
+                margin-bottom: 8px;
+            }
+
+            .login-left .content h1 {
+                font-size: 2.2rem !important;
             }
 
             .login-right {

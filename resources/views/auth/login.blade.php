@@ -475,7 +475,6 @@
         </div>
         <div class="login-right">
             <div class="login-card">
-                <div class="header-badge" style="font-family:'Dancing Script',cursive;font-weight:600;font-size:1.1rem">✦ Senin Davetiyen</div>
                 <h2>Hoş Geldiniz</h2>
                 <p class="subtitle">Hesabınıza giriş yaparak davetiyenizi yönetin</p>
                 <p style="text-align:center;margin-top:4px;font-size:0.75rem;color:#94a3b8">Hesabınız varsa giriş yapın. Hesabınız yoksa yöneticinizle iletişime geçin.</p>

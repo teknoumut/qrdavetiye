@@ -398,7 +398,7 @@
             margin-bottom: 20px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             body {
                 overflow: auto;
             }
@@ -408,6 +408,7 @@
             }
 
             .login-left {
+                width: 100%;
                 display: flex;
                 min-height: 200px;
                 padding: 32px;
@@ -437,7 +438,9 @@
             }
 
             .login-right {
-                padding: 0 24px 16px;
+                width: 100%;
+                margin-top: 0;
+                padding: 2px 24px 16px;
             }
 
             .login-right .login-card {
@@ -461,8 +464,6 @@
                 margin-bottom: 20px;
                 text-align: left;
             }
-
-
         }
     </style>
 </head>

@@ -411,7 +411,7 @@
     <aside class="admin-sidebar" id="sidebar">
         <div class="logo-area">
             <a href="{{ route('admin.dashboard') }}">
-                <div class="logo-icon">s</div>
+                <img src="{{ asset('images/logo.svg') }}" alt="senin 💝 davetiyen" class="w-9 h-9 object-contain">
                 <div>
                     <div class="logo-text">senin 💝 davetiyen</div>
                     <div class="logo-sub">Yönetim Paneli</div>

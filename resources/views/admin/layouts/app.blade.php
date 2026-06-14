@@ -530,41 +530,56 @@
         </main>
     </div>
 
-    <audio id="notifSound" preload="auto" style="display:none"></audio>
-
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('open');
         }
 
-        function playNotificationSound() {
-            try {
-                var ctx = new (window.AudioContext || window.webkitAudioContext)();
-                var g = ctx.createGain();
-                g.connect(ctx.destination);
-                g.gain.value = 0.15;
+        var notifCtx = null;
 
-                var o1 = ctx.createOscillator();
+        function initAudioCtx() {
+            if (!notifCtx) {
+                try {
+                    notifCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch(e) {}
+            }
+            if (notifCtx && notifCtx.state === 'suspended') {
+                notifCtx.resume();
+            }
+        }
+
+        document.addEventListener('click', initAudioCtx, { once: true });
+        document.addEventListener('touchstart', initAudioCtx, { once: true });
+
+        function playNotificationSound() {
+            initAudioCtx();
+            if (!notifCtx) return;
+            try {
+                var g = notifCtx.createGain();
+                g.connect(notifCtx.destination);
+                g.gain.value = 0.12;
+
+                var o1 = notifCtx.createOscillator();
                 o1.type = 'sine';
                 o1.frequency.value = 523.25;
                 o1.connect(g);
                 o1.start();
-                o1.stop(ctx.currentTime + 0.12);
+                o1.stop(notifCtx.currentTime + 0.12);
 
-                var o2 = ctx.createOscillator();
+                var o2 = notifCtx.createOscillator();
                 o2.type = 'sine';
                 o2.frequency.value = 659.25;
                 o2.connect(g);
-                o2.start(ctx.currentTime + 0.13);
-                o2.stop(ctx.currentTime + 0.28);
+                o2.start(notifCtx.currentTime + 0.13);
+                o2.stop(notifCtx.currentTime + 0.28);
 
-                var o3 = ctx.createOscillator();
+                var o3 = notifCtx.createOscillator();
                 o3.type = 'sine';
                 o3.frequency.value = 783.99;
                 o3.connect(g);
-                o3.start(ctx.currentTime + 0.29);
-                o3.stop(ctx.currentTime + 0.45);
+                o3.start(notifCtx.currentTime + 0.29);
+                o3.stop(notifCtx.currentTime + 0.45);
             } catch(e) {}
         }
 

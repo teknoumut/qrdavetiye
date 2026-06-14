@@ -142,6 +142,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
 
     Route::get('payment-notifications', [AdminPaymentNotificationController::class, 'index'])->name('payment-notifications.index');
+    Route::get('payment-notifications/pending-count', function () {
+        return response()->json([
+            'count' => PaymentNotification::where('status', 'pending')->count(),
+        ]);
+    })->name('payment-notifications.pending-count');
     Route::post('payment-notifications/{notification}/approve', [AdminPaymentNotificationController::class, 'approve'])->name('payment-notifications.approve');
     Route::post('payment-notifications/{notification}/reject', [AdminPaymentNotificationController::class, 'reject'])->name('payment-notifications.reject');
     Route::delete('payment-notifications/{notification}', [AdminPaymentNotificationController::class, 'destroy'])->name('payment-notifications.destroy');
@@ -155,12 +160,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('visitors', [VisitorController::class, 'index'])->name('visitors.index');
     Route::post('visitors/reset', [VisitorController::class, 'reset'])->name('visitors.reset');
-
-    Route::get('payment-notifications/pending-count', function () {
-        return response()->json([
-            'count' => PaymentNotification::where('status', 'pending')->count(),
-        ]);
-    })->name('payment-notifications.pending-count');
 
 });
 

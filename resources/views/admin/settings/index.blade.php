@@ -210,15 +210,31 @@
                 <span class="section-icon">🔔</span>
                 <div>
                     <h3 class="font-semibold text-gray-900 text-sm">Bildirim Sesi</h3>
-                    <p class="text-xs text-gray-400">Admin panelinde yeni bildirim geldiğinde çalacak ses (MP3/OGG/WAV URL'si)</p>
+                    <p class="text-xs text-gray-400">Admin panelinde yeni bildirim geldiğinde çalacak ses</p>
                 </div>
             </div>
 
             <div class="mb-6">
-                <label>Bildirim Sesi URL</label>
-                <input type="text" name="notification_sound" value="{{ old('notification_sound', $settings['notification_sound'] ?? '') }}" placeholder="https://example.com/ses.mp3">
-                <p class="text-xs text-gray-400 mt-1.5">Boş bırakırsanız varsayılan ses kullanılır. İnternetten bir ses dosyası URL'si girebilirsiniz.</p>
+                <label>Bildirim Sesi URL'si</label>
+                <div class="flex gap-2">
+                    <input type="text" name="notification_sound" value="{{ old('notification_sound', $settings['notification_sound'] ?? '') }}" placeholder="https://www.soundbible.com/mp3/kes.mp3" class="flex-1">
+                    <button type="button" onclick="testSound()" class="btn-ghost shrink-0">🔊 Test</button>
+                </div>
+                <p class="text-xs text-gray-400 mt-1.5">Direkt MP3/OGG/WAV dosya linki girin. <strong>YouTube linki çalışmaz.</strong> Boş bırakırsanız varsayılan ses kullanılır. <a href="https://www.google.com/search?q=notification+sound+mp3+free" target="_blank" class="underline hover:text-gray-600">Ücretsiz bildirim sesi ara →</a></p>
             </div>
+
+            <script>
+                function testSound() {
+                    var url = document.querySelector('[name="notification_sound"]').value;
+                    if (url) {
+                        try {
+                            var a = new Audio(url);
+                            a.volume = 0.4;
+                            a.play().catch(function(e) { alert('Ses çalınamadı. Linki kontrol edin.'); });
+                        } catch(e) { alert('Geçersiz URL'); }
+                    }
+                }
+            </script>
 
             <div class="flex justify-end pt-4 border-t border-gray-100">
                 <button type="submit" class="btn-primary">Ayarları Kaydet</button>

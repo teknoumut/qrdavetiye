@@ -13,8 +13,6 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        session(['notifications_viewed_at' => now()]);
-
         $payments = PaymentNotification::with(['user', 'plan'])
             ->where('status', 'pending')
             ->latest()

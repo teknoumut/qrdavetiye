@@ -146,11 +146,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('payment-notifications', [AdminPaymentNotificationController::class, 'index'])->name('payment-notifications.index');
     Route::get('payment-notifications/pending-count', function () {
-        $since = session('notifications_viewed_at', now()->subDay());
-        $count = PaymentNotification::where('status', 'pending')->where('created_at', '>', $since)->count()
-            + Review::where('is_approved', false)->where('created_at', '>', $since)->count()
-            + Invoice::where('refund_status', 'requested')->where('created_at', '>', $since)->count()
-            + ContactMessage::where('is_read', false)->where('created_at', '>', $since)->count();
+        $count = PaymentNotification::where('status', 'pending')->count()
+            + Review::where('is_approved', false)->count()
+            + Invoice::where('refund_status', 'requested')->count()
+            + ContactMessage::where('is_read', false)->count();
 
         return response()->json([
             'count' => $count,

@@ -406,10 +406,11 @@
     </style>
 </head>
 @php
-    $pendingNotificationCount = \App\Models\PaymentNotification::where('status', 'pending')->count()
-        + \App\Models\Review::where('is_approved', false)->count()
-        + \App\Models\Invoice::where('refund_status', 'requested')->count()
-        + \App\Models\ContactMessage::where('is_read', false)->count();
+    $notifSince = session('notifications_viewed_at', now()->subDay());
+    $pendingNotificationCount = \App\Models\PaymentNotification::where('status', 'pending')->where('created_at', '>', $notifSince)->count()
+        + \App\Models\Review::where('is_approved', false)->where('created_at', '>', $notifSince)->count()
+        + \App\Models\Invoice::where('refund_status', 'requested')->where('created_at', '>', $notifSince)->count()
+        + \App\Models\ContactMessage::where('is_read', false)->where('created_at', '>', $notifSince)->count();
 @endphp
 
 <body>
@@ -548,50 +549,45 @@
             document.getElementById('sidebarOverlay').classList.toggle('open');
         }
 
+        @php
+            $notifSoundUrl = \App\Models\Setting::getValue('notification_sound', '');
+        @endphp
+
+        var notifSoundUrl = '{{ $notifSoundUrl }}';
         var notifCtx = null;
 
         function initAudioCtx() {
             if (!notifCtx) {
-                try {
-                    notifCtx = new (window.AudioContext || window.webkitAudioContext)();
-                } catch(e) {}
+                try { notifCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
             }
             if (notifCtx && notifCtx.state === 'suspended') {
                 notifCtx.resume();
             }
         }
-
         document.addEventListener('click', initAudioCtx, { once: true });
         document.addEventListener('touchstart', initAudioCtx, { once: true });
 
         function playNotificationSound() {
+            if (notifSoundUrl) {
+                try {
+                    var a = new Audio(notifSoundUrl);
+                    a.volume = 0.4;
+                    a.play().catch(function() {});
+                    return;
+                } catch(e) {}
+            }
             initAudioCtx();
             if (!notifCtx) return;
             try {
                 var g = notifCtx.createGain();
                 g.connect(notifCtx.destination);
-                g.gain.value = 0.12;
-
-                var o1 = notifCtx.createOscillator();
-                o1.type = 'sine';
-                o1.frequency.value = 523.25;
-                o1.connect(g);
-                o1.start();
-                o1.stop(notifCtx.currentTime + 0.12);
-
-                var o2 = notifCtx.createOscillator();
-                o2.type = 'sine';
-                o2.frequency.value = 659.25;
-                o2.connect(g);
-                o2.start(notifCtx.currentTime + 0.13);
-                o2.stop(notifCtx.currentTime + 0.28);
-
-                var o3 = notifCtx.createOscillator();
-                o3.type = 'sine';
-                o3.frequency.value = 783.99;
-                o3.connect(g);
-                o3.start(notifCtx.currentTime + 0.29);
-                o3.stop(notifCtx.currentTime + 0.45);
+                g.gain.value = 0.1;
+                var o = notifCtx.createOscillator();
+                o.type = 'sine';
+                o.frequency.value = 880;
+                o.connect(g);
+                o.start();
+                o.stop(notifCtx.currentTime + 0.2);
             } catch(e) {}
         }
 

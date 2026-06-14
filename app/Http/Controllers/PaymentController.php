@@ -47,13 +47,7 @@ class PaymentController extends Controller
 
         $remainingDays = max(0, now()->diffInDays($user->subscription_end, false));
 
-        $oldInterval = 'monthly';
-        if ($user->subscription_start) {
-            $diffDays = $user->subscription_start->diffInDays($user->subscription_end);
-            if ($diffDays >= 360) {
-                $oldInterval = 'yearly';
-            }
-        }
+        $oldInterval = $this->getUserInterval($user);
 
         $oldIntervalDays = $oldInterval === 'yearly' ? 365 : 30;
         $newIntervalDays = $newInterval === 'yearly' ? 365 : 30;
@@ -66,15 +60,35 @@ class PaymentController extends Controller
         }
 
         $oldDailyRate = $oldPrice / $oldIntervalDays;
-        $newDailyRate = $newPrice / $newIntervalDays;
+        $remainingValue = $remainingDays * $oldDailyRate;
 
-        if ($newDailyRate <= $oldDailyRate) {
-            return null;
+        if ($oldInterval === $newInterval) {
+            $newDailyRate = $newPrice / $newIntervalDays;
+
+            if ($newDailyRate <= $oldDailyRate) {
+                return null;
+            }
+
+            $proratedNewPrice = $remainingDays * $newDailyRate;
+            $difference = max(0, $proratedNewPrice - $remainingValue);
+
+            return [
+                'remaining_days' => (int) ceil($remainingDays),
+                'total_days' => $oldIntervalDays,
+                'old_plan' => $oldPlan,
+                'old_price' => $oldPrice,
+                'new_price' => $newPrice,
+                'remaining_value' => round($remainingValue, 2),
+                'prorated_new_price' => round($proratedNewPrice, 2),
+                'difference' => round($difference, 2),
+            ];
         }
 
-        $remainingValue = $remainingDays * $oldDailyRate;
-        $proratedNewPrice = $remainingDays * $newDailyRate;
-        $difference = max(0, $proratedNewPrice - $remainingValue);
+        $difference = max(0, $newPrice - $remainingValue);
+
+        if ($difference <= 0) {
+            return null;
+        }
 
         return [
             'remaining_days' => (int) ceil($remainingDays),
@@ -83,7 +97,7 @@ class PaymentController extends Controller
             'old_price' => $oldPrice,
             'new_price' => $newPrice,
             'remaining_value' => round($remainingValue, 2),
-            'prorated_new_price' => round($proratedNewPrice, 2),
+            'prorated_new_price' => round($newPrice, 2),
             'difference' => round($difference, 2),
         ];
     }

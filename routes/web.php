@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminContactMessageController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\PaymentNotificationController as AdminPaymentNotificationController;
 use App\Http\Controllers\Admin\PlanController as AdminPlanController;
 use App\Http\Controllers\Admin\RefundController;
@@ -167,6 +168,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('visitors', [VisitorController::class, 'index'])->name('visitors.index');
     Route::post('visitors/reset', [VisitorController::class, 'reset'])->name('visitors.reset');
+
+    Route::get('notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');
 
 });
 

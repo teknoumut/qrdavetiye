@@ -62,7 +62,11 @@
             </table>
         </div>
     </div>
-    <div class="mt-4">
-        {{ $reviews->links() }}
+    <div class="mt-4 flex items-center justify-between">
+        <form method="POST" action="{{ route('admin.reviews.mass-destroy') }}" onsubmit="return confirm('Tüm yorumları silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')">
+            @csrf @method('DELETE')
+            <button type="submit" class="px-4 py-2 text-sm font-semibold bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">🗑️ Tümünü Sil</button>
+        </form>
+        <div>{{ $reviews->links() }}</div>
     </div>
 </x-admin-layout>

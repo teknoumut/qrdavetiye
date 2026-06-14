@@ -142,6 +142,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
     Route::post('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
+    Route::delete('reviews/mass-destroy', [AdminReviewController::class, 'massDestroy'])->name('reviews.mass-destroy');
     Route::delete('reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
 
     Route::get('payment-notifications', [AdminPaymentNotificationController::class, 'index'])->name('payment-notifications.index');

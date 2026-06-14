@@ -27,4 +27,11 @@ class AdminReviewController extends Controller
 
         return redirect()->back()->with('success', 'Yorum silindi.');
     }
+
+    public function massDestroy()
+    {
+        Review::truncate();
+
+        return redirect()->back()->with('success', 'Tüm yorumlar silindi.');
+    }
 }

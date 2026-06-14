@@ -412,6 +412,7 @@
         + \App\Models\ContactMessage::where('is_read', false)->count();
     $lastSeenCount = (int) session('notifications_last_seen_raw_count', $rawNotificationCount);
     $badgeNotificationCount = max(0, $rawNotificationCount - $lastSeenCount);
+    session(['notifications_last_seen_raw_count' => $rawNotificationCount]);
 @endphp
 
 <body>

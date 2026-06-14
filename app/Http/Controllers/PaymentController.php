@@ -100,10 +100,15 @@ class PaymentController extends Controller
             if ($user->plan_id === $plan->id) {
                 return redirect()->route('home')->with('error', 'Zaten bu pakete abonesiniz.');
             }
-            $upgrade = $this->calculateUpgradePrice($user, $plan, 'monthly');
-            if (! $upgrade) {
+            $upgradeMonthly = $this->calculateUpgradePrice($user, $plan, 'monthly');
+            $upgradeYearly = $this->calculateUpgradePrice($user, $plan, 'yearly');
+            if (! $upgradeMonthly && ! $upgradeYearly) {
                 return redirect()->route('home')->with('error', 'Bu pakete yükseltme yapılamaz. Mevcut paketinizden daha düşük veya aynı fiyatlı paketler için yükseltme yapılamaz.');
             }
+            $upgrade = [
+                'monthly' => $upgradeMonthly,
+                'yearly' => $upgradeYearly,
+            ];
         }
 
         return view('checkout', compact('plan', 'upgrade'));

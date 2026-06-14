@@ -52,12 +52,12 @@
             <div style="background:#fefce8;border:1px solid #fde68a;border-radius:12px;padding:16px;margin-bottom:16px;font-size:0.85rem;">
                 <strong style="color:#92400e">📈 {{ $plan->name }} Paketine Yükseltme</strong>
                 <div style="margin-top:8px;color:#78350f;">
-                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan gün:</span> <strong>{{ $upgrade['remaining_days'] }} gün</strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan değer:</span> <strong>{{ number_format($upgrade['remaining_value'], 2) }} TL</strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Yeni plan fiyatı (kalan gün):</span> <strong>{{ number_format($upgrade['prorated_new_price'], 2) }} TL</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan gün:</span> <strong>{{ $upgrade['monthly']['remaining_days'] }} gün</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan değer:</span> <strong id="upgradeRemainingValue">{{ number_format($upgrade['monthly']['remaining_value'], 2) }} TL</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Yeni plan fiyatı (kalan gün):</span> <strong id="upgradeProratedPrice">{{ number_format($upgrade['monthly']['prorated_new_price'], 2) }} TL</strong></div>
                     <div style="border-top:1px dashed #fde68a;margin:6px 0;padding:6px 0;display:flex;justify-content:space-between;font-size:1rem;">
                         <span style="font-weight:700;">Ödenecek fark:</span>
-                        <strong style="color:#dc2626;font-size:1.2rem;" id="upgradePrice">{{ number_format($upgrade['difference'], 2) }} TL</strong>
+                        <strong style="color:#dc2626;font-size:1.2rem;" id="upgradePrice">{{ number_format($upgrade['monthly']['difference'], 2) }} TL</strong>
                     </div>
                 </div>
             </div>
@@ -69,17 +69,10 @@
 
             <form id="paymentForm" method="POST" action="{{ route('payment.eft.upgrade', $plan) }}">
                 @csrf
-                <input type="hidden" name="difference" value="{{ $upgrade['difference'] }}">
-                <input type="hidden" name="interval" value="monthly">
+                <input type="hidden" name="difference" id="differenceInput" value="{{ $upgrade['monthly']['difference'] }}">
+                <input type="hidden" name="interval" id="intervalInput" value="monthly">
                 <button type="submit" class="btn-pay" id="payBtn">
-                    <span class="label">{{ $upgrade['difference'] > 0 ? 'Farkı Öde ve Yükselt' : 'Yükseltmeyi Tamamla' }}</span>
-                    <span class="spinner" style="display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
-                </button>
-            </form>
-            @else
-            <form id="paymentForm" method="GET" action="{{ route('payment.eft.pay', [$plan, 'monthly']) }}">
-                <button type="submit" class="btn-pay" id="payBtn">
-                    <span class="label">Ödemeyi Tamamla</span>
+                    <span class="label">{{ isset($upgrade) ? ($upgrade['difference'] > 0 ? 'Farkı Öde ve Yükselt' : 'Yükseltmeyi Tamamla') : 'Ödemeyi Tamamla' }}</span>
                     <span class="spinner" style="display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
                 </button>
             </form>
@@ -98,6 +91,8 @@
         var monthlyPrice = @json($plan->monthly_price);
         var yearlyPrice = @json($plan->yearly_price);
         var isUpgrade = @json(isset($upgrade) ? true : false);
+        var upgradeMonthly = @json(isset($upgrade['monthly']) ? $upgrade['monthly'] : null);
+        var upgradeYearly = @json(isset($upgrade['yearly']) ? $upgrade['yearly'] : null);
         var payUrl = @json(route('payment.eft.pay', [$plan, '__INTERVAL__']));
 
         function setPlanInterval(type) {
@@ -105,8 +100,21 @@
                 b.classList.toggle('active', b.dataset.interval === type);
             });
 
-            if (!isUpgrade) {
-                document.getElementById('paymentForm').action = payUrl.replace('__INTERVAL__', type);
+            var form = document.getElementById('paymentForm');
+            var intervalInput = document.getElementById('intervalInput');
+            if (intervalInput) intervalInput.value = type;
+
+            if (isUpgrade) {
+                var data = type === 'yearly' ? upgradeYearly : upgradeMonthly;
+                if (data) {
+                    document.getElementById('upgradePrice').textContent = Number(data.difference).toFixed(2) + ' TL';
+                    document.getElementById('upgradeRemainingValue').textContent = Number(data.remaining_value).toFixed(2) + ' TL';
+                    document.getElementById('upgradeProratedPrice').textContent = Number(data.prorated_new_price).toFixed(2) + ' TL';
+                    document.getElementById('differenceInput').value = data.difference;
+                }
+                form.action = '{{ route('payment.eft.upgrade', $plan) }}';
+            } else {
+                form.action = payUrl.replace('__INTERVAL__', type);
             }
 
             var price = type === 'yearly' ? yearlyPrice : monthlyPrice;

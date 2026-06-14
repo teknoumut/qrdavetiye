@@ -102,41 +102,33 @@ class PaymentController extends Controller
     private function calculateSwitchPrice(User $user, Plan $plan): array
     {
         $oldInterval = $this->getUserInterval($user);
+
+        if ($oldInterval !== 'monthly') {
+            return ['monthly' => null, 'yearly' => null];
+        }
+
         $remainingDays = max(0, now()->diffInDays($user->subscription_end, false));
-        $oldIntervalDays = $oldInterval === 'yearly' ? 365 : 30;
+        $oldDailyRate = $this->getPrice($plan, 'monthly') / 30;
+        $newPrice = $this->getPrice($plan, 'yearly');
 
-        $result = [];
-        foreach (['monthly', 'yearly'] as $target) {
-            if ($target === $oldInterval) {
-                $result[$target] = null;
+        if (! $oldDailyRate || ! $newPrice) {
+            return ['monthly' => null, 'yearly' => null];
+        }
 
-                continue;
-            }
+        $remainingValue = $remainingDays * $oldDailyRate;
+        $switchPrice = max(0, $newPrice - $remainingValue);
 
-            $newIntervalDays = $target === 'yearly' ? 365 : 30;
-            $oldPrice = $this->getPrice($plan, $oldInterval);
-            $newPrice = $this->getPrice($plan, $target);
-
-            if (! $oldPrice || ! $newPrice) {
-                $result[$target] = null;
-
-                continue;
-            }
-
-            $remainingValue = $remainingDays * ($oldPrice / $oldIntervalDays);
-            $switchPrice = max(0, $newPrice - ($oldPrice - $remainingValue));
-
-            $result[$target] = [
+        return [
+            'monthly' => null,
+            'yearly' => [
                 'type' => 'interval_switch',
                 'difference' => round($switchPrice, 2),
                 'remaining_days' => (int) ceil($remainingDays),
                 'remaining_value' => round($remainingValue, 2),
-                'old_price' => $oldPrice,
+                'old_price' => $this->getPrice($plan, 'monthly'),
                 'new_price' => $newPrice,
-            ];
-        }
-
-        return $result;
+            ],
+        ];
     }
 
     public function checkout(Plan $plan)
@@ -156,8 +148,18 @@ class PaymentController extends Controller
             $currentPlan = $user->plan;
 
             if ($currentPlan && $currentPlan->id === $plan->id) {
-                $switchType = 'interval_switch';
                 $upgrade = $this->calculateSwitchPrice($user, $plan);
+                $hasValid = false;
+                foreach (['monthly', 'yearly'] as $int) {
+                    if ($upgrade[$int] && $upgrade[$int]['difference'] > 0) {
+                        $hasValid = true;
+                        break;
+                    }
+                }
+                if (! $hasValid) {
+                    return redirect()->route('home')->with('error', 'Zaten bu pakete abonesiniz ya da geçerli bir periyot değişikliği bulunmuyor.');
+                }
+                $switchType = 'interval_switch';
             } else {
                 $upgradeMonthly = $this->calculateUpgradePrice($user, $plan, 'monthly');
                 $upgradeYearly = $this->calculateUpgradePrice($user, $plan, 'yearly');
@@ -169,43 +171,12 @@ class PaymentController extends Controller
                         'yearly' => $upgradeYearly,
                     ];
                 } else {
-                    $switchType = 'downgrade';
-                    $remainingDays = max(0, now()->diffInDays($user->subscription_end, false));
-                    $upgrade = [
-                        'monthly' => [
-                            'type' => 'downgrade',
-                            'difference' => 0,
-                            'remaining_days' => (int) ceil($remainingDays),
-                        ],
-                        'yearly' => [
-                            'type' => 'downgrade',
-                            'difference' => 0,
-                            'remaining_days' => (int) ceil($remainingDays),
-                        ],
-                    ];
+                    return redirect()->route('home')->with('error', 'Daha düşük fiyatlı bir pakete geçiş yapmak için mevcut aboneliğinizi iptal etmeniz gerekmektedir. İptal ettikten sonra dilediğiniz paketi satın alabilirsiniz.');
                 }
             }
         }
 
         return view('checkout', compact('plan', 'upgrade', 'switchType'));
-    }
-
-    public function switchPlan(Request $request, Plan $plan)
-    {
-        if (! $plan->is_active) {
-            return redirect()->route('home')->with('error', 'Bu plan şu anda aktif değil.');
-        }
-
-        $user = auth()->user();
-        if (! $user || $user->subscription_status !== User::STATUS_ACTIVE
-            || ! $user->subscription_end || ! Carbon::parse($user->subscription_end)->isFuture()
-        ) {
-            return redirect()->route('payment.checkout', $plan)->with('error', 'Aktif bir aboneliğiniz bulunmuyor.');
-        }
-
-        (new SubscriptionService)->upgrade($user, $plan);
-
-        return redirect()->route('dashboard')->with('success', 'Planınız başarıyla değiştirildi.');
     }
 
     public function pay(Plan $plan, string $interval)

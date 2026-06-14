@@ -271,7 +271,7 @@
                         <li><span class="{{ $plan->qr_download ? 'check' : 'cross' }}">{{ $plan->qr_download ? '✓' : '✗' }}</span> {{ __('QR kod indirme') }}</li>
                     </ul>
                     @auth
-                        <a href="{{ route('payment.eft.checkout', $plan) }}" class="p-btn {{ $plan->monthly_price == 0 ? 'p-btn-outline' : '' }}">{{ __('Satın Al') }}</a>
+                        <a href="{{ route('payment.checkout', $plan) }}" class="p-btn {{ $plan->monthly_price == 0 ? 'p-btn-outline' : '' }}">{{ __('Satın Al') }}</a>
                     @else
                         <a href="{{ route('register', ['purchase' => 1]) }}" class="p-btn p-btn-outline">{{ __('Satın Al') }}</a>
                     @endauth

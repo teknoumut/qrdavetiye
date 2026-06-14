@@ -9,13 +9,13 @@ class VisitorController extends Controller
 {
     public function index()
     {
-        $visits = PageVisit::latest()->paginate(50);
+        $visits = PageVisit::where('url', url('/'))->latest()->paginate(50);
 
         $stats = [
-            'total' => PageVisit::count(),
-            'unique_ips' => PageVisit::distinct('ip')->count('ip'),
-            'today' => PageVisit::whereDate('created_at', today())->count(),
-            'countries' => PageVisit::whereNotNull('country')->distinct('country')->count('country'),
+            'total' => PageVisit::where('url', url('/'))->count(),
+            'unique_ips' => PageVisit::where('url', url('/'))->distinct('ip')->count('ip'),
+            'today' => PageVisit::where('url', url('/'))->whereDate('created_at', today())->count(),
+            'countries' => PageVisit::where('url', url('/'))->whereNotNull('country')->distinct('country')->count('country'),
         ];
 
         return view('admin.visitors.index', compact('visits', 'stats'));

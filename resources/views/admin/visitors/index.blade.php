@@ -12,7 +12,7 @@
     @endif
 
     <div class="flex items-center justify-between mb-6">
-        <div></div>
+        <div class="text-sm text-gray-500">Sadece ana sayfa ziyaretleri sayılır. Admin girişleri dahil edilmez.</div>
         <form method="POST" action="{{ route('admin.visitors.reset') }}" onsubmit="return confirm('Tüm ziyaretçi kayıtları silinecek! Emin misiniz?')">
             @csrf
             <button type="submit" class="px-4 py-2 rounded-lg bg-red-50 border border-red-200 text-red-600 hover:bg-red-100 text-sm font-semibold transition-all flex items-center gap-2">
@@ -42,13 +42,12 @@
 
     <div class="glass-card overflow-hidden">
         <div class="table-wrap">
-            <table>
+                    <table>
                 <thead>
                     <tr>
                         <th>IP</th>
                         <th>Konum</th>
                         <th>ISS</th>
-                        <th>Sayfa</th>
                         <th>Tarih</th>
                     </tr>
                 </thead>
@@ -70,14 +69,11 @@
                                 @endif
                             </td>
                             <td class="text-xs text-gray-500">{{ $visit->isp ?? '-' }}</td>
-                            <td class="max-w-[200px] truncate" title="{{ $visit->url }}">
-                                <a href="{{ $visit->url }}" target="_blank" class="text-indigo-600 hover:underline text-xs">{{ \Illuminate\Support\Str::limit($visit->url, 60) }}</a>
-                            </td>
                             <td class="whitespace-nowrap text-xs text-gray-500">{{ $visit->created_at->format('d.m.Y H:i') }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-10 text-gray-400">Henüz ziyaretçi kaydı yok</td>
+                            <td colspan="4" class="text-center py-10 text-gray-400">Henüz ziyaretçi kaydı yok</td>
                         </tr>
                     @endforelse
                 </tbody>

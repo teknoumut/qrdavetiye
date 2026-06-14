@@ -405,6 +405,8 @@
         }
     </style>
 </head>
+@php $pendingNotificationCount = \App\Models\PaymentNotification::where('status', 'pending')->count(); @endphp
+
 <body>
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
@@ -437,6 +439,12 @@
             </a>
             <a href="{{ route('admin.contact-messages.index') }}" class="nav-item {{ request()->routeIs('admin.contact-messages*') ? 'active' : '' }}">
                 <span class="nav-icon">✉️</span> Mesajlar
+            </a>
+            <a href="{{ route('admin.payment-notifications.index') }}" class="nav-item {{ request()->routeIs('admin.payment-notifications*') ? 'active' : '' }}">
+                <span class="nav-icon">💳</span> Ödemeler
+                @if($pendingNotificationCount > 0)
+                    <span class="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[10px] font-bold text-white bg-red-500 rounded-full">{{ $pendingNotificationCount }}</span>
+                @endif
             </a>
             <div class="nav-section">Sistem</div>
             <a href="{{ route('admin.visitors.index') }}" class="nav-item {{ request()->routeIs('admin.visitors*') ? 'active' : '' }}">
@@ -522,11 +530,58 @@
         </main>
     </div>
 
+    <audio id="notifSound" preload="auto" style="display:none"></audio>
+
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('open');
         }
+
+        function playNotificationSound() {
+            try {
+                var ctx = new (window.AudioContext || window.webkitAudioContext)();
+                var g = ctx.createGain();
+                g.connect(ctx.destination);
+                g.gain.value = 0.15;
+
+                var o1 = ctx.createOscillator();
+                o1.type = 'sine';
+                o1.frequency.value = 523.25;
+                o1.connect(g);
+                o1.start();
+                o1.stop(ctx.currentTime + 0.12);
+
+                var o2 = ctx.createOscillator();
+                o2.type = 'sine';
+                o2.frequency.value = 659.25;
+                o2.connect(g);
+                o2.start(ctx.currentTime + 0.13);
+                o2.stop(ctx.currentTime + 0.28);
+
+                var o3 = ctx.createOscillator();
+                o3.type = 'sine';
+                o3.frequency.value = 783.99;
+                o3.connect(g);
+                o3.start(ctx.currentTime + 0.29);
+                o3.stop(ctx.currentTime + 0.45);
+            } catch(e) {}
+        }
+
+        (function() {
+            var lastCount = {{ $pendingNotificationCount ?? 0 }};
+            setInterval(function() {
+                fetch('{{ route('admin.payment-notifications.pending-count') }}')
+                    .then(function(r) { return r.json(); })
+                    .then(function(d) {
+                        if (d.count > lastCount) {
+                            playNotificationSound();
+                        }
+                        lastCount = d.count;
+                    })
+                    .catch(function() {});
+            }, 15000);
+        })();
     </script>
 </body>
 </html>

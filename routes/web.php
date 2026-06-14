@@ -22,6 +22,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\InvitationController as UserInvitationController;
+use App\Models\PaymentNotification;
 use App\Models\Review;
 use Illuminate\Support\Facades\Route;
 
@@ -154,6 +155,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('visitors', [VisitorController::class, 'index'])->name('visitors.index');
     Route::post('visitors/reset', [VisitorController::class, 'reset'])->name('visitors.reset');
+
+    Route::get('payment-notifications/pending-count', function () {
+        return response()->json([
+            'count' => PaymentNotification::where('status', 'pending')->count(),
+        ]);
+    })->name('payment-notifications.pending-count');
 
 });
 

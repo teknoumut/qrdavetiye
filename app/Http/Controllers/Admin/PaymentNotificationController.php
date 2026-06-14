@@ -37,7 +37,7 @@ class PaymentNotificationController extends Controller
 
             $service = new SubscriptionService;
             if ($notification->is_upgrade) {
-                $service->upgrade($notification->user, $notification->plan);
+                $service->upgrade($notification->user, $notification->plan, $notification->interval);
             } else {
                 $service->activate($notification->user, $notification->plan, $notification->interval);
             }

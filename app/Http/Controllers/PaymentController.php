@@ -240,7 +240,7 @@ class PaymentController extends Controller
 
                 $service = new SubscriptionService;
                 if ($isUpgrade) {
-                    $service->upgrade($user, $plan);
+                    $service->upgrade($user, $plan, $interval);
                 } else {
                     $service->activate($user, $plan, $interval);
                 }
@@ -357,7 +357,7 @@ class PaymentController extends Controller
                 $service = new SubscriptionService;
 
                 if ($isUpgrade) {
-                    $service->upgrade($user, $plan);
+                    $service->upgrade($user, $plan, $interval);
                 } else {
                     $service->activate($user, $plan, $interval);
                 }

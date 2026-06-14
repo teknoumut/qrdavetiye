@@ -77,7 +77,7 @@
                 </button>
             </form>
             @else
-            <form id="paymentForm" method="GET" action="{{ route('payment.pay', ['plan' => $plan->id, 'interval' => 'monthly']) }}">
+            <form id="paymentForm" method="GET" action="{{ route('payment.eft.pay', [$plan, 'monthly']) }}">
                 <button type="submit" class="btn-pay" id="payBtn">
                     <span class="label">Ödemeyi Tamamla</span>
                     <span class="spinner" style="display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
@@ -98,7 +98,7 @@
         var monthlyPrice = @json($plan->monthly_price);
         var yearlyPrice = @json($plan->yearly_price);
         var isUpgrade = @json(isset($upgrade) ? true : false);
-        var payUrl = @json(route('payment.pay', ['plan' => $plan->id, 'interval' => '__INTERVAL__']));
+        var payUrl = @json(route('payment.eft.pay', [$plan, '__INTERVAL__']));
 
         function setPlanInterval(type) {
             document.querySelectorAll('.interval-btn').forEach(function(b) {

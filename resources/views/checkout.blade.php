@@ -34,7 +34,7 @@
 
             <div class="price-display">
                 <span id="priceDisplay">{{ number_format($plan->monthly_price, 2) }}</span>
-                <span class="cur">USD</span>
+                <span class="cur">TL</span>
                 <span id="periodDisplay" style="font-size:0.9rem;color:#8893ac;font-weight:400">/ {{ __('ay') }}</span>
             </div>
 

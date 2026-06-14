@@ -26,6 +26,7 @@ class Invoice extends Model
         'billing_address',
         'tax_number',
         'tax_office',
+        'is_upgrade',
     ];
 
     protected $casts = [
@@ -34,6 +35,7 @@ class Invoice extends Model
         'tax_amount' => 'decimal:2',
         'refund_requested_at' => 'datetime',
         'refunded_at' => 'datetime',
+        'is_upgrade' => 'boolean',
     ];
 
     public function refundApprover()

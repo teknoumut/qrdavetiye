@@ -66,6 +66,7 @@ class PaymentNotificationController extends Controller
                 'status' => 'paid',
                 'gateway' => 'EFT/Havale',
                 'transaction_id' => $notification->order_no,
+                'is_upgrade' => $notification->is_upgrade,
             ]);
 
             DB::commit();

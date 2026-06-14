@@ -60,7 +60,10 @@
                 <h1>FATURA</h1>
                 <div class="meta"><strong>Fatura No:</strong> {{ $invoice->invoice_no }}</div>
                 <div class="meta"><strong>Düzenlenme:</strong> {{ $invoice->created_at->format('d/m/Y') }}</div>
-                <div class="meta" style="margin-top:4px;"><span class="badge badge-paid">{{ ucfirst($invoice->status) }}</span></div>
+                <div class="meta" style="margin-top:4px;">
+                    <span class="badge badge-paid">{{ ucfirst($invoice->status) }}</span>
+                    @if($invoice->is_upgrade)<span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:8px;font-weight:700;background:#fef3c7;color:#92400e;margin-left:4px;">YÜKSELTME</span>@endif
+                </div>
             </td>
         </tr>
     </table>
@@ -94,7 +97,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ $invoice->plan->name ?? 'Plan' }}</td>
+                <td>{{ $invoice->plan->name ?? 'Plan' }} @if($invoice->is_upgrade)<br><span style="font-size:9px;color:#92400e;font-weight:600;">↑ Paket yükseltme</span>@endif</td>
                 <td>{{ $invoice->interval === 'yearly' ? 'Yıllık' : 'Aylık' }}</td>
                 <td>{{ ucfirst($invoice->status) }}</td>
                 <td>{{ formatCurrency($invoice->amount) }}</td>

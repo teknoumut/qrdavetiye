@@ -148,7 +148,7 @@ class PaymentController extends Controller
                     $service->activate($user, $plan, $interval);
                 }
 
-                $invoice = $this->createInvoice($user, $plan, $interval, $price, $result->transactionId);
+                $invoice = $this->createInvoice($user, $plan, $interval, $price, $result->transactionId, $isUpgrade);
 
                 DB::commit();
 
@@ -265,7 +265,7 @@ class PaymentController extends Controller
                     $service->activate($user, $plan, $interval);
                 }
 
-                $invoice = $this->createInvoice($user, $plan, $interval, $price, $result->transactionId);
+                $invoice = $this->createInvoice($user, $plan, $interval, $price, $result->transactionId, $isUpgrade);
 
                 DB::commit();
 
@@ -331,7 +331,7 @@ class PaymentController extends Controller
         return (float) Setting::getValue('tax_rate', 20);
     }
 
-    private function createInvoice($user, $plan, $interval, $price, ?string $transactionId = null): Invoice
+    private function createInvoice($user, $plan, $interval, $price, ?string $transactionId = null, bool $isUpgrade = false): Invoice
     {
         $last = Invoice::latest()->first();
         $seq = $last ? (intval(substr($last->invoice_no, -4)) + 1) : 1;
@@ -348,6 +348,7 @@ class PaymentController extends Controller
             'status' => 'paid',
             'gateway' => $this->gateway->getName(),
             'transaction_id' => $transactionId,
+            'is_upgrade' => $isUpgrade,
         ]);
     }
 }

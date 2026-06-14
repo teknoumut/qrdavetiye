@@ -38,7 +38,7 @@ class PaymentController extends Controller
         return null;
     }
 
-    private function calculateUpgradePrice(User $user, Plan $newPlan, string $interval): ?array
+    private function calculateUpgradePrice(User $user, Plan $newPlan, string $newInterval): ?array
     {
         $oldPlan = $user->plan;
         if (! $oldPlan || ! $user->subscription_end || ! now()->lessThan($user->subscription_end)) {
@@ -46,22 +46,35 @@ class PaymentController extends Controller
         }
 
         $remainingDays = max(0, now()->diffInDays($user->subscription_end, false));
-        $totalDays = $interval === 'yearly' ? 365 : 30;
 
-        $oldPrice = $this->getPrice($oldPlan, $interval);
-        $newPrice = $this->getPrice($newPlan, $interval);
+        $oldInterval = 'monthly';
+        if ($user->subscription_start) {
+            $diffDays = $user->subscription_start->diffInDays($user->subscription_end);
+            if ($diffDays >= 360) {
+                $oldInterval = 'yearly';
+            }
+        }
+
+        $oldIntervalDays = $oldInterval === 'yearly' ? 365 : 30;
+        $newIntervalDays = $newInterval === 'yearly' ? 365 : 30;
+
+        $oldPrice = $this->getPrice($oldPlan, $oldInterval);
+        $newPrice = $this->getPrice($newPlan, $newInterval);
 
         if (! $oldPrice || ! $newPrice || $newPrice <= $oldPrice) {
             return null;
         }
 
-        $remainingValue = ($remainingDays / $totalDays) * $oldPrice;
-        $proratedNewPrice = ($remainingDays / $totalDays) * $newPrice;
+        $oldDailyRate = $oldPrice / $oldIntervalDays;
+        $newDailyRate = $newPrice / $newIntervalDays;
+
+        $remainingValue = $remainingDays * $oldDailyRate;
+        $proratedNewPrice = $remainingDays * $newDailyRate;
         $difference = max(0, $proratedNewPrice - $remainingValue);
 
         return [
             'remaining_days' => (int) ceil($remainingDays),
-            'total_days' => $totalDays,
+            'total_days' => $oldIntervalDays,
             'old_plan' => $oldPlan,
             'old_price' => $oldPrice,
             'new_price' => $newPrice,

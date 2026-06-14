@@ -31,7 +31,7 @@ class CheckSubscription
             }
         }
 
-        $expired = $user->subscription_status === User::STATUS_EXPIRED
+        $expired = $user->subscription_status !== User::STATUS_ACTIVE
             || ($user->subscription_end && now()->greaterThan($user->subscription_end));
 
         if ($expired && ! $user->is_admin) {

@@ -31,12 +31,8 @@ class SubscriptionService
         }
 
         $now = Carbon::now();
-        $start = $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
-            ? Carbon::parse($user->subscription_end)
-            : $now;
-
         $days = $interval === 'yearly' ? 365 : 30;
-        $end = $start->copy()->addDays($days);
+        $end = $now->copy()->addDays($days);
 
         $user->update([
             'plan_id' => $plan->id,

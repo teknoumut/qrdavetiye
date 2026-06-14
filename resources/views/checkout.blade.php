@@ -59,12 +59,17 @@
             </ul>
 
             @if($switchType === 'upgrade')
+            @php
+                $selectedInterval = $upgrade['yearly'] ? 'yearly' : 'monthly';
+                $newPeriodDays = $selectedInterval === 'yearly' ? 365 : 30;
+            @endphp
             <div class="info-box" style="background:#fefce8;border:1px solid #fde68a;">
                 <strong style="color:#92400e">📈 {{ $plan->name }} Paketine Yükseltme</strong>
                 <div style="margin-top:8px;color:#78350f;">
-                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan gün:</span> <strong>{{ $upgrade['monthly']['remaining_days'] ?? $upgrade['yearly']['remaining_days'] }} gün</strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan değer:</span> <strong id="upgradeRemainingValue">{{ number_format($upgrade['monthly']['remaining_value'] ?? 0, 2) }} TL</strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Yeni plan fiyatı (kalan gün):</span> <strong id="upgradeProratedPrice">{{ number_format($upgrade['monthly']['prorated_new_price'] ?? 0, 2) }} TL</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Mevcut paketten kalan gün:</span> <strong>{{ $upgrade['monthly']['remaining_days'] ?? $upgrade['yearly']['remaining_days'] }} gün</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan değer (kredi):</span> <strong id="upgradeRemainingValue">{{ number_format($upgrade['monthly']['remaining_value'] ?? 0, 2) }} TL</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;" id="proratedRow"><span>Yeni plan fiyatı (kalan gün):</span> <strong id="upgradeProratedPrice">{{ number_format($upgrade['monthly']['prorated_new_price'] ?? 0, 2) }} TL</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Yeni abonelik süresi:</span> <strong id="newPeriodDisplay">{{ $newPeriodDays }} gün</strong></div>
                     <div style="border-top:1px dashed #fde68a;margin:6px 0;padding:6px 0;display:flex;justify-content:space-between;font-size:1rem;">
                         <span style="font-weight:700;">Ödenecek fark:</span>
                         <strong style="color:#dc2626;font-size:1.2rem;" id="upgradePrice">{{ number_format($upgrade['monthly']['difference'] ?? 0, 2) }} TL</strong>
@@ -91,8 +96,9 @@
             <div class="info-box" style="background:#fefce8;border:1px solid #fde68a;">
                 <strong style="color:#92400e">🔄 Yıllık Pakete Geçiş</strong>
                 <div style="margin-top:8px;color:#78350f;">
-                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan gün:</span> <strong>{{ $targetData['remaining_days'] }} gün</strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan değer:</span> <strong>{{ number_format($targetData['remaining_value'], 2) }} TL</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Mevcut paketten kalan gün:</span> <strong>{{ $targetData['remaining_days'] }} gün</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan değer (kredi):</span> <strong>{{ number_format($targetData['remaining_value'], 2) }} TL</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Yeni abonelik süresi:</span> <strong>365 gün</strong></div>
                     <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Yıllık paket fiyatı:</span> <strong>{{ number_format($targetData['new_price'], 2) }} TL</strong></div>
                     <div style="border-top:1px dashed #fde68a;margin:6px 0;padding:6px 0;display:flex;justify-content:space-between;font-size:1rem;">
                         <span style="font-weight:700;">Ödenecek tutar:</span>
@@ -165,6 +171,8 @@
                     var diffInput = document.getElementById('differenceInput');
                     if (diffInput) diffInput.value = data.difference;
                 }
+                var periodEl = document.getElementById('newPeriodDisplay');
+                if (periodEl) periodEl.textContent = type === 'yearly' ? '365 gün' : '30 gün';
                 form.action = upgradeUrl;
             } else {
                 form.action = payUrl.replace('__INTERVAL__', type);

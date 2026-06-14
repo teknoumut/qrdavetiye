@@ -185,6 +185,9 @@
                                             <a href="{{ route('invoices.show', $inv) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-xs font-semibold transition-colors" target="_blank">
                                                 Görüntüle
                                             </a>
+                                            <a href="{{ route('invoices.download', $inv) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 text-xs font-semibold transition-colors">
+                                                İndir
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

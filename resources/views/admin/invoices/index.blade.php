@@ -69,9 +69,14 @@
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 text-right whitespace-nowrap">
-                                <a href="{{ route('invoices.show', $inv) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-xs font-semibold transition-colors" target="_blank">
-                                    Goruntule
-                                </a>
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('invoices.show', $inv) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-xs font-semibold transition-colors" target="_blank">
+                                        Goruntule
+                                    </a>
+                                    <a href="{{ route('invoices.download', $inv) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 text-xs font-semibold transition-colors">
+                                        Indir
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty

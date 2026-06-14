@@ -44,7 +44,8 @@ class SettingController extends Controller
             'bank_holder' => 'nullable|string|max:255',
             'bank_iban' => 'nullable|string|max:50',
 
-            'notification_sound' => 'nullable|string|max:500',
+            'notification_sound_preset' => 'nullable|string|in:ding,chime,triple,custom',
+            'notification_sound_custom' => 'nullable|string|max:500',
         ]);
 
         foreach ($data as $key => $value) {

@@ -214,24 +214,54 @@
                 </div>
             </div>
 
-            <div class="mb-6">
-                <label>Bildirim Sesi URL'si</label>
+            <div class="mb-4">
+                <label>Hazır Ses</label>
                 <div class="flex gap-2">
-                    <input type="text" name="notification_sound" value="{{ old('notification_sound', $settings['notification_sound'] ?? '') }}" placeholder="https://www.soundbible.com/mp3/kes.mp3" class="flex-1">
-                    <button type="button" onclick="testSound()" class="btn-ghost shrink-0">🔊 Test</button>
+                    <select name="notification_sound_preset" onchange="presetChanged(this)" class="flex-1">
+                        <option value="ding" {{ ($settings['notification_sound_preset'] ?? 'ding') === 'ding' ? 'selected' : '' }}>Ding (tek ton)</option>
+                        <option value="chime" {{ ($settings['notification_sound_preset'] ?? '') === 'chime' ? 'selected' : '' }}>Chime (iki ton)</option>
+                        <option value="triple" {{ ($settings['notification_sound_preset'] ?? '') === 'triple' ? 'selected' : '' }}>Triple (üç ton)</option>
+                        <option value="custom" {{ ($settings['notification_sound_preset'] ?? '') === 'custom' ? 'selected' : '' }}>Özel URL</option>
+                    </select>
+                    <button type="button" onclick="testPresetSound()" class="btn-ghost shrink-0">🔊 Test</button>
                 </div>
-                <p class="text-xs text-gray-400 mt-1.5">Direkt MP3/OGG/WAV dosya linki girin. <strong>YouTube linki çalışmaz.</strong> Boş bırakırsanız varsayılan ses kullanılır. <a href="https://www.google.com/search?q=notification+sound+mp3+free" target="_blank" class="underline hover:text-gray-600">Ücretsiz bildirim sesi ara →</a></p>
+            </div>
+
+            <div class="mb-6" id="customSoundUrlField" style="display:{{ ($settings['notification_sound_preset'] ?? 'ding') === 'custom' ? 'block' : 'none' }}">
+                <label>Özel Ses URL'si (MP3/OGG/WAV)</label>
+                <input type="text" name="notification_sound_custom" value="{{ old('notification_sound_custom', $settings['notification_sound_custom'] ?? '') }}" placeholder="https://example.com/ses.mp3">
+                <p class="text-xs text-gray-400 mt-1.5">YouTube linki değil, direkt <strong>MP3 dosya linki</strong> girin. İnternette "notification sound mp3" aratıp çıkan sitelerden kopyalayın.</p>
             </div>
 
             <script>
-                function testSound() {
-                    var url = document.querySelector('[name="notification_sound"]').value;
-                    if (url) {
-                        try {
-                            var a = new Audio(url);
-                            a.volume = 0.4;
-                            a.play().catch(function(e) { alert('Ses çalınamadı. Linki kontrol edin.'); });
-                        } catch(e) { alert('Geçersiz URL'); }
+                var notifCtx = null;
+                function getAudioCtx() {
+                    if (!notifCtx) { try { notifCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} }
+                    if (notifCtx && notifCtx.state === 'suspended') notifCtx.resume();
+                    return notifCtx;
+                }
+                function playBeep(freq, start, dur) {
+                    var ctx = getAudioCtx(); if (!ctx) return;
+                    var g = ctx.createGain(); g.connect(ctx.destination); g.gain.value = 0.12;
+                    var o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = freq;
+                    o.connect(g); o.start(ctx.currentTime + start); o.stop(ctx.currentTime + start + dur);
+                }
+                function playPreset(name) {
+                    if (name === 'ding') { playBeep(880, 0, 0.2); }
+                    else if (name === 'chime') { playBeep(523, 0, 0.15); playBeep(659, 0.16, 0.2); }
+                    else if (name === 'triple') { playBeep(523, 0, 0.12); playBeep(659, 0.13, 0.15); playBeep(784, 0.29, 0.2); }
+                }
+                function presetChanged(sel) {
+                    document.getElementById('customSoundUrlField').style.display = sel.value === 'custom' ? 'block' : 'none';
+                }
+                function testPresetSound() {
+                    var preset = document.querySelector('[name="notification_sound_preset"]').value;
+                    if (preset === 'custom') {
+                        var url = document.querySelector('[name="notification_sound_custom"]').value;
+                        if (url) { try { var a = new Audio(url); a.volume = 0.4; a.play().catch(function() { alert('Ses çalınamadı. URL\'yi kontrol edin.'); }); } catch(e) { alert('Geçersiz URL'); } }
+                        else { alert('Önce bir URL girin.'); }
+                    } else {
+                        playPreset(preset);
                     }
                 }
             </script>

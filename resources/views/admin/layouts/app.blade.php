@@ -547,45 +547,31 @@
         }
 
         @php
-            $notifSoundUrl = \App\Models\Setting::getValue('notification_sound', '');
+            $notifPreset = \App\Models\Setting::getValue('notification_sound_preset', 'ding');
+            $notifCustom = \App\Models\Setting::getValue('notification_sound_custom', '');
         @endphp
-
-        var notifSoundUrl = '{{ $notifSoundUrl }}';
+        var notifPreset = '{{ $notifPreset }}';
+        var notifCustom = '{{ $notifCustom }}';
         var notifCtx = null;
-
         function initAudioCtx() {
-            if (!notifCtx) {
-                try { notifCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
-            }
-            if (notifCtx && notifCtx.state === 'suspended') {
-                notifCtx.resume();
-            }
+            if (!notifCtx) { try { notifCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} }
+            if (notifCtx && notifCtx.state === 'suspended') notifCtx.resume();
         }
         document.addEventListener('click', initAudioCtx, { once: true });
         document.addEventListener('touchstart', initAudioCtx, { once: true });
-
+        function beep(freq, start, dur) {
+            initAudioCtx(); if (!notifCtx) return;
+            var g = notifCtx.createGain(); g.connect(notifCtx.destination); g.gain.value = 0.12;
+            var o = notifCtx.createOscillator(); o.type = 'sine'; o.frequency.value = freq;
+            o.connect(g); o.start(notifCtx.currentTime + start); o.stop(notifCtx.currentTime + start + dur);
+        }
         function playNotificationSound() {
-            if (notifSoundUrl) {
-                try {
-                    var a = new Audio(notifSoundUrl);
-                    a.volume = 0.4;
-                    a.play().catch(function() {});
-                    return;
-                } catch(e) {}
+            if (notifPreset === 'custom' && notifCustom) {
+                try { var a = new Audio(notifCustom); a.volume = 0.4; a.play().catch(function(){}); return; } catch(e) {}
             }
-            initAudioCtx();
-            if (!notifCtx) return;
-            try {
-                var g = notifCtx.createGain();
-                g.connect(notifCtx.destination);
-                g.gain.value = 0.1;
-                var o = notifCtx.createOscillator();
-                o.type = 'sine';
-                o.frequency.value = 880;
-                o.connect(g);
-                o.start();
-                o.stop(notifCtx.currentTime + 0.2);
-            } catch(e) {}
+            if (notifPreset === 'chime') { beep(523, 0, 0.15); beep(659, 0.16, 0.2); }
+            else if (notifPreset === 'triple') { beep(523, 0, 0.12); beep(659, 0.13, 0.15); beep(784, 0.29, 0.2); }
+            else { beep(880, 0, 0.2); }
         }
 
         (function() {

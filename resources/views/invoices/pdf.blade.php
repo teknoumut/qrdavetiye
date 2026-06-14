@@ -4,55 +4,92 @@
     <meta charset="utf-8">
     <title>Fatura {{ $invoice->invoice_no }}</title>
     <style>
-        body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; color: #1a1a2e; }
-        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #06b6d4; }
-        .header .brand-name { font-size: 24px; margin: 0; font-family: 'Dancing Script', 'DejaVu Sans', cursive; }
-        .header p { color: #8893ac; font-size: 11px; margin: 5px 0 0; }
-        .info { margin-bottom: 30px; }
-        .info table { width: 100%; }
-        .info td { vertical-align: top; padding: 5px 10px; }
-        .info td:first-child { width: 50%; }
-        .info h3 { font-size: 10px; text-transform: uppercase; color: #8893ac; margin: 0 0 5px; letter-spacing: 1px; }
-        .info p { margin: 2px 0; font-size: 12px; }
-        .details { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        .details th { background: #f5f5f7; padding: 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8893ac; }
-        .details td { padding: 10px; border-bottom: 1px solid #eceef2; font-size: 12px; }
-        .details td:last-child { text-align: right; }
-        .total { text-align: right; font-size: 18px; font-weight: bold; padding: 10px 0; border-top: 2px solid #1a1a2e; }
-        .footer { text-align: center; color: #b1b8c9; font-size: 10px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eceef2; }
+        @page { margin: 30px 40px; }
+        body { font-family: 'DejaVu Sans', sans-serif; font-size: 11px; color: #1e293b; line-height: 1.5; margin: 0; padding: 0; }
+        .header-table { width: 100%; margin-bottom: 30px; }
+        .header-table td { vertical-align: middle; }
+        .header-left { width: 50%; }
+        .header-right { width: 50%; text-align: right; }
+        .header-right h1 { font-size: 22px; font-weight: 900; color: #0f172a; margin: 0 0 4px; letter-spacing: -0.02em; }
+        .header-right .meta { font-size: 10px; color: #64748b; }
+        .header-right .meta strong { color: #0f172a; }
+        .logo-box { display: inline-block; }
+        .logo-box img { width: 60px; height: 60px; vertical-align: middle; }
+        .brand-text { display: inline-block; vertical-align: middle; margin-left: 10px; font-size: 20px; font-family: 'Dancing Script', 'DejaVu Sans', cursive; font-weight: 700; }
+        .brand-text .t { color: #06b6d4; }
+        .brand-text .p { color: #ec4899; }
+        hr { border: none; border-top: 2px solid #06b6d4; margin: 0 0 25px; }
+        .company-box, .client-box { width: 48%; vertical-align: top; }
+        .company-box h3, .client-box h3 { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin: 0 0 8px; }
+        .company-box p, .client-box p { margin: 2px 0; font-size: 11px; color: #1e293b; }
+        .company-box .label { color: #64748b; font-size: 10px; }
+        .details { width: 100%; border-collapse: collapse; margin: 25px 0; border-radius: 8px; overflow: hidden; }
+        .details thead { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .details th { padding: 10px 14px; text-align: left; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #fff; font-weight: 700; }
+        .details th:last-child { text-align: right; }
+        .details td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #334155; }
+        .details td:last-child { text-align: right; font-weight: 700; }
+        .details tbody tr:last-child td { border-bottom: none; }
+        .details tbody tr:nth-child(even) { background: #f8fafc; }
+        .totals { margin-left: auto; width: 280px; }
+        .totals table { width: 100%; }
+        .totals td { padding: 5px 0; font-size: 12px; }
+        .totals .label { color: #64748b; }
+        .totals .value { text-align: right; font-weight: 600; }
+        .totals .sep td { border-top: 1px solid #e2e8f0; }
+        .grand-total td { font-size: 16px; font-weight: 900; color: #0f172a; padding-top: 8px; border-top: 2px solid #0f172a; }
+        .grand-total .value { color: #06b6d4; }
+        .footer { text-align: center; color: #94a3b8; font-size: 9px; margin-top: 35px; padding-top: 15px; border-top: 1px solid #e2e8f0; }
+        .footer p { margin: 2px 0; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-paid { background: #dcfce7; color: #166534; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <img src="data:image/svg+xml;base64,{{ $logoBase64 }}" alt="Logo" style="width:70px;height:70px;margin-bottom:10px;">
-        <h1 class="brand-name"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></h1>
-        <p>Fatura #{{ $invoice->invoice_no }}</p>
-        <p>{{ $invoice->created_at->format('d F Y') }}</p>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td class="header-left">
+                <div class="logo-box">
+                    <img src="data:image/svg+xml;base64,{{ $logoBase64 }}" alt="Logo">
+                </div>
+                <div class="brand-text">
+                    <span class="t">Senin</span> <span class="p">Davetiyen</span>
+                </div>
+            </td>
+            <td class="header-right">
+                <h1>FATURA</h1>
+                <div class="meta"><strong>Fatura No:</strong> {{ $invoice->invoice_no }}</div>
+                <div class="meta"><strong>Düzenlenme:</strong> {{ $invoice->created_at->format('d/m/Y') }}</div>
+                <div class="meta" style="margin-top:4px;"><span class="badge badge-paid">{{ ucfirst($invoice->status) }}</span></div>
+            </td>
+        </tr>
+    </table>
 
-    <div class="info">
-        <table>
-            <tr>
-                <td>
-                    <h3>Fatura Eden</h3>
-                    <p><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></p>
-                </td>
-                <td>
-                    <h3>Müşteri</h3>
-                    <p>{{ $invoice->user->name }}</p>
-                    <p>{{ $invoice->user->email }}</p>
-                </td>
-            </tr>
-        </table>
-    </div>
+    <hr>
+
+    <table style="width:100%;margin-bottom:25px;">
+        <tr>
+            <td class="company-box">
+                <h3>Fatura Eden</h3>
+                <p style="font-weight:700;font-size:13px;"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></p>
+                <p>info@senindavetiyen.com.tr</p>
+                <p>www.senindavetiyen.com.tr</p>
+            </td>
+            <td class="client-box">
+                <h3>Müşteri</h3>
+                <p style="font-weight:700;font-size:13px;">{{ $invoice->user->name }}</p>
+                <p>{{ $invoice->user->email }}</p>
+            </td>
+        </tr>
+    </table>
 
     <table class="details">
         <thead>
             <tr>
-                <th>Açıklama</th>
+                <th style="width:50%;">Açıklama</th>
                 <th>Dönem</th>
                 <th>Durum</th>
-                <th>Tutar</th>
+                <th style="text-align:right;">Tutar</th>
             </tr>
         </thead>
         <tbody>
@@ -65,24 +102,29 @@
         </tbody>
     </table>
 
-    <div style="text-align:right;margin-top:20px;padding-top:15px;border-top:1px solid #eceef2;">
-        <div style="font-size:13px;padding:3px 0;color:#464e62;">
-            <span>Ara Toplam:</span>
-            <span style="margin-left:20px;font-weight:600;">{{ formatCurrency($invoice->amount) }}</span>
-        </div>
-        @if($invoice->tax_rate > 0)
-        <div style="font-size:13px;padding:3px 0;color:#464e62;">
-            <span>KDV ({{ number_format($invoice->tax_rate, 0) }}%):</span>
-            <span style="margin-left:20px;font-weight:600;">{{ formatCurrency($invoice->tax_amount) }}</span>
-        </div>
-        @endif
-        <div class="total">
-            Toplam: {{ formatCurrency($invoice->amount + $invoice->tax_amount) }}
-        </div>
+    <div class="totals">
+        <table>
+            <tr>
+                <td class="label">Ara Toplam</td>
+                <td class="value">{{ formatCurrency($invoice->amount) }}</td>
+            </tr>
+            @if($invoice->tax_rate > 0)
+            <tr>
+                <td class="label">KDV ({{ number_format($invoice->tax_rate, 0) }}%)</td>
+                <td class="value">{{ formatCurrency($invoice->tax_amount) }}</td>
+            </tr>
+            @endif
+            <tr class="sep"><td colspan="2"></td></tr>
+            <tr class="grand-total">
+                <td class="label">Toplam</td>
+                <td class="value">{{ formatCurrency($invoice->amount + $invoice->tax_amount) }}</td>
+            </tr>
+        </table>
     </div>
 
     <div class="footer">
-        <p><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span> - Bu fatura {{ $invoice->created_at->format('d/m/Y') }} tarihinde oluşturulmuştur.</p>
+        <p><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span> &bull; www.senindavetiyen.com.tr &bull; info@senindavetiyen.com.tr</p>
+        <p>Bu fatura {{ $invoice->created_at->format('d/m/Y') }} tarihinde oluşturulmuştur.</p>
     </div>
 </body>
 </html>

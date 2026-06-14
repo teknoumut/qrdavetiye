@@ -22,6 +22,8 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\InvitationController as UserInvitationController;
+use App\Models\ContactMessage;
+use App\Models\Invoice;
 use App\Models\PaymentNotification;
 use App\Models\Review;
 use Illuminate\Support\Facades\Route;
@@ -143,8 +145,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('payment-notifications', [AdminPaymentNotificationController::class, 'index'])->name('payment-notifications.index');
     Route::get('payment-notifications/pending-count', function () {
+        $count = PaymentNotification::where('status', 'pending')->count()
+            + Review::where('is_approved', false)->count()
+            + Invoice::where('refund_status', 'requested')->count()
+            + ContactMessage::where('is_read', false)->count();
+
         return response()->json([
-            'count' => PaymentNotification::where('status', 'pending')->count(),
+            'count' => $count,
         ]);
     })->name('payment-notifications.pending-count');
     Route::post('payment-notifications/{notification}/approve', [AdminPaymentNotificationController::class, 'approve'])->name('payment-notifications.approve');

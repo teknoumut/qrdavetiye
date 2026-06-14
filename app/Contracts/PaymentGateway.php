@@ -19,7 +19,7 @@ interface PaymentGateway
 {
     public function getName(): string;
 
-    public function initialize(User $user, Plan $plan, string $interval): PaymentResult;
+    public function initialize(User $user, Plan $plan, string $interval, ?float $customAmount = null): PaymentResult;
 
     public function verify(array $data): PaymentResult;
 }

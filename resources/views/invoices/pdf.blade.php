@@ -24,6 +24,7 @@
 </head>
 <body>
     <div class="header">
+        <img src="data:image/svg+xml;base64,{{ $logoBase64 }}" alt="Logo" style="width:70px;height:70px;margin-bottom:10px;">
         <h1>{{ config('app.name') }}</h1>
         <p>Fatura #{{ $invoice->invoice_no }}</p>
         <p>{{ $invoice->created_at->format('d F Y') }}</p>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminContactMessageController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
 use App\Http\Controllers\Admin\PaymentNotificationController as AdminPaymentNotificationController;
 use App\Http\Controllers\Admin\PlanController as AdminPlanController;
 use App\Http\Controllers\Admin\RefundController;
@@ -147,6 +148,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('refund-requests', [RefundController::class, 'index'])->name('refund-requests.index');
     Route::post('refund-requests/{invoice}/approve', [RefundController::class, 'approve'])->name('refund-requests.approve');
     Route::post('refund-requests/{invoice}/reject', [RefundController::class, 'reject'])->name('refund-requests.reject');
+
+    Route::get('invoices', [AdminInvoiceController::class, 'index'])->name('invoices.index');
 
     Route::get('visitors', [VisitorController::class, 'index'])->name('visitors.index');
     Route::post('visitors/reset', [VisitorController::class, 'reset'])->name('visitors.reset');

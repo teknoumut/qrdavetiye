@@ -8,6 +8,19 @@ use Carbon\Carbon;
 
 class SubscriptionService
 {
+    public function upgrade(User $user, Plan $newPlan): void
+    {
+        $now = Carbon::now();
+
+        $user->update([
+            'plan_id' => $newPlan->id,
+            'subscription_start' => $user->subscription_start ?? $now,
+            'subscription_status' => User::STATUS_ACTIVE,
+            'cancelled_at' => null,
+            'is_active' => true,
+        ]);
+    }
+
     public function activate(User $user, Plan $plan, string $interval = 'monthly'): void
     {
         if ($user->subscription_status === User::STATUS_ACTIVE

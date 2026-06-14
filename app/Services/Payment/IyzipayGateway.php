@@ -33,9 +33,9 @@ class IyzipayGateway implements PaymentGateway
         return 'iyzico';
     }
 
-    public function initialize(User $user, Plan $plan, string $interval): PaymentResult
+    public function initialize(User $user, Plan $plan, string $interval, ?float $customAmount = null): PaymentResult
     {
-        $price = $interval === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
+        $price = $customAmount ?? ($interval === 'yearly' ? $plan->yearly_price : $plan->monthly_price);
 
         if (! $price || $price <= 0) {
             return new PaymentResult(
@@ -58,6 +58,8 @@ class IyzipayGateway implements PaymentGateway
             'plan' => $plan->id,
             'interval' => $interval,
             'conversation_id' => $conversationId,
+            'upgrade' => $customAmount ? '1' : '0',
+            'difference' => $customAmount ? (string) $price : '0',
         ]));
         $request->setEnabledInstallments([]);
 
@@ -94,7 +96,8 @@ class IyzipayGateway implements PaymentGateway
 
         $basketItem = new BasketItem;
         $basketItem->setId((string) $plan->id);
-        $basketItem->setName($plan->name.' ('.($interval === 'yearly' ? 'Yıllık' : 'Aylık').')');
+        $itemName = $customAmount ? $plan->name.' Yükseltme ('.($interval === 'yearly' ? 'Yıllık' : 'Aylık').')' : $plan->name.' ('.($interval === 'yearly' ? 'Yıllık' : 'Aylık').')';
+        $basketItem->setName($itemName);
         $basketItem->setCategory1('Davetiye');
         $basketItem->setItemType('VIRTUAL');
         $basketItem->setPrice((float) $price);

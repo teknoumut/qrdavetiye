@@ -25,6 +25,9 @@
                             <span class="ml-1.5 inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-red-500 rounded-full">{{ $pendingPayments }}</span>
                         @endif
                     </a>
+                    <a href="{{ route('admin.invoices.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 hover:text-white {{ request()->routeIs('admin.invoices*') ? 'text-white border-b-2 border-indigo-400' : '' }}">
+                        Faturalar
+                    </a>
                     <a href="{{ route('admin.reviews.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 hover:text-white {{ request()->routeIs('admin.reviews*') ? 'text-white border-b-2 border-indigo-400' : '' }}">
                         Yorumlar
                     </a>
@@ -56,6 +59,7 @@
                     <span class="ml-1.5 inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-red-500 rounded-full">{{ $pendingPayments }}</span>
                 @endif
             </a>
+            <a href="{{ route('admin.invoices.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">Faturalar</a>
             <a href="{{ route('admin.reviews.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">Yorumlar</a>
             <a href="{{ route('admin.contact-messages.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">Mesajlar</a>
             <a href="{{ route('admin.settings.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">Ayarlar</a>

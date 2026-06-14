@@ -48,12 +48,34 @@
                 <li><span class="{{ $plan->qr_download ? 'check' : 'cross' }}">{{ $plan->qr_download ? '✓' : '✗' }}</span> {{ __('QR kod indirme') }}</li>
             </ul>
 
+            @if(isset($upgrade))
+            <div style="background:#fefce8;border:1px solid #fde68a;border-radius:12px;padding:16px;margin-bottom:16px;font-size:0.85rem;">
+                <strong style="color:#92400e">📈 {{ $plan->name }} Paketine Yükseltme</strong>
+                <div style="margin-top:8px;color:#78350f;">
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan gün:</span> <strong>{{ $upgrade['remaining_days'] }} gün</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Kalan değer:</span> <strong>{{ number_format($upgrade['remaining_value'], 2) }} TL</strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Yeni plan fiyatı (kalan gün):</span> <strong>{{ number_format($upgrade['prorated_new_price'], 2) }} TL</strong></div>
+                    <div style="border-top:1px dashed #fde68a;margin:6px 0;padding:6px 0;display:flex;justify-content:space-between;font-size:1rem;">
+                        <span style="font-weight:700;">Ödenecek fark:</span>
+                        <strong style="color:#dc2626;font-size:1.2rem;" id="upgradePrice">{{ number_format($upgrade['difference'], 2) }} TL</strong>
+                    </div>
+                </div>
+            </div>
+
+            <form id="paymentForm" method="GET" action="{{ route('payment.pay', ['plan' => $plan->id, 'interval' => 'monthly']) }}">
+                <button type="submit" class="btn-pay" id="payBtn">
+                    <span class="label">{{ $upgrade['difference'] > 0 ? 'Farkı Öde ve Yükselt' : 'Yükseltmeyi Tamamla' }}</span>
+                    <span class="spinner" style="display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
+                </button>
+            </form>
+            @else
             <form id="paymentForm" method="GET" action="{{ route('payment.pay', ['plan' => $plan->id, 'interval' => 'monthly']) }}">
                 <button type="submit" class="btn-pay" id="payBtn">
                     <span class="label">Ödemeyi Tamamla</span>
                     <span class="spinner" style="display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
                 </button>
             </form>
+            @endif
             <div class="secure-badge">🔒 Güvenli ödeme</div>
         </div>
     </div>

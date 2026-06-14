@@ -10,11 +10,13 @@ class PaymentNotification extends Model
         'user_id',
         'plan_id',
         'order_no',
+        'transaction_id',
         'interval',
         'amount',
         'tax_rate',
         'tax_amount',
         'subtotal',
+        'gateway',
         'status',
         'notes',
         'approved_at',
@@ -59,9 +61,8 @@ class PaymentNotification extends Model
         return $query->where('status', 'rejected');
     }
 
-    public static function generateOrderNo(): string
+    public static function generateOrderNo(string $prefix = 'EFT'): string
     {
-        $prefix = 'EFT';
         $date = now()->format('ymd');
         $rand = strtoupper(substr(uniqid(), -6));
 

@@ -456,7 +456,7 @@
             }
 
             .login-right .login-card p:last-of-type {
-                margin-top: 12px !important;
+              
                 margin-bottom: 12px;
             }
 

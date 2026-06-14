@@ -27,7 +27,9 @@ class InvoiceController extends Controller
             abort(403);
         }
 
-        $pdf = Pdf::loadView('invoices.pdf', compact('invoice'));
+        $logoBase64 = base64_encode(file_get_contents(public_path('images/logo.svg')));
+
+        $pdf = Pdf::loadView('invoices.pdf', compact('invoice', 'logoBase64'));
 
         return $pdf->download('fatura-'.$invoice->invoice_no.'.pdf');
     }

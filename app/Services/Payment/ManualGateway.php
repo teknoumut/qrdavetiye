@@ -14,7 +14,7 @@ class ManualGateway implements PaymentGateway
         return 'manual';
     }
 
-    public function initialize(User $user, Plan $plan, string $interval): PaymentResult
+    public function initialize(User $user, Plan $plan, string $interval, ?float $customAmount = null): PaymentResult
     {
         return new PaymentResult(
             success: true,

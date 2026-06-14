@@ -38,6 +38,39 @@ class PaymentController extends Controller
         return null;
     }
 
+    private function calculateUpgradePrice(User $user, Plan $newPlan, string $interval): ?array
+    {
+        $oldPlan = $user->plan;
+        if (! $oldPlan || ! $user->subscription_end || ! now()->lessThan($user->subscription_end)) {
+            return null;
+        }
+
+        $remainingDays = max(0, now()->diffInDays($user->subscription_end, false));
+        $totalDays = $interval === 'yearly' ? 365 : 30;
+
+        $oldPrice = $this->getPrice($oldPlan, $interval);
+        $newPrice = $this->getPrice($newPlan, $interval);
+
+        if (! $oldPrice || ! $newPrice || $newPrice <= $oldPrice) {
+            return null;
+        }
+
+        $remainingValue = ($remainingDays / $totalDays) * $oldPrice;
+        $proratedNewPrice = ($remainingDays / $totalDays) * $newPrice;
+        $difference = max(0, $proratedNewPrice - $remainingValue);
+
+        return [
+            'remaining_days' => (int) ceil($remainingDays),
+            'total_days' => $totalDays,
+            'old_plan' => $oldPlan,
+            'old_price' => $oldPrice,
+            'new_price' => $newPrice,
+            'remaining_value' => round($remainingValue, 2),
+            'prorated_new_price' => round($proratedNewPrice, 2),
+            'difference' => round($difference, 2),
+        ];
+    }
+
     public function checkout(Plan $plan)
     {
         $error = $this->validatePlan($plan);
@@ -46,13 +79,21 @@ class PaymentController extends Controller
         }
 
         $user = auth()->user();
+        $upgrade = null;
+
         if ($user && $user->subscription_status === User::STATUS_ACTIVE
             && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
         ) {
-            return redirect()->route('home')->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+            if ($user->plan_id === $plan->id) {
+                return redirect()->route('home')->with('error', 'Zaten bu pakete abonesiniz.');
+            }
+            $upgrade = $this->calculateUpgradePrice($user, $plan, 'monthly');
+            if (! $upgrade) {
+                return redirect()->route('home')->with('error', 'Bu pakete yükseltme yapılamaz. Mevcut paketinizden daha düşük veya aynı fiyatlı paketler için yükseltme yapılamaz.');
+            }
         }
 
-        return view('checkout', compact('plan'));
+        return view('checkout', compact('plan', 'upgrade'));
     }
 
     public function pay(Plan $plan, string $interval)
@@ -71,21 +112,26 @@ class PaymentController extends Controller
             return redirect()->route('login');
         }
 
-        if ($user->subscription_status === User::STATUS_ACTIVE
-            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
-        ) {
-            return redirect()->route('payment.fail', ['plan' => $plan->id])
-                ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+        $upgradeData = null;
+        $isUpgrade = $user->subscription_status === User::STATUS_ACTIVE
+            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture();
+
+        if ($isUpgrade) {
+            $upgradeData = $this->calculateUpgradePrice($user, $plan, $interval);
+            if (! $upgradeData) {
+                return redirect()->route('payment.fail', ['plan' => $plan->id])
+                    ->with('error', 'Bu pakete yükseltme yapılamaz.');
+            }
         }
 
-        $price = $this->getPrice($plan, $interval);
+        $price = $isUpgrade ? $upgradeData['difference'] : $this->getPrice($plan, $interval);
 
         if (is_null($price) || $price < 0) {
             return redirect()->route('payment.fail', ['plan' => $plan->id])
                 ->with('error', 'Bu plan için geçerli bir fiyat bulunamadı.');
         }
 
-        $result = $this->gateway->initialize($user, $plan, $interval);
+        $result = $this->gateway->initialize($user, $plan, $interval, $isUpgrade ? (float) $price : null);
 
         if ($result->success && $result->redirectUrl) {
             return view('payment.pay', compact('redirectUrl'));
@@ -96,7 +142,11 @@ class PaymentController extends Controller
                 DB::beginTransaction();
 
                 $service = new SubscriptionService;
-                $service->activate($user, $plan, $interval);
+                if ($isUpgrade) {
+                    $service->upgrade($user, $plan);
+                } else {
+                    $service->activate($user, $plan, $interval);
+                }
 
                 $invoice = $this->createInvoice($user, $plan, $interval, $price, $result->transactionId);
 
@@ -107,6 +157,7 @@ class PaymentController extends Controller
                     'plan_id' => $plan->id,
                     'invoice_id' => $invoice->id,
                     'transaction_id' => $result->transactionId,
+                    'is_upgrade' => $isUpgrade,
                 ]);
 
                 return redirect()->route('payment.success', ['plan' => $plan->id, 'invoice' => $invoice->id]);
@@ -167,14 +218,20 @@ class PaymentController extends Controller
 
         $user = auth()->user();
 
-        if ($user->subscription_status === User::STATUS_ACTIVE
-            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
-        ) {
-            return redirect()->route('payment.fail', ['plan' => $plan->id])
-                ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+        $isUpgrade = $request->upgrade === '1'
+            && $user->subscription_status === User::STATUS_ACTIVE
+            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture();
+
+        if (! $isUpgrade) {
+            if ($user->subscription_status === User::STATUS_ACTIVE
+                && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
+            ) {
+                return redirect()->route('payment.fail', ['plan' => $plan->id])
+                    ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+            }
         }
 
-        $price = $this->getPrice($plan, $interval);
+        $price = $isUpgrade ? (float) ($request->difference ?? 0) : $this->getPrice($plan, $interval);
 
         if (is_null($price) || $price < 0) {
             return redirect()->route('payment.fail', ['plan' => $plan->id])
@@ -201,7 +258,12 @@ class PaymentController extends Controller
                 DB::beginTransaction();
 
                 $service = new SubscriptionService;
-                $service->activate($user, $plan, $interval);
+
+                if ($isUpgrade) {
+                    $service->upgrade($user, $plan);
+                } else {
+                    $service->activate($user, $plan, $interval);
+                }
 
                 $invoice = $this->createInvoice($user, $plan, $interval, $price, $result->transactionId);
 
@@ -212,6 +274,7 @@ class PaymentController extends Controller
                     'plan_id' => $plan->id,
                     'invoice_id' => $invoice->id,
                     'transaction_id' => $result->transactionId,
+                    'is_upgrade' => $isUpgrade,
                 ]);
 
                 return redirect()->route('payment.success', ['plan' => $plan->id, 'invoice' => $invoice->id]);

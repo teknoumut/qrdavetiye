@@ -13,6 +13,13 @@ class NotificationController extends Controller
 {
     public function index()
     {
+        $totalRaw = PaymentNotification::where('status', 'pending')->count()
+            + Review::where('is_approved', false)->count()
+            + Invoice::where('refund_status', 'requested')->count()
+            + ContactMessage::where('is_read', false)->count();
+
+        session(['notifications_last_seen_raw_count' => $totalRaw]);
+
         $payments = PaymentNotification::with(['user', 'plan'])
             ->where('status', 'pending')
             ->latest()

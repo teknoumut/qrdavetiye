@@ -28,3 +28,6 @@ yarn-error.log
 
 # SQLite database
 /database/database.sqlite
+
+# Downloaded tools (yt-dlp)
+/storage/app/bin/

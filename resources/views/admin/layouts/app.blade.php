@@ -406,10 +406,12 @@
     </style>
 </head>
 @php
-    $pendingNotificationCount = \App\Models\PaymentNotification::where('status', 'pending')->count()
+    $rawNotificationCount = \App\Models\PaymentNotification::where('status', 'pending')->count()
         + \App\Models\Review::where('is_approved', false)->count()
         + \App\Models\Invoice::where('refund_status', 'requested')->count()
         + \App\Models\ContactMessage::where('is_read', false)->count();
+    $lastSeenCount = (int) session('notifications_last_seen_raw_count', $rawNotificationCount);
+    $badgeNotificationCount = max(0, $rawNotificationCount - $lastSeenCount);
 @endphp
 
 <body>
@@ -498,7 +500,7 @@
             <div class="right">
                 <a href="{{ route('admin.notifications.index') }}" class="relative mr-2 flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition-all" title="Bildirimler">
                     <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                    <span id="notifBadge" class="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-red-500 rounded-full leading-none" @if($pendingNotificationCount <= 0) style="display:none" @endif>{{ $pendingNotificationCount > 99 ? '99+' : $pendingNotificationCount }}</span>
+                    <span id="notifBadge" class="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-red-500 rounded-full leading-none" @if($badgeNotificationCount <= 0) style="display:none" @endif>{{ $badgeNotificationCount > 99 ? '99+' : $badgeNotificationCount }}</span>
                 </a>
                 <div class="user-badge">
                     <div class="user-text">
@@ -575,7 +577,7 @@
         }
 
         (function() {
-            var lastCount = {{ $pendingNotificationCount ?? 0 }};
+            var lastRawCount = {{ $rawNotificationCount ?? 0 }};
             var badge = document.getElementById('notifBadge');
             function updateBadge(n) {
                 if (badge) {
@@ -591,11 +593,11 @@
                 fetch('{{ route('admin.payment-notifications.pending-count') }}')
                     .then(function(r) { return r.json(); })
                     .then(function(d) {
-                        if (d.count > lastCount) {
+                        if (d.raw_count > lastRawCount) {
                             playNotificationSound();
                         }
-                        lastCount = d.count;
-                        updateBadge(d.count);
+                        lastRawCount = d.raw_count;
+                        updateBadge(d.badge_count);
                     })
                     .catch(function() {});
             }, 10000);

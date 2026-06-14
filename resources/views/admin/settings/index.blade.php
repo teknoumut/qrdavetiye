@@ -221,16 +221,24 @@
                         <option value="ding" {{ ($settings['notification_sound_preset'] ?? 'ding') === 'ding' ? 'selected' : '' }}>Ding (tek ton)</option>
                         <option value="chime" {{ ($settings['notification_sound_preset'] ?? '') === 'chime' ? 'selected' : '' }}>Chime (iki ton)</option>
                         <option value="triple" {{ ($settings['notification_sound_preset'] ?? '') === 'triple' ? 'selected' : '' }}>Triple (üç ton)</option>
-                        <option value="custom" {{ ($settings['notification_sound_preset'] ?? '') === 'custom' ? 'selected' : '' }}>Özel URL</option>
+                        <option value="custom" {{ ($settings['notification_sound_preset'] ?? '') === 'custom' ? 'selected' : '' }}>Özel Ses</option>
                     </select>
                     <button type="button" onclick="testPresetSound()" class="btn-ghost shrink-0">🔊 Test</button>
                 </div>
             </div>
 
             <div class="mb-6" id="customSoundUrlField" style="display:{{ ($settings['notification_sound_preset'] ?? 'ding') === 'custom' ? 'block' : 'none' }}">
-                <label>Özel Ses URL'si (MP3/OGG/WAV)</label>
-                <input type="text" name="notification_sound_custom" value="{{ old('notification_sound_custom', $settings['notification_sound_custom'] ?? '') }}" placeholder="https://example.com/ses.mp3">
-                <p class="text-xs text-gray-400 mt-1.5">YouTube linki değil, direkt <strong>MP3 dosya linki</strong> girin. İnternette "notification sound mp3" aratıp çıkan sitelerden kopyalayın.</p>
+                <label class="mb-3">Bilgisayardan Ses Yükle</label>
+                <input type="file" name="notification_sound_file" accept="audio/mp3,audio/wav,audio/ogg,audio/m4a,.mp3,.wav,.ogg,.m4a" style="padding:8px 14px">
+                <p class="text-xs text-gray-400 mt-1.5 mb-4">MP3, WAV, OGG veya M4A dosyası yükleyin. Maksimum 2MB.</p>
+
+                <div class="border-t border-gray-100 pt-4">
+                    <label class="mb-2">Ya da direkt URL girin (opsiyonel)</label>
+                    <div class="flex gap-2">
+                        <input type="text" name="notification_sound_custom" id="soundCustomInput" value="{{ old('notification_sound_custom', $settings['notification_sound_custom'] ?? '') }}" placeholder="https://example.com/ses.mp3" class="flex-1">
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1.5">Dosya yüklemezseniz bu URL kullanılır. Sadece direkt MP3/OGG/WAV linkleri çalışır.</p>
+                </div>
             </div>
 
             <script>
@@ -258,8 +266,10 @@
                     var preset = document.querySelector('[name="notification_sound_preset"]').value;
                     if (preset === 'custom') {
                         var url = document.querySelector('[name="notification_sound_custom"]').value;
-                        if (url) { try { var a = new Audio(url); a.volume = 0.4; a.play().catch(function() { alert('Ses çalınamadı. URL\'yi kontrol edin.'); }); } catch(e) { alert('Geçersiz URL'); } }
-                        else { alert('Önce bir URL girin.'); }
+                        if (url) {
+                            try { var a = new Audio(url); a.volume = 0.4; a.play().catch(function() { alert('Ses çalınamadı.'); }); } catch(e) { alert('Geçersiz URL'); }
+                        }
+                        else { alert('Önce bir ses dosyası yükleyin veya URL girin, sonra ayarları kaydedin.'); }
                     } else {
                         playPreset(preset);
                     }

@@ -146,13 +146,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('payment-notifications', [AdminPaymentNotificationController::class, 'index'])->name('payment-notifications.index');
     Route::get('payment-notifications/pending-count', function () {
-        $count = PaymentNotification::where('status', 'pending')->count()
+        $rawCount = PaymentNotification::where('status', 'pending')->count()
             + Review::where('is_approved', false)->count()
             + Invoice::where('refund_status', 'requested')->count()
             + ContactMessage::where('is_read', false)->count();
 
+        $lastSeen = (int) session('notifications_last_seen_raw_count', $rawCount);
+        $badgeCount = max(0, $rawCount - $lastSeen);
+
         return response()->json([
-            'count' => $count,
+            'count' => $rawCount,
+            'badge_count' => $badgeCount,
+            'raw_count' => $rawCount,
         ]);
     })->name('payment-notifications.pending-count');
     Route::post('payment-notifications/{notification}/approve', [AdminPaymentNotificationController::class, 'approve'])->name('payment-notifications.approve');
@@ -170,6 +175,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('visitors/reset', [VisitorController::class, 'reset'])->name('visitors.reset');
 
     Route::get('notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');
+
+    Route::post('settings/download-youtube-sound', [AdminSettingController::class, 'downloadYoutubeSound'])->name('settings.download-youtube-sound');
 
 });
 

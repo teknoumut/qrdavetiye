@@ -16,6 +16,7 @@ class PaymentNotification extends Model
         'tax_rate',
         'tax_amount',
         'subtotal',
+        'is_upgrade',
         'gateway',
         'status',
         'notes',
@@ -29,6 +30,7 @@ class PaymentNotification extends Model
         'tax_rate' => 'decimal:2',
         'tax_amount' => 'decimal:2',
         'subtotal' => 'decimal:2',
+        'is_upgrade' => 'boolean',
     ];
 
     public function user()

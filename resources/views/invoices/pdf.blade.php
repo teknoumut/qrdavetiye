@@ -5,8 +5,8 @@
     <title>Fatura {{ $invoice->invoice_no }}</title>
     <style>
         body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; color: #1a1a2e; }
-        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #d4a61e; }
-        .header h1 { font-size: 24px; color: #d4a61e; margin: 0; }
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #06b6d4; }
+        .header .brand-name { font-size: 24px; margin: 0; font-family: 'Dancing Script', 'DejaVu Sans', cursive; }
         .header p { color: #8893ac; font-size: 11px; margin: 5px 0 0; }
         .info { margin-bottom: 30px; }
         .info table { width: 100%; }
@@ -25,7 +25,7 @@
 <body>
     <div class="header">
         <img src="data:image/svg+xml;base64,{{ $logoBase64 }}" alt="Logo" style="width:70px;height:70px;margin-bottom:10px;">
-        <h1>{{ config('app.name') }}</h1>
+        <h1 class="brand-name"><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></h1>
         <p>Fatura #{{ $invoice->invoice_no }}</p>
         <p>{{ $invoice->created_at->format('d F Y') }}</p>
     </div>
@@ -35,7 +35,7 @@
             <tr>
                 <td>
                     <h3>Fatura Eden</h3>
-                    <p>{{ config('app.name') }}</p>
+                    <p><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span></p>
                 </td>
                 <td>
                     <h3>Müşteri</h3>
@@ -82,7 +82,7 @@
     </div>
 
     <div class="footer">
-        <p>{{ config('app.name') }} - Bu fatura {{ $invoice->created_at->format('d/m/Y') }} tarihinde oluşturulmuştur.</p>
+        <p><span style="color:#06b6d4">Senin</span> <span style="color:#ec4899">Davetiyen</span> - Bu fatura {{ $invoice->created_at->format('d/m/Y') }} tarihinde oluşturulmuştur.</p>
     </div>
 </body>
 </html>

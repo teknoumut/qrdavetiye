@@ -36,7 +36,11 @@ class PaymentNotificationController extends Controller
             DB::beginTransaction();
 
             $service = new SubscriptionService;
-            $service->activate($notification->user, $notification->plan, $notification->interval);
+            if ($notification->is_upgrade) {
+                $service->upgrade($notification->user, $notification->plan);
+            } else {
+                $service->activate($notification->user, $notification->plan, $notification->interval);
+            }
 
             $notification->update([
                 'status' => 'approved',

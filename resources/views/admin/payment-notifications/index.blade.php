@@ -73,6 +73,7 @@
                                     <td class="py-3.5 px-4 whitespace-nowrap">
                                         <span class="font-semibold text-night-900 dark:text-cream-100">{{ $n->plan->name }}</span>
                                         <span class="text-xs text-night-400">/ {{ $n->interval === 'yearly' ? 'Yıllık' : 'Aylık' }}</span>
+                                        @if($n->is_upgrade)<span class="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300">YÜKSELTME</span>@endif
                                     </td>
                                     <td class="py-3.5 px-4 font-semibold text-night-900 dark:text-cream-100 whitespace-nowrap">{{ number_format($n->amount, 2) }} TL</td>
                                     <td class="py-3.5 px-4 whitespace-nowrap">

@@ -5,9 +5,16 @@
                 <div class="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
                     <svg class="w-7 h-7 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 </div>
-                <h1 class="text-2xl font-extrabold text-night-900 dark:text-cream-100">{{ __('EFT / Havale ile Öde') }}</h1>
+                <h1 class="text-2xl font-extrabold text-night-900 dark:text-cream-100">{{ $isUpgrade ? __('Farkı Öde ve Yükselt') : __('EFT / Havale ile Öde') }}</h1>
                 <p class="text-night-400 dark:text-night-500 text-sm mt-1">{{ $plan->name }} {{ __('Plan') }} — {{ $interval === 'yearly' ? __('Yıllık') : __('Aylık') }}</p>
             </div>
+
+            @if($isUpgrade)
+            <div style="background:#fefce8;border:1px solid #fde68a;border-radius:12px;padding:16px;margin-bottom:16px;font-size:0.85rem;">
+                <strong style="color:#92400e">📈 {{ $plan->name }} Paketine Yükseltme</strong>
+                <p style="margin:8px 0 0;color:#78350f;">Bu yükseltme için yalnızca fark ücretini ödemeniz yeterlidir. Ödeme bildiriminiz admin tarafından onaylandığında paketiniz yükseltilecektir.</p>
+            </div>
+            @endif
 
             <div class="bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-500/10 dark:to-emerald-500/5 rounded-xl border border-emerald-200 dark:border-emerald-500/20 p-5 mb-6">
                 <div class="space-y-1.5 text-sm mb-3">
@@ -64,6 +71,7 @@
                 <input type="hidden" name="interval" value="{{ $interval }}">
                 <input type="hidden" name="order_no" value="{{ $orderNo }}">
                 <input type="hidden" name="amount" value="{{ $total }}">
+                @if($isUpgrade)<input type="hidden" name="is_upgrade" value="1">@endif
 
                 <div class="mb-5">
                     <label class="block text-sm font-semibold text-night-600 dark:text-cream-300 mb-1.5">{{ __('Not (isteğe bağlı)') }}</label>

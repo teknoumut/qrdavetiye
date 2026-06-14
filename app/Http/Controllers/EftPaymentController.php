@@ -21,7 +21,7 @@ class EftPaymentController extends Controller
         return view('payment.eft-checkout', compact('plan'));
     }
 
-    public function show(Plan $plan, string $interval)
+    public function show(Plan $plan, string $interval, Request $request)
     {
         if (! in_array($interval, ['monthly', 'yearly'])) {
             return redirect()->route('home');
@@ -32,14 +32,29 @@ class EftPaymentController extends Controller
         }
 
         $user = auth()->user();
-        if ($user && $user->subscription_status === User::STATUS_ACTIVE
-            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
-        ) {
-            return redirect()->route('payment.eft.checkout', $plan)
-                ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+        $isUpgrade = $request->boolean('upgrade');
+
+        if (! $isUpgrade) {
+            if ($user && $user->subscription_status === User::STATUS_ACTIVE
+                && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
+            ) {
+                return redirect()->route('payment.eft.checkout', $plan)
+                    ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
+            }
         }
 
-        $price = $interval === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
+        if ($isUpgrade) {
+            if (! $user || $user->subscription_status !== User::STATUS_ACTIVE || ! $user->subscription_end || ! Carbon::parse($user->subscription_end)->isFuture()) {
+                return redirect()->route('payment.checkout', $plan)->with('error', 'Yükseltme için aktif bir aboneliğiniz bulunmuyor.');
+            }
+
+            $price = (float) ($request->difference ?? 0);
+            if ($price <= 0) {
+                return redirect()->route('payment.checkout', $plan)->with('error', 'Geçersiz yükseltme fiyatı.');
+            }
+        } else {
+            $price = $interval === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
+        }
 
         if (is_null($price) || $price < 0) {
             return redirect()->route('home')->with('error', 'Geçersiz fiyat.');
@@ -49,13 +64,13 @@ class EftPaymentController extends Controller
         $taxAmount = round($price * $taxRate / 100, 2);
         $total = round($price + $taxAmount, 2);
 
-        $orderNo = PaymentNotification::generateOrderNo();
+        $orderNo = PaymentNotification::generateOrderNo($isUpgrade ? 'UPG' : 'EFT');
 
         $bankName = Setting::getValue('bank_name', 'Ziraat Bankası');
         $iban = Setting::getValue('bank_iban', 'TR00 0000 0000 0000 0000 0000');
         $bankHolder = Setting::getValue('bank_holder', 'senindavetiyen.com.tr');
 
-        return view('payment.eft', compact('plan', 'interval', 'price', 'taxRate', 'taxAmount', 'total', 'orderNo', 'bankName', 'iban', 'bankHolder'));
+        return view('payment.eft', compact('plan', 'interval', 'price', 'taxRate', 'taxAmount', 'total', 'orderNo', 'bankName', 'iban', 'bankHolder', 'isUpgrade'));
     }
 
     public function notify(Request $request)
@@ -65,17 +80,27 @@ class EftPaymentController extends Controller
             'interval' => 'required|in:monthly,yearly',
             'order_no' => 'required|string|max:50|unique:payment_notifications,order_no',
             'amount' => 'required|numeric|min:0',
+            'is_upgrade' => 'boolean',
             'notes' => 'nullable|string|max:1000',
         ]);
 
         $plan = Plan::findOrFail($data['plan_id']);
-        $expectedPrice = $data['interval'] === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
-        $taxRate = (float) Setting::getValue('tax_rate', 20);
-        $expectedTotal = round($expectedPrice * (1 + $taxRate / 100), 2);
-        $taxAmount = round($expectedPrice * $taxRate / 100, 2);
+        $isUpgrade = $request->boolean('is_upgrade');
 
-        if (abs((float) $data['amount'] - $expectedTotal) > 0.01) {
-            return back()->with('error', 'Gönderilen tutar plan ücreti ile uyuşmuyor. Lütfen doğru tutarı gönderdiğinizden emin olun.');
+        if ($isUpgrade) {
+            $expectedPrice = (float) $data['amount'];
+            $expectedTotal = $expectedPrice;
+            $taxRate = 0;
+            $taxAmount = 0;
+        } else {
+            $expectedPrice = $data['interval'] === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
+            $taxRate = (float) Setting::getValue('tax_rate', 20);
+            $expectedTotal = round($expectedPrice * (1 + $taxRate / 100), 2);
+            $taxAmount = round($expectedPrice * $taxRate / 100, 2);
+
+            if (abs((float) $data['amount'] - $expectedTotal) > 0.01) {
+                return back()->with('error', 'Gönderilen tutar plan ücreti ile uyuşmuyor. Lütfen doğru tutarı gönderdiğinizden emin olun.');
+            }
         }
 
         try {
@@ -85,9 +110,10 @@ class EftPaymentController extends Controller
                 'order_no' => $data['order_no'],
                 'interval' => $data['interval'],
                 'amount' => $data['amount'],
-                'subtotal' => $expectedPrice,
+                'subtotal' => $isUpgrade ? $data['amount'] : $expectedPrice,
                 'tax_rate' => $taxRate,
                 'tax_amount' => $taxAmount,
+                'is_upgrade' => $isUpgrade,
                 'status' => 'pending',
                 'notes' => $data['notes'] ?? null,
             ]);
@@ -96,6 +122,7 @@ class EftPaymentController extends Controller
                 'user_id' => auth()->id(),
                 'notification_id' => $notification->id,
                 'order_no' => $data['order_no'],
+                'is_upgrade' => $isUpgrade,
             ]);
 
             return redirect()->route('payment.eft.success', [

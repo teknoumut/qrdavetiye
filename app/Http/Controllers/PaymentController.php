@@ -88,6 +88,57 @@ class PaymentController extends Controller
         ];
     }
 
+    private function getUserInterval(User $user): string
+    {
+        if ($user->subscription_start) {
+            $diffDays = $user->subscription_start->diffInDays($user->subscription_end);
+
+            return $diffDays >= 360 ? 'yearly' : 'monthly';
+        }
+
+        return 'monthly';
+    }
+
+    private function calculateSwitchPrice(User $user, Plan $plan): array
+    {
+        $oldInterval = $this->getUserInterval($user);
+        $remainingDays = max(0, now()->diffInDays($user->subscription_end, false));
+        $oldIntervalDays = $oldInterval === 'yearly' ? 365 : 30;
+
+        $result = [];
+        foreach (['monthly', 'yearly'] as $target) {
+            if ($target === $oldInterval) {
+                $result[$target] = null;
+
+                continue;
+            }
+
+            $newIntervalDays = $target === 'yearly' ? 365 : 30;
+            $oldPrice = $this->getPrice($plan, $oldInterval);
+            $newPrice = $this->getPrice($plan, $target);
+
+            if (! $oldPrice || ! $newPrice) {
+                $result[$target] = null;
+
+                continue;
+            }
+
+            $remainingValue = $remainingDays * ($oldPrice / $oldIntervalDays);
+            $switchPrice = max(0, $newPrice - ($oldPrice - $remainingValue));
+
+            $result[$target] = [
+                'type' => 'interval_switch',
+                'difference' => round($switchPrice, 2),
+                'remaining_days' => (int) ceil($remainingDays),
+                'remaining_value' => round($remainingValue, 2),
+                'old_price' => $oldPrice,
+                'new_price' => $newPrice,
+            ];
+        }
+
+        return $result;
+    }
+
     public function checkout(Plan $plan)
     {
         $error = $this->validatePlan($plan);
@@ -97,25 +148,64 @@ class PaymentController extends Controller
 
         $user = auth()->user();
         $upgrade = null;
+        $switchType = null;
 
         if ($user && $user->subscription_status === User::STATUS_ACTIVE
             && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
         ) {
-            if ($user->plan_id === $plan->id) {
-                return redirect()->route('home')->with('error', 'Zaten bu pakete abonesiniz.');
+            $currentPlan = $user->plan;
+
+            if ($currentPlan && $currentPlan->id === $plan->id) {
+                $switchType = 'interval_switch';
+                $upgrade = $this->calculateSwitchPrice($user, $plan);
+            } else {
+                $upgradeMonthly = $this->calculateUpgradePrice($user, $plan, 'monthly');
+                $upgradeYearly = $this->calculateUpgradePrice($user, $plan, 'yearly');
+
+                if ($upgradeMonthly || $upgradeYearly) {
+                    $switchType = 'upgrade';
+                    $upgrade = [
+                        'monthly' => $upgradeMonthly,
+                        'yearly' => $upgradeYearly,
+                    ];
+                } else {
+                    $switchType = 'downgrade';
+                    $remainingDays = max(0, now()->diffInDays($user->subscription_end, false));
+                    $upgrade = [
+                        'monthly' => [
+                            'type' => 'downgrade',
+                            'difference' => 0,
+                            'remaining_days' => (int) ceil($remainingDays),
+                        ],
+                        'yearly' => [
+                            'type' => 'downgrade',
+                            'difference' => 0,
+                            'remaining_days' => (int) ceil($remainingDays),
+                        ],
+                    ];
+                }
             }
-            $upgradeMonthly = $this->calculateUpgradePrice($user, $plan, 'monthly');
-            $upgradeYearly = $this->calculateUpgradePrice($user, $plan, 'yearly');
-            if (! $upgradeMonthly && ! $upgradeYearly) {
-                return redirect()->route('home')->with('error', 'Bu pakete yükseltme yapılamaz. Mevcut paketinizden daha düşük veya aynı fiyatlı paketler için yükseltme yapılamaz.');
-            }
-            $upgrade = [
-                'monthly' => $upgradeMonthly,
-                'yearly' => $upgradeYearly,
-            ];
         }
 
-        return view('checkout', compact('plan', 'upgrade'));
+        return view('checkout', compact('plan', 'upgrade', 'switchType'));
+    }
+
+    public function switchPlan(Request $request, Plan $plan)
+    {
+        if (! $plan->is_active) {
+            return redirect()->route('home')->with('error', 'Bu plan şu anda aktif değil.');
+        }
+
+        $user = auth()->user();
+        if (! $user || $user->subscription_status !== User::STATUS_ACTIVE
+            || ! $user->subscription_end || ! Carbon::parse($user->subscription_end)->isFuture()
+        ) {
+            return redirect()->route('payment.checkout', $plan)->with('error', 'Aktif bir aboneliğiniz bulunmuyor.');
+        }
+
+        (new SubscriptionService)->upgrade($user, $plan);
+
+        return redirect()->route('dashboard')->with('success', 'Planınız başarıyla değiştirildi.');
     }
 
     public function pay(Plan $plan, string $interval)

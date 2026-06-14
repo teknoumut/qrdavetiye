@@ -61,12 +61,16 @@ class PaymentController extends Controller
         $oldPrice = $this->getPrice($oldPlan, $oldInterval);
         $newPrice = $this->getPrice($newPlan, $newInterval);
 
-        if (! $oldPrice || ! $newPrice || $newPrice <= $oldPrice) {
+        if (! $oldPrice || ! $newPrice) {
             return null;
         }
 
         $oldDailyRate = $oldPrice / $oldIntervalDays;
         $newDailyRate = $newPrice / $newIntervalDays;
+
+        if ($newDailyRate <= $oldDailyRate) {
+            return null;
+        }
 
         $remainingValue = $remainingDays * $oldDailyRate;
         $proratedNewPrice = $remainingDays * $newDailyRate;

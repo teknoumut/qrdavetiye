@@ -59,6 +59,7 @@ Route::middleware(['auth', 'throttle:10,1'])->group(function () {
     Route::get('/payment/eft/{plan}/success', [EftPaymentController::class, 'success'])->name('payment.eft.success');
     Route::post('/payment/eft/notify', [EftPaymentController::class, 'notify'])->name('payment.eft.notify');
     Route::get('/payment/eft/{plan}/{interval}', [EftPaymentController::class, 'show'])->name('payment.eft.pay');
+    Route::post('/payment/eft/upgrade/{plan}', [EftPaymentController::class, 'showUpgrade'])->name('payment.eft.upgrade');
 
     Route::post('/subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
     Route::post('/subscription/resubscribe', [SubscriptionController::class, 'resubscribe'])->name('subscription.resubscribe');

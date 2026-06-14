@@ -32,34 +32,47 @@ class EftPaymentController extends Controller
         }
 
         $user = auth()->user();
-        $isUpgrade = $request->boolean('upgrade');
-
-        if (! $isUpgrade) {
-            if ($user && $user->subscription_status === User::STATUS_ACTIVE
-                && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
-            ) {
-                return redirect()->route('payment.eft.checkout', $plan)
-                    ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
-            }
+        if ($user && $user->subscription_status === User::STATUS_ACTIVE
+            && $user->subscription_end && Carbon::parse($user->subscription_end)->isFuture()
+        ) {
+            return redirect()->route('payment.eft.checkout', $plan)
+                ->with('error', 'Mevcut aboneliğiniz devam ederken yeni bir paket satın alamazsınız. Lütfen önce mevcut aboneliğinizi iptal edin.');
         }
 
-        if ($isUpgrade) {
-            if (! $user || $user->subscription_status !== User::STATUS_ACTIVE || ! $user->subscription_end || ! Carbon::parse($user->subscription_end)->isFuture()) {
-                return redirect()->route('payment.checkout', $plan)->with('error', 'Yükseltme için aktif bir aboneliğiniz bulunmuyor.');
-            }
-
-            $price = (float) ($request->difference ?? 0);
-            if ($price <= 0) {
-                return redirect()->route('payment.checkout', $plan)->with('error', 'Geçersiz yükseltme fiyatı.');
-            }
-        } else {
-            $price = $interval === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
-        }
-
+        $price = $interval === 'yearly' ? $plan->yearly_price : $plan->monthly_price;
         if (is_null($price) || $price < 0) {
             return redirect()->route('home')->with('error', 'Geçersiz fiyat.');
         }
 
+        return $this->showEftForm($plan, $interval, $price, false);
+    }
+
+    public function showUpgrade(Request $request, Plan $plan)
+    {
+        if (! $plan->is_active) {
+            return redirect()->route('home')->with('error', 'Bu plan şu anda aktif değil.');
+        }
+
+        $user = auth()->user();
+        if (! $user || $user->subscription_status !== User::STATUS_ACTIVE || ! $user->subscription_end || ! Carbon::parse($user->subscription_end)->isFuture()) {
+            return redirect()->route('payment.checkout', $plan)->with('error', 'Yükseltme için aktif bir aboneliğiniz bulunmuyor.');
+        }
+
+        $interval = $request->input('interval', 'monthly');
+        if (! in_array($interval, ['monthly', 'yearly'])) {
+            return redirect()->route('home');
+        }
+
+        $difference = (float) ($request->difference ?? 0);
+        if ($difference <= 0) {
+            return redirect()->route('payment.checkout', $plan)->with('error', 'Geçersiz yükseltme fiyatı.');
+        }
+
+        return $this->showEftForm($plan, $interval, $difference, true);
+    }
+
+    private function showEftForm(Plan $plan, string $interval, float $price, bool $isUpgrade)
+    {
         $taxRate = (float) Setting::getValue('tax_rate', 20);
         $taxAmount = round($price * $taxRate / 100, 2);
         $total = round($price + $taxAmount, 2);

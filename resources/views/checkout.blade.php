@@ -67,9 +67,10 @@
                 <p style="margin:8px 0 0;color:#14532d;">Yükseltme işleminiz için banka havalesi ile ödeme yapacaksınız. Ödeme bildiriminiz admin tarafından onaylandığında paketiniz yükseltilecektir.</p>
             </div>
 
-            <form id="paymentForm" method="GET" action="{{ route('payment.eft.pay', ['plan' => $plan->id, 'interval' => 'monthly']) }}">
-                <input type="hidden" name="upgrade" value="1">
+            <form id="paymentForm" method="POST" action="{{ route('payment.eft.upgrade', $plan) }}">
+                @csrf
                 <input type="hidden" name="difference" value="{{ $upgrade['difference'] }}">
+                <input type="hidden" name="interval" value="monthly">
                 <button type="submit" class="btn-pay" id="payBtn">
                     <span class="label">{{ $upgrade['difference'] > 0 ? 'Farkı Öde ve Yükselt' : 'Yükseltmeyi Tamamla' }}</span>
                     <span class="spinner" style="display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
@@ -97,16 +98,16 @@
         var monthlyPrice = @json($plan->monthly_price);
         var yearlyPrice = @json($plan->yearly_price);
         var isUpgrade = @json(isset($upgrade) ? true : false);
-        var baseUrl = isUpgrade
-            ? @json(route('payment.eft.pay', ['plan' => $plan->id, 'interval' => '__INTERVAL__']))
-            : @json(route('payment.pay', ['plan' => $plan->id, 'interval' => '__INTERVAL__']));
+        var payUrl = @json(route('payment.pay', ['plan' => $plan->id, 'interval' => '__INTERVAL__']));
 
         function setPlanInterval(type) {
             document.querySelectorAll('.interval-btn').forEach(function(b) {
                 b.classList.toggle('active', b.dataset.interval === type);
             });
 
-            document.getElementById('paymentForm').action = baseUrl.replace('__INTERVAL__', type);
+            if (!isUpgrade) {
+                document.getElementById('paymentForm').action = payUrl.replace('__INTERVAL__', type);
+            }
 
             var price = type === 'yearly' ? yearlyPrice : monthlyPrice;
             document.getElementById('priceDisplay').textContent = Number(price).toFixed(2);
@@ -114,12 +115,15 @@
             document.getElementById('yearlySaving').style.display = type === 'yearly' ? 'block' : 'none';
         }
 
-        document.getElementById('paymentForm').addEventListener('submit', function() {
-            var btn = document.getElementById('payBtn');
-            btn.disabled = true;
-            btn.querySelector('.label').textContent = 'Yönlendiriliyor...';
-            btn.querySelector('.spinner').style.display = 'inline-block';
-        });
+        var form = document.getElementById('paymentForm');
+        if (form) {
+            form.addEventListener('submit', function() {
+                var btn = document.getElementById('payBtn');
+                btn.disabled = true;
+                btn.querySelector('.label').textContent = 'Yönlendiriliyor...';
+                btn.querySelector('.spinner').style.display = 'inline-block';
+            });
+        }
 
         setPlanInterval('monthly');
     </script>

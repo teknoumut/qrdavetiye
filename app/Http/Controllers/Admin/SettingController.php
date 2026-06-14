@@ -56,6 +56,7 @@ class SettingController extends Controller
             $filename = 'notification_'.Str::random(8).'.'.$file->getClientOriginalExtension();
             $file->move(public_path('sounds'), $filename);
             $data['notification_sound_custom'] = asset('sounds/'.$filename);
+            $data['notification_sound_preset'] = 'custom';
         }
 
         foreach ($data as $key => $value) {

@@ -136,8 +136,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::resource('themes', AdminThemeController::class);
 
-    Route::resource('patterns', AdminPatternController::class);
     Route::delete('patterns/mass-destroy', [AdminPatternController::class, 'massDestroy'])->name('patterns.mass-destroy');
+    Route::resource('patterns', AdminPatternController::class);
 
     Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [AdminSettingController::class, 'update'])->name('settings.update');

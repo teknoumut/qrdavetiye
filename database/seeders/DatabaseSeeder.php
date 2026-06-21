@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             PlanSeeder::class,
             ThemeSeeder::class,
             SettingSeeder::class,
+            PatternSeeder::class,
         ]);
     }
 }

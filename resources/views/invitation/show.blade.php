@@ -100,6 +100,8 @@
             --font-body: 'Cormorant Garamond', serif;
             --font-display: '{{ $fontFamily }}', serif;
             --envelope-text: {{ $invitation->envelope_text_color ?: '#333333' }};
+            --envelope-bg: {{ $invitation->envelope_bg_color ?: '#ffffff' }};
+            --envelope-flap-bg: {{ $invitation->envelope_flap_color ?: '#ffffff' }};
         }
     </style>
     <style>
@@ -273,27 +275,28 @@
             position: fixed; inset: 0; z-index: 9999;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; overflow: hidden;
-            background: linear-gradient(145deg, var(--primary-dark) 0%, #1a1a2e 40%, #0f3460 100%);
+            background: var(--envelope-bg);
             transition: background 0.5s;
         }
-        /* Event-type specific envelope screen backgrounds */
-        .envelope-screen.event-wedding { background: linear-gradient(145deg, var(--primary-dark) 0%, #2d1b2e 40%, #4a1942 100%); }
-        .envelope-screen.event-engagement { background: linear-gradient(145deg, var(--primary-dark) 0%, #2d1b3e 40%, #3a1f5e 100%); }
-        .envelope-screen.event-circumcision { background: linear-gradient(145deg, #0f4c5c 0%, #0a2a36 40%, #0f3460 100%); }
-        .envelope-screen.event-birthday { background: linear-gradient(145deg, #c9434a 0%, #2d1020 40%, #4a1020 100%); }
-        .envelope-screen.event-corporate { background: linear-gradient(145deg, #1e293b 0%, #0f172a 40%, #1e3a5f 100%); }
-        .envelope-screen.event-graduation { background: linear-gradient(145deg, #4a148c 0%, #1a0a2e 40%, #2d1b4e 100%); }
-        /* Event-specific envelope decoration */
-        .envelope-screen.event-birthday .envelope-body { background: linear-gradient(165deg, #e84393, #c0387a) !important; }
-        .envelope-screen.event-graduation .envelope-body { background: linear-gradient(165deg, #6c5ce7, #4a148c) !important; }
-        .envelope-screen.event-circumcision .envelope-body { background: linear-gradient(165deg, #00b894, #008060) !important; }
-        .envelope-screen.event-corporate .envelope-body { background: linear-gradient(165deg, #2d3436, #1a1a2e) !important; }
-        .envelope-screen.event-wedding .envelope-body { background: linear-gradient(165deg, var(--primary), var(--primary-dark)) !important; }
-        .envelope-screen.event-engagement .envelope-body { background: linear-gradient(165deg, var(--primary), #6c3483) !important; }
-        .envelope-screen.event-birthday .envelope-seal { background: linear-gradient(135deg, #fd79a8, #e84393) !important; font-size: 1.6rem !important; }
-        .envelope-screen.event-graduation .envelope-seal { background: linear-gradient(135deg, #a29bfe, #6c5ce7) !important; font-size: 1.6rem !important; }
-        .envelope-screen.event-circumcision .envelope-seal { background: linear-gradient(135deg, #55efc4, #00b894) !important; font-size: 1.6rem !important; }
-
+        .envelope-screen.event-wedding,
+        .envelope-screen.event-engagement,
+        .envelope-screen.event-birthday,
+        .envelope-screen.event-circumcision,
+        .envelope-screen.event-graduation,
+        .envelope-screen.event-corporate {
+            background: var(--envelope-bg);
+        }
+        .envelope-screen.event-birthday .envelope-body,
+        .envelope-screen.event-graduation .envelope-body,
+        .envelope-screen.event-circumcision .envelope-body,
+        .envelope-screen.event-corporate .envelope-body,
+        .envelope-screen.event-wedding .envelope-body,
+        .envelope-screen.event-engagement .envelope-body {
+            background: var(--envelope-bg) !important;
+        }
+        .envelope-screen .envelope-seal {
+            background: none;
+        }
         .envelope-screen .particle-bg {
             position: absolute; inset: 0; pointer-events: none; overflow: hidden;
         }
@@ -379,13 +382,13 @@
         /* Zarf govdesi (arka yuz) */
         .envelope-body {
             position: absolute; inset: 0;
-            background: linear-gradient(165deg, var(--primary), var(--primary-dark));
+            background-color: var(--envelope-bg);
             border-radius: 3px;
             box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.12),
-                inset 0 -1px 0 rgba(0,0,0,0.15),
+                inset 0 -1px 0 rgba(0,0,0,0.04),
                 0 1px 4px rgba(0,0,0,0.06);
             overflow: hidden;
+            transform: translateZ(0);
         }
         /* Kagit lif dokusu */
         .envelope-body::after {
@@ -396,15 +399,6 @@
                 repeating-linear-gradient(2deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 6px);
             pointer-events: none;
             z-index: 0;
-        }
-        /* Zarf kenar incelik efekti - 3D derinlik */
-        .envelope-body::before {
-            content: '';
-            position: absolute; inset: 0;
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 3px;
-            pointer-events: none;
-            z-index: 2;
         }
         /* Yan gussetler - zarfin yan katlanma cizgileri */
         .envelope-body .gusset-left,
@@ -449,7 +443,8 @@
             background: rgba(0,0,0,0.05);
         }
         /* Watermark desen */
-        .envelope-body .pattern-watermark {
+        .envelope-body .pattern-watermark,
+        .envelope-inner .pattern-watermark {
             position: absolute; inset: 0;
             background-size: cover;
             background-position: center;
@@ -480,98 +475,43 @@
             clip-path: polygon(100% 0, 0 50%, 100% 100%);
         }
 
-        /* Flap - zarf kapağı (daha gerçekçi egri) */
+        /* Flap - zarf kapağı (içe dönük) */
         .envelope-flap {
-            position: absolute; top: -95px; left: 0; right: 0;
-            height: 110px;
-            background: linear-gradient(168deg, var(--primary), var(--primary-dark));
-            clip-path: polygon(2% 0, 50% 97%, 98% 0);
-            transform-origin: bottom center;
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 90px;
+            transform: translateZ(0);
+            transform-origin: top center;
             transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
             z-index: 3;
-            filter: brightness(0.84);
-            will-change: transform;
-            backface-visibility: hidden;
+            background: transparent;
+            overflow: visible;
         }
+        .envelope-flap .flap-bg {
+            position: absolute; inset: 0;
+            clip-path: polygon(0% 0%, 50% 105%, 100% 0%);
+            -webkit-clip-path: polygon(0% 0%, 50% 105%, 100% 0%);
+            pointer-events: none;
+        }
+
         .envelope.open .envelope-flap {
             transform: rotateX(185deg);
         }
-        .envelope.open .envelope-flap .flap-glue {
-            opacity: 0;
-        }
-        /* Flap gölge - kapak govdeye bindiğinde */
-        .envelope-flap::before {
-            content: '';
-            position: absolute; bottom: -8px; left: 10%; right: 10%;
-            height: 12px;
-            background: radial-gradient(ellipse at center, rgba(0,0,0,0.12) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        /* Flap kagit dokusu */
-        .envelope-flap::after {
-            content: '';
-            position: absolute; inset: 0;
-            background-image:
-                repeating-linear-gradient(88deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px);
-            pointer-events: none;
-        }
-        .envelope.open .envelope-flap::before {
-            opacity: 0;
-        }
-        /* Yapiskan bandı */
-        .flap-glue {
-            position: absolute; bottom: 16px; left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 8px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.14));
-            border-radius: 4px;
-            pointer-events: none;
-            box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);
-            transition: opacity 0.3s ease;
-        }
-        .flap-glue::after {
-            content: '';
-            position: absolute; top: 2px; left: 15%; right: 15%;
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 2px;
-        }
-        .envelope.open .flap-glue {
-            opacity: 0;
-        }
+        /* Flap gölge - kaldirildi */
 
-        /* Mühür (balmumu) */
-        .envelope-seal {
+        /* Flap içindeki kalp */
+        .flap-heart {
             position: absolute;
-            top: -52px; left: 50%;
-            transform: translateX(-50%);
-            width: 56px; height: 56px;
-            background: radial-gradient(circle at 35% 35%, color-mix(in srgb, var(--primary) 90%, #fff), var(--primary-dark));
-            border: 2px solid rgba(255,255,255,0.15);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 4;
-            font-size: 1.2rem;
-            color: rgba(255,255,255,0.85);
-            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.15);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-            cursor: default;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.6rem;
+            z-index: 5;
+            pointer-events: none;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
         }
-        .envelope-seal::after {
-            content: '';
-            position: absolute;
-            top: 4px; left: 8px; right: 8px;
-            height: 4px;
-            background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-        .envelope.open .envelope-seal {
+        .envelope.open .flap-heart {
             opacity: 0;
-            transform: translateX(-50%) scale(0) rotate(380deg);
+            transform: translate(-50%, -50%) scale(0) rotate(380deg);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
         }
 
         /* Ic kisim - mektup */
@@ -1100,9 +1040,8 @@
             .gallery img { height: 200px; }
         }
 
-        /* ===== ENVELOPE PATTERNS (body + flap) ===== */
-        .envelope-body.pattern-lace,
-        .envelope-flap.pattern-lace {
+        /* ===== ENVELOPE PATTERNS (body only) ===== */
+        .envelope-body.pattern-lace {
             background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 8px),
                               repeating-linear-gradient(-45deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 8px),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
@@ -1121,23 +1060,20 @@
         .envelope-body.pattern-petal::after {
             display: none;
         }
-        .envelope-body.pattern-floral,
-        .envelope-flap.pattern-floral {
+        .envelope-body.pattern-floral {
             background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.35) 3px, transparent 3px),
                               radial-gradient(circle at 80% 70%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.35) 3px, transparent 3px),
                               radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.18) 5px, transparent 5px),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
             background-size: 40px 40px, 40px 40px, 60px 60px, auto;
         }
-        .envelope-body.pattern-geometric,
-        .envelope-flap.pattern-geometric {
+        .envelope-body.pattern-geometric {
             background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 22px),
                               repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 22px),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
             background-size: 24px 24px, 24px 24px, auto;
         }
-        .envelope-body.pattern-stars,
-        .envelope-flap.pattern-stars {
+        .envelope-body.pattern-stars {
             background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.4) 3px, transparent 3px),
                               radial-gradient(circle at 85% 25%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.3) 2px, transparent 2px),
                               radial-gradient(circle at 45% 75%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.35) 3px, transparent 3px),
@@ -1145,8 +1081,7 @@
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
             background-size: 60px 60px, 60px 60px, 60px 60px, 60px 60px, auto;
         }
-        .envelope-body.pattern-hearts,
-        .envelope-flap.pattern-hearts {
+        .envelope-body.pattern-hearts {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='rgba(255,255,255,0.3)' d='M20 36.7l-2.4-2.2C9 26.3 3.3 21.2 3.3 14.8c0-5 4-9 9-9 2.9 0 5.7 1.4 7.7 3.5 2-2.1 4.8-3.5 7.7-3.5 5 0 9 4 9 9 0 6.4-5.7 11.5-14.3 19.7L20 36.7z'/%3E%3C/svg%3E"),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
             background-size: 36px 36px, auto;
@@ -1154,32 +1089,27 @@
         .envelope-body.pattern-hearts::after {
             display: none;
         }
-        .envelope-body.pattern-damask,
-        .envelope-flap.pattern-damask {
+        .envelope-body.pattern-damask {
             background-image: repeating-conic-gradient(rgba(255,255,255,0.28) 0% 25%, transparent 0% 50%),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
             background-size: 28px 28px, auto;
         }
-        .envelope-body.pattern-minimal,
-        .envelope-flap.pattern-minimal {
+        .envelope-body.pattern-minimal {
             background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 2px, transparent 2px, transparent 18px),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
             background-size: 20px 100%, auto;
         }
-        .envelope-body.pattern-leaf,
-        .envelope-flap.pattern-leaf {
+        .envelope-body.pattern-leaf {
             background-image: repeating-linear-gradient(12deg, transparent 0px, transparent 14px, rgba(255,255,255,0.28) 14px, rgba(255,255,255,0.28) 16px, transparent 16px, transparent 30px),
                               linear-gradient(90deg, transparent 46%, rgba(255,255,255,0.32) 46%, rgba(255,255,255,0.32) 54%, transparent 54%),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
         }
-        .envelope-body.pattern-vine,
-        .envelope-flap.pattern-vine {
+        .envelope-body.pattern-vine {
             background-image: repeating-linear-gradient(50deg, transparent 0px, transparent 24px, rgba(255,255,255,0.25) 24px, rgba(255,255,255,0.25) 27px, transparent 27px, transparent 48px),
                               repeating-linear-gradient(-50deg, transparent 0px, transparent 14px, rgba(255,255,255,0.18) 14px, rgba(255,255,255,0.18) 16px, transparent 16px, transparent 40px),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
         }
-        .envelope-body.pattern-blossom,
-        .envelope-flap.pattern-blossom {
+        .envelope-body.pattern-blossom {
             background-image: radial-gradient(circle at 15% 25%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.32) 3px, transparent 3px),
                               radial-gradient(circle at 10% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
                               radial-gradient(circle at 20% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
@@ -1194,23 +1124,20 @@
                               radial-gradient(circle at 75% 34%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.2) 2px, transparent 2px),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
         }
-        .envelope-body.pattern-botanic,
-        .envelope-flap.pattern-botanic {
+        .envelope-body.pattern-botanic {
             background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.2) 0px, rgba(255,255,255,0.2) 1px, transparent 1px, transparent 10px),
                               repeating-linear-gradient(90deg, rgba(255,255,255,0.2) 0px, rgba(255,255,255,0.2) 1px, transparent 1px, transparent 10px),
                               radial-gradient(circle at 25% 25%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 1.5px, transparent 1.5px),
                               radial-gradient(circle at 75% 75%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 1.5px, transparent 1.5px),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
         }
-        .envelope-body.pattern-fern,
-        .envelope-flap.pattern-fern {
+        .envelope-body.pattern-fern {
             background-image: repeating-linear-gradient(30deg, rgba(255,255,255,0.25) 0px, rgba(255,255,255,0.25) 2px, transparent 2px, transparent 20px),
                               repeating-linear-gradient(-30deg, rgba(255,255,255,0.18) 0px, rgba(255,255,255,0.18) 1.5px, transparent 1.5px, transparent 20px),
                               linear-gradient(90deg, transparent 46%, rgba(255,255,255,0.28) 46%, rgba(255,255,255,0.28) 54%, transparent 54%),
                               linear-gradient(160deg, var(--primary), var(--primary-dark));
         }
-        .envelope-body.pattern-petal,
-        .envelope-flap.pattern-petal {
+        .envelope-body.pattern-petal {
             background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 7px, transparent 7px),
                               radial-gradient(circle at 50% 20%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.18) 6px, transparent 6px),
                               radial-gradient(circle at 80% 20%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.25) 7px, transparent 7px),
@@ -1264,7 +1191,11 @@
             transform: scale(2.0) translateY(-50px) rotateX(-8deg) translateZ(80px);
         }
         .anim-heart .envelope-flap {
-            clip-path: polygon(2% 0, 50% 100%, 98% 0);
+            border-radius: 0 0 30% 30%;
+        }
+        .anim-heart .envelope-flap .flap-bg {
+            clip-path: polygon(0% 0%, 50% 105%, 100% 0%);
+            -webkit-clip-path: polygon(0% 0%, 50% 105%, 100% 0%);
             border-radius: 0 0 30% 30%;
         }
         .anim-heart .envelope-seal {
@@ -1339,7 +1270,14 @@
         }
         $envelopeAnim = $invitation->envelope_animation ?: 'classic';
         $envelopePattern = $invitation->envelope_pattern ?: '';
-        $customPatternUrl = $invitation->custom_pattern ? \Illuminate\Support\Facades\Storage::url($invitation->custom_pattern) : '';
+        $adminPatternUrl = '';
+        if (str_starts_with($envelopePattern, 'a_')) {
+            $patternSlug = substr($envelopePattern, 2);
+            $patternModel = \App\Models\Pattern::where('slug', $patternSlug)->first();
+            if ($patternModel && $patternModel->image_path) {
+                $adminPatternUrl = \Illuminate\Support\Facades\Storage::url($patternModel->image_path);
+            }
+        }
         function embedUrl($url) {
             if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $m)) {
                 return 'https://www.youtube-nocookie.com/embed/'.$m[1];
@@ -1368,20 +1306,22 @@
         <div class="floating-hearts" id="floatingHearts"></div>
         <div class="envelope-wrapper">
             <div class="envelope" id="envelope">
-                <div class="envelope-body @if($envelopePattern) pattern-{{ $envelopePattern }} @endif">
+                <div class="envelope-body @if($envelopePattern && !str_starts_with($envelopePattern, 'a_')) pattern-{{ $envelopePattern }} @endif">
                     <div class="gusset-left"></div>
                     <div class="gusset-right"></div>
                     <div class="bottom-fold"></div>
-                    @if($customPatternUrl)
-                        <div class="pattern-watermark" style="background-image: url('{{ $customPatternUrl }}');"></div>
+                    @if($adminPatternUrl)
+                        <div class="pattern-watermark" style="background-image: url('{{ $adminPatternUrl }}'); background-size: cover; background-position: center; opacity: 0.25; mix-blend-mode: normal;"></div>
                     @endif
                 </div>
-                <div class="envelope-flap @if($envelopePattern) pattern-{{ $envelopePattern }} @endif">
-                    <div class="flap-glue"></div>
+                <div class="envelope-flap" style="--flap-color: {{ $invitation->envelope_flap_color ?: '#ffffff' }}">
+                    <div class="flap-bg" style="background-color: var(--flap-color);"></div>
+                    <div class="flap-heart" style="color: #000;">@if($eventType === 'birthday') 🎂 @else 💖 @endif</div>
                 </div>
-                <div class="envelope-seal">♥</div>
-                    <div class="envelope-inner" @if($customPatternUrl) style="background-image: linear-gradient(160deg, rgba(255,253,247,0.75), rgba(255,255,255,0.75)), url('{{ $customPatternUrl }}'); background-size: auto, cover; background-position: 0% 0%, center;" @endif>
-                        <div class="heart">@if($eventType === 'birthday')🎂 @else 💖 @endif</div>
+                    <div class="envelope-inner">
+                        @if($adminPatternUrl)
+                            <div class="pattern-watermark" style="background-image: url('{{ $adminPatternUrl }}'); background-size: cover; background-position: center; opacity: 0.2; mix-blend-mode: normal;"></div>
+                        @endif
                         <div class="names">@if($ev['couple']){{ $fixName($invitation->groom_name) }} <span class="ampersand">&</span> {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@if($eventType === 'birthday' && $invitation->bride_name) <span style="font-size:0.5em;opacity:0.6;display:block;margin-top:2px;">{{ $invitation->bride_name }} Yaşında</span>@endif @endif</div>
                         <div class="sub">{{ $ev['title'] }}</div>
                         @if($invitation->welcome_message)
@@ -1691,6 +1631,11 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var envFlap = document.querySelector('.envelope-flap');
+            if (envFlap) envFlap.style.setProperty('--flap-color', '{{ $invitation->envelope_flap_color ?: '#ffffff' }}');
+        });
+
         var invContent = document.getElementById('invitationContent');
         var envelopeOpened = false;
 

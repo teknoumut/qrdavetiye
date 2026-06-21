@@ -10,6 +10,7 @@ use App\Models\InvitationImage;
 use App\Models\InvitationMusic;
 use App\Models\InvitationTheme;
 use App\Models\InvitationVideo;
+use App\Models\Pattern;
 use App\Models\Plan;
 use App\Models\Rsvp;
 use Illuminate\Http\Request;
@@ -53,10 +54,11 @@ class InvitationController extends Controller
         }
 
         $themes = InvitationTheme::where('is_active', true)->get();
+        $patterns = Pattern::where('is_active', true)->get();
         $plans = Plan::where('is_active', true)->get();
         $userPlan = $user->plan;
 
-        return view('user.invitations.create', compact('themes', 'plans', 'userPlan'));
+        return view('user.invitations.create', compact('themes', 'patterns', 'plans', 'userPlan'));
     }
 
     public function store(Request $request)
@@ -109,6 +111,8 @@ class InvitationController extends Controller
             'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
             'corner_decoration' => 'nullable|image|mimes:png,webp|max:5120',
             'envelope_text_color' => 'nullable|string|max:20',
+            'envelope_bg_color' => 'nullable|string|max:20',
+            'envelope_flap_color' => 'nullable|string|max:20',
         ]);
 
         $data['user_id'] = auth()->id();
@@ -162,6 +166,7 @@ class InvitationController extends Controller
         $invitation->load(['images', 'videos', 'music'])->loadCount('rsvps');
 
         $themes = InvitationTheme::where('is_active', true)->get();
+        $patterns = Pattern::where('is_active', true)->get();
         $plans = Plan::where('is_active', true)->get();
         $userPlan = auth()->user()->plan;
 
@@ -172,7 +177,7 @@ class InvitationController extends Controller
             $suggestedPlan = Plan::active()->orderBy('monthly_price')->first();
         }
 
-        return view('user.invitations.edit', compact('invitation', 'themes', 'plans', 'userPlan', 'suggestedPlan'));
+        return view('user.invitations.edit', compact('invitation', 'themes', 'patterns', 'plans', 'userPlan', 'suggestedPlan'));
     }
 
     public function update(Request $request, Invitation $invitation)
@@ -213,6 +218,8 @@ class InvitationController extends Controller
             'custom_pattern' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:131072',
             'corner_decoration' => 'nullable|image|mimes:png,webp|max:5120',
             'envelope_text_color' => 'nullable|string|max:20',
+            'envelope_bg_color' => 'nullable|string|max:20',
+            'envelope_flap_color' => 'nullable|string|max:20',
         ]);
 
         if ($request->hasFile('cover_image')) {
@@ -226,13 +233,13 @@ class InvitationController extends Controller
         $oldCoverVideo = $invitation->cover_video;
 
         if ($request->hasFile('cover_video_file')) {
-            if ($oldCoverVideo && !str_starts_with($oldCoverVideo, 'http')) {
+            if ($oldCoverVideo && ! str_starts_with($oldCoverVideo, 'http')) {
                 Storage::disk('public')->delete($oldCoverVideo);
             }
             $data['cover_video'] = $request->file('cover_video_file')
                 ->store('invitations/covers', 'public');
         } elseif ($request->filled('cover_video_url')) {
-            if ($oldCoverVideo && !str_starts_with($oldCoverVideo, 'http')) {
+            if ($oldCoverVideo && ! str_starts_with($oldCoverVideo, 'http')) {
                 Storage::disk('public')->delete($oldCoverVideo);
             }
             $data['cover_video'] = $request->cover_video_url;
@@ -253,6 +260,8 @@ class InvitationController extends Controller
             $data['corner_decoration'] = $request->file('corner_decoration')
                 ->store('invitations/corners', 'public');
         }
+
+        \Log::info('Invitation update', ['id' => $invitation->id, 'envelope_bg_color' => $request->envelope_bg_color, 'data_bg_color' => ($data['envelope_bg_color'] ?? 'NOT_SET')]);
 
         $invitation->update($data);
 
@@ -412,8 +421,9 @@ class InvitationController extends Controller
 
         if ($request->hasFile('video_file')) {
             $path = $request->file('video_file')->store('invitations/videos', 'public');
-            if (!$path) {
+            if (! $path) {
                 \Log::error('Video store failed', ['invitation_id' => $invitation->id]);
+
                 return back()->with('error', 'Video yüklenirken bir hata oluştu. Sunucu deposu kontrol edin.');
             }
             $data['file_path'] = $path;
@@ -466,7 +476,7 @@ class InvitationController extends Controller
             abort(403);
         }
 
-        if ($invitation->cover_video && !str_starts_with($invitation->cover_video, 'http')) {
+        if ($invitation->cover_video && ! str_starts_with($invitation->cover_video, 'http')) {
             Storage::disk('public')->delete($invitation->cover_video);
         }
 

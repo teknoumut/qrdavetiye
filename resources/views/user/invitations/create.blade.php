@@ -267,65 +267,180 @@
                             </div>
                         </div>
 
-                            <div>
-                                <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-3">{{ __('Kendi Desenini Yükle') }}</label>
+                            <div x-data="{ selectedPattern: '{{ old('envelope_pattern', '') }}' }">
+                                <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-3">{{ __('Zarf Deseni') }}</label>
 
-                                <div class="rounded-xl border-2 border-dashed border-cream-200 dark:border-night-700 hover:border-gold-300 dark:hover:border-gold-500/30 transition-all duration-200 overflow-hidden">
-                                    <label class="flex items-center gap-3 px-4 py-3 cursor-pointer">
-                                        <div class="w-10 h-10 rounded-lg bg-cream-100 dark:bg-night-700 flex items-center justify-center text-lg shrink-0 border border-cream-200 dark:border-night-600">
-                                            <span>🖼️</span>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <span class="text-sm font-semibold text-night-700 dark:text-cream-200 block leading-tight">{{ __('PNG, JPG, SVG — 64MB\'a kadar') }}</span>
-                                            <span class="text-xs text-night-400 dark:text-cream-400 block mt-0.5" id="customFileLabel">{{ __('Dosya seçilmedi') }}</span>
-                                        </div>
-                                        <div class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gold-700 dark:text-gold-400 bg-gold-50 dark:bg-gold-500/10 border border-gold-200 dark:border-gold-500/20 hover:bg-gold-100 dark:hover:bg-gold-500/20 transition-colors shrink-0">
-                                            {{ __('Gözat') }}
-                                        </div>
-                                        <input type="file" name="custom_pattern" accept="image/png,image/jpeg,image/svg+xml" class="hidden"
-                                            onchange="
-                                                var label = document.getElementById('customFileLabel');
-                                                if (this.files[0]) {
-                                                    label.textContent = this.files[0].name;
-                                                }
-                                            ">
-                                    </label>
+                                <div class="grid grid-cols-4 sm:grid-cols-4 gap-2.5 mb-4">
+                                    <template x-for="p in window.envPatterns" :key="p.v">
+                                        <button type="button"
+                                            @click="selectedPattern = p.v"
+                                            class="relative flex flex-col items-center gap-2 p-2 rounded-xl border-2 cursor-pointer transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-gold-400/40"
+                                            :class="selectedPattern === p.v
+                                                ? 'border-gold-500 bg-gold-50 dark:bg-gold-500/10 shadow-md'
+                                                : 'border-cream-200 dark:border-night-700 hover:border-gold-300 dark:hover:border-gold-500/30 hover:shadow-sm'">
+                                            <div class="w-full aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-gold-400 to-gold-600 shadow-sm relative">
+                                                <template x-if="p.img">
+                                                    <img :src="p.img" class="absolute inset-0 w-full h-full object-cover">
+                                                </template>
+                                                <template x-if="!p.img">
+                                                    <div :class="'pat-prev-' + p.v" class="absolute inset-0"></div>
+                                                </template>
+                                                <template x-if="p.v === ''">
+                                                    <div class="absolute inset-0 flex items-center justify-center bg-black/5 dark:bg-white/5">
+                                                        <svg class="w-5 h-5 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                    </div>
+                                                </template>
+                                                <div x-show="selectedPattern === p.v"
+                                                    class="absolute top-1 right-1 w-5 h-5 rounded-full bg-gold-500 text-white flex items-center justify-center shadow"
+                                                    style="display: none;">
+                                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                                </div>
+                                            </div>
+                                            <span class="text-[11px] leading-tight text-center font-semibold text-night-600 dark:text-cream-300 transition-colors" x-text="p.l"></span>
+                                        </button>
+                                    </template>
                                 </div>
 
+                                <input type="hidden" name="envelope_pattern" :value="selectedPattern">
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+                            @php
+                                $presets = [
+                                    'primary' => ['#d4a61e','#c9952e','#e8c44a','#b8860b','#8b1a4a','#1a2a4a','#2d6a4f','#c1694f','#7ba0b0','#e8b4b8','#6b5ce7','#e75480'],
+                                    'secondary' => ['#fefcf8','#fffdf5','#fdf2e9','#fdf2f2','#f0f4f8','#f5f0ff','#f0f4f0','#fef9e7','#fff5f5','#f3eeea','#f0fdf4','#ecfdf5'],
+                                    'text' => ['#333333','#1a1a1a','#000000','#4a3728','#5c4033','#666666','#555555','#444444','#3d3d3d','#2d2d2d'],
+                                    'flap' => ['#ffffff','#fefcf8','#fdf2f2','#fdf2e9','#f0f4f8','#f5f0ff','#fce7f3','#fff7ed','#f0fdf4','#fef2f2','#fffbeb','#faf5ff'],
+                                    'bg' => ['#ffffff','#fefcf8','#fdf2f2','#fdf2e9','#f0f4f8','#f5f0ff','#fce7f3','#fff7ed','#f0fdf4','#fef2f2','#fffbeb','#faf5ff'],
+                                ];
+                            @endphp
+                            <script>
+                                function hexToHsl(hex) {
+                                    let r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
+                                    let mx = Math.max(r,g,b), mn = Math.min(r,g,b), h = 0, s = 0, l = (mx+mn)/2;
+                                    if (mx !== mn) {
+                                        let d = mx - mn;
+                                        s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+                                        if (mx === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+                                        else if (mx === g) h = ((b - r) / d + 2) / 6;
+                                        else h = ((r - g) / d + 4) / 6;
+                                    }
+                                    return [h * 360, s * 100, l * 100];
+                                }
+                                function hslToHex(h, s, l) {
+                                    s /= 100; l /= 100;
+                                    let a = s * Math.min(l, 1 - l);
+                                    let f = n => { let k = (n + h / 30) % 12; return Math.round(255 * (l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1))); };
+                                    return '#' + [f(0), f(8), f(4)].map(x => x.toString(16).padStart(2,'0')).join('');
+                                }
+                                function generateSimilarColors(hex) {
+                                    let [h, s, l] = hexToHsl(hex);
+                                    let colors = [];
+                                    for (let i = -5; i <= 6; i++) {
+                                        let nh = (h + i * 8 + 360) % 360;
+                                        let ns = Math.max(10, Math.min(100, s + (i % 3) * 8 - 8));
+                                        let nl = Math.max(10, Math.min(95, l + (i % 4) * 6 - 9));
+                                        colors.push(hslToHex(nh, ns, nl));
+                                    }
+                                    return colors;
+                                }
+                            </script>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                                 <div>
                                     <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Ana Renk') }}</label>
-                                    <div class="flex gap-2 items-center">
+                                    <div class="flex gap-2 items-center mb-2">
                                         <input type="color" name="primary_color" value="{{ old('primary_color', '#d4a61e') }}"
                                             class="w-14 h-12 rounded-xl border border-cream-200 dark:border-night-700 cursor-pointer bg-white p-0.5"
-                                            oninput="this.nextElementSibling.value = this.value">
-                                        <input type="text" value="{{ old('primary_color', '#d4a61e') }}" readonly
+                                            oninput="document.getElementById('primary_color_text').value = this.value; updatePaletteNow('primary')">
+                                        <input type="text" id="primary_color_text" value="{{ old('primary_color', '#d4a61e') }}" readonly
                                             class="flex-1 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-cream-50 dark:bg-night-900 text-night-500 dark:text-cream-400 text-sm font-mono">
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5" id="palette_primary">
+                                        @foreach($presets['primary'] as $hex)
+                                        <button type="button" onclick="document.querySelector('[name=primary_color]').value='{{$hex}}'; document.getElementById('primary_color_text').value='{{$hex}}'; document.querySelector('[name=primary_color]').dispatchEvent(new Event('input'))" class="w-7 h-7 rounded-lg border border-cream-200 dark:border-night-700 cursor-pointer hover:scale-110 transition-transform shadow-sm" style="background:{{$hex}}"></button>
+                                        @endforeach
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Arka Plan') }}</label>
-                                    <div class="flex gap-2 items-center">
+                                    <div class="flex gap-2 items-center mb-2">
                                         <input type="color" name="secondary_color" value="{{ old('secondary_color', '#fefcf8') }}"
                                             class="w-14 h-12 rounded-xl border border-cream-200 dark:border-night-700 cursor-pointer bg-white p-0.5"
-                                            oninput="this.nextElementSibling.value = this.value">
-                                        <input type="text" value="{{ old('secondary_color', '#fefcf8') }}" readonly
+                                            oninput="document.getElementById('secondary_color_text').value = this.value; updatePaletteNow('secondary')">
+                                        <input type="text" id="secondary_color_text" value="{{ old('secondary_color', '#fefcf8') }}" readonly
                                             class="flex-1 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-cream-50 dark:bg-night-900 text-night-500 dark:text-cream-400 text-sm font-mono">
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5" id="palette_secondary">
+                                        @foreach($presets['secondary'] as $hex)
+                                        <button type="button" onclick="document.querySelector('[name=secondary_color]').value='{{$hex}}'; document.getElementById('secondary_color_text').value='{{$hex}}'; document.querySelector('[name=secondary_color]').dispatchEvent(new Event('input'))" class="w-7 h-7 rounded-lg border border-cream-200 dark:border-night-700 cursor-pointer hover:scale-110 transition-transform shadow-sm" style="background:{{$hex}}"></button>
+                                        @endforeach
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Zarf Yazı Rengi') }}</label>
-                                    <div class="flex gap-2 items-center">
+                                    <div class="flex gap-2 items-center mb-2">
                                         <input type="color" name="envelope_text_color" value="{{ old('envelope_text_color', '#333333') }}"
                                             class="w-14 h-12 rounded-xl border border-cream-200 dark:border-night-700 cursor-pointer bg-white p-0.5"
-                                            oninput="this.nextElementSibling.value = this.value">
-                                        <input type="text" value="{{ old('envelope_text_color', '#333333') }}" readonly
+                                            oninput="document.getElementById('envelope_text_color_text').value = this.value; updatePaletteNow('envelope_text')">
+                                        <input type="text" id="envelope_text_color_text" value="{{ old('envelope_text_color', '#333333') }}" readonly
                                             class="flex-1 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-cream-50 dark:bg-night-900 text-night-500 dark:text-cream-400 text-sm font-mono">
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5" id="palette_envelope_text">
+                                        @foreach($presets['text'] as $hex)
+                                        <button type="button" onclick="document.querySelector('[name=envelope_text_color]').value='{{$hex}}'; document.getElementById('envelope_text_color_text').value='{{$hex}}'; document.querySelector('[name=envelope_text_color]').dispatchEvent(new Event('input'))" class="w-7 h-7 rounded-lg border border-cream-200 dark:border-night-700 cursor-pointer hover:scale-110 transition-transform shadow-sm" style="background:{{$hex}}"></button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Zarf Üçgen Rengi') }}</label>
+                                    <div class="flex gap-2 items-center mb-2">
+                                        <input type="color" name="envelope_flap_color" value="{{ old('envelope_flap_color', '#ffffff') }}"
+                                            class="w-14 h-12 rounded-xl border border-cream-200 dark:border-night-700 cursor-pointer bg-white p-0.5"
+                                            oninput="document.getElementById('envelope_flap_color_text').value = this.value; updatePaletteNow('envelope_flap')">
+                                        <input type="text" id="envelope_flap_color_text" value="{{ old('envelope_flap_color', '#ffffff') }}" readonly
+                                            class="flex-1 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-cream-50 dark:bg-night-900 text-night-500 dark:text-cream-400 text-sm font-mono">
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5" id="palette_envelope_flap">
+                                        @foreach($presets['flap'] as $hex)
+                                        <button type="button" onclick="document.querySelector('[name=envelope_flap_color]').value='{{$hex}}'; document.getElementById('envelope_flap_color_text').value='{{$hex}}'; document.querySelector('[name=envelope_flap_color]').dispatchEvent(new Event('input'))" class="w-7 h-7 rounded-lg border border-cream-200 dark:border-night-700 cursor-pointer hover:scale-110 transition-transform shadow-sm" style="background:{{$hex}}"></button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Zarf Arka Plan') }}</label>
+                                    <div class="flex gap-2 items-center mb-2">
+                                        <input type="color" name="envelope_bg_color" value="{{ old('envelope_bg_color', '#ffffff') }}"
+                                            class="w-14 h-12 rounded-xl border border-cream-200 dark:border-night-700 cursor-pointer bg-white p-0.5"
+                                            oninput="document.getElementById('envelope_bg_color_text').value = this.value; updatePaletteNow('envelope_bg')">
+                                        <input type="text" id="envelope_bg_color_text" value="{{ old('envelope_bg_color', '#ffffff') }}" readonly
+                                            class="flex-1 px-4 py-3 rounded-xl border border-cream-200 dark:border-night-700 bg-cream-50 dark:bg-night-900 text-night-500 dark:text-cream-400 text-sm font-mono">
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5" id="palette_envelope_bg">
+                                        @foreach($presets['bg'] as $hex)
+                                        <button type="button" onclick="document.querySelector('[name=envelope_bg_color]').value='{{$hex}}'; document.getElementById('envelope_bg_color_text').value='{{$hex}}'; document.querySelector('[name=envelope_bg_color]').dispatchEvent(new Event('input'))" class="w-7 h-7 rounded-lg border border-cream-200 dark:border-night-700 cursor-pointer hover:scale-110 transition-transform shadow-sm" style="background:{{$hex}}"></button>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
+                            <script>
+                                function updatePaletteNow(name) {
+                                    let input = document.querySelector('[name="' + name + '_color"]');
+                                    let text = document.getElementById(name + '_color_text');
+                                    let container = document.getElementById('palette_' + name);
+                                    if (!input || !container) return;
+                                    let hex = input.value;
+                                    if (text) text.value = hex;
+                                    let colors = generateSimilarColors(hex);
+                                    container.innerHTML = colors.map(c =>
+                                        '<button type="button" onclick="document.querySelector(\'[name=' + name + '_color]\').value=\'' + c + '\'; document.getElementById(\'' + name + '_color_text\').value=\'' + c + '\'; document.querySelector(\'[name=' + name + '_color]\').dispatchEvent(new Event(\'input\'))" class="w-7 h-7 rounded-lg border border-cream-200 dark:border-night-700 cursor-pointer hover:scale-110 transition-transform shadow-sm" style="background:' + c + '"></button>'
+                                    ).join('');
+                                }
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    ['primary', 'secondary', 'envelope_text', 'envelope_flap', 'envelope_bg'].forEach(function(n) {
+                                        let input = document.querySelector('[name="' + n + '_color"]');
+                                        if (input) input.addEventListener('input', function() { updatePaletteNow(n); });
+                                    });
+                                });
+                            </script>
 
                             <div>
                                 <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Kapak Fotoğrafı') }}</label>
@@ -502,6 +617,13 @@
         }
     </script>
     <script>
+        window.envPatterns = [
+            {v:'', l:'Yok'},
+            @foreach($patterns as $pattern)
+            {v:'a_{{ $pattern->slug }}', l:'{{ $pattern->name }}', img:'{{ \Illuminate\Support\Facades\Storage::url($pattern->image_path) }}'},
+            @endforeach
+        ];
+
         window.themes = @json($themes);
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -518,13 +640,11 @@
 
                 if (primaryInput && theme.primary_color) {
                     primaryInput.value = theme.primary_color;
-                    var next = primaryInput.nextElementSibling;
-                    if (next) next.value = theme.primary_color;
+                    document.getElementById('primary_color_text').value = theme.primary_color;
                 }
                 if (secondaryInput && theme.secondary_color) {
                     secondaryInput.value = theme.secondary_color;
-                    var next = secondaryInput.nextElementSibling;
-                    if (next) next.value = theme.secondary_color;
+                    document.getElementById('secondary_color_text').value = theme.secondary_color;
                 }
                 if (fontSelect && theme.font_family) {
                     fontSelect.value = theme.font_family;

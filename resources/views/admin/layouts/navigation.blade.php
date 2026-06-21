@@ -18,6 +18,9 @@
                     <a href="{{ route('admin.themes.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 hover:text-white {{ request()->routeIs('admin.themes*') ? 'text-white border-b-2 border-indigo-400' : '' }}">
                         Temalar
                     </a>
+                    <a href="{{ route('admin.patterns.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 hover:text-white {{ request()->routeIs('admin.patterns*') ? 'text-white border-b-2 border-indigo-400' : '' }}">
+                        Desenler
+                    </a>
                     @php $pendingPayments = \App\Models\PaymentNotification::pending()->count(); @endphp
                     <a href="{{ route('admin.payment-notifications.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 hover:text-white {{ request()->routeIs('admin.payment-notifications*') ? 'text-white border-b-2 border-indigo-400' : '' }}">
                         Ödemeler
@@ -53,6 +56,7 @@
             <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">Kullanıcılar</a>
             <a href="{{ route('admin.plans.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">Paketler</a>
             <a href="{{ route('admin.themes.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">Temalar</a>
+            <a href="{{ route('admin.patterns.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">Desenler</a>
             <a href="{{ route('admin.payment-notifications.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-white">
                 Ödemeler
                 @if($pendingPayments > 0)

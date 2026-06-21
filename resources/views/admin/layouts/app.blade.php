@@ -442,6 +442,9 @@
             <a href="{{ route('admin.themes.index') }}" class="nav-item {{ request()->routeIs('admin.themes*') ? 'active' : '' }}">
                 <span class="nav-icon">🎨</span> Temalar
             </a>
+            <a href="{{ route('admin.patterns.index') }}" class="nav-item {{ request()->routeIs('admin.patterns*') ? 'active' : '' }}">
+                <span class="nav-icon">🔲</span> Desenler
+            </a>
             <a href="{{ route('admin.reviews.index') }}" class="nav-item {{ request()->routeIs('admin.reviews*') ? 'active' : '' }}">
                 <span class="nav-icon">💬</span> Yorumlar
             </a>

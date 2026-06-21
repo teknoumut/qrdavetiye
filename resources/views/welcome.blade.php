@@ -204,6 +204,36 @@
             </div>
         </div>
 
+        <div class="showcase-section">
+            <div class="section-title animate-reveal">{{ __('Zarf Desenleri') }}</div>
+            <div class="section-sub animate-reveal">{{ __('Özel tasarım desenler') }}</div>
+            @if($patterns->count())
+            <div class="showcase-grid">
+                @foreach($patterns as $pattern)
+                @php
+                    $imgContent = \Illuminate\Support\Facades\Storage::disk('public')->get($pattern->image_path);
+                    $mime = $imgContent ? 'image/' . (str_ends_with($pattern->image_path, '.svg') ? 'svg+xml' : (str_ends_with($pattern->image_path, '.png') ? 'png' : 'jpeg')) : '';
+                    $imgDataUri = $imgContent ? 'data:' . $mime . ';base64,' . base64_encode($imgContent) : '';
+                @endphp
+                <div class="showcase-card">
+                    <div class="env-mini" style="background:#ffffff;">
+                        <div class="env-mini-flap" style="background:#f1f5f9;">
+                            <div class="env-mini-seal">❤</div>
+                        </div>
+                        <div class="env-mini-body" style="background-image:url('{{ $imgDataUri }}');background-size:cover;background-position:center;opacity:0.7;"></div>
+                    </div>
+                    <span>{{ $pattern->name }}</span>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <div class="showcase-empty">
+                <p>{{ __('Henüz desen eklenmemiş.') }}</p>
+                <p style="font-size:0.8rem;color:#94a3b8;margin-top:4px;">{{ __('Admin panelden desen ekleyebilirsin.') }}</p>
+            </div>
+            @endif
+        </div>
+
         <div class="events-section" id="events">
             <div class="section-title animate-reveal">{{ __('Etkinlik Türleri') }}</div>
             <div class="section-sub animate-reveal">{{ __('Her özel gün için özel tasarım') }}</div>

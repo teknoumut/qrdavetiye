@@ -1,0 +1,38 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="500" height="350">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="50%" stop-color="#16213e"/>
+      <stop offset="100%" stop-color="#0f3460"/>
+    </linearGradient>
+    <linearGradient id="shadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(0,0,0,0.08)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0.15)"/>
+    </linearGradient>
+    <linearGradient id="gL" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="rgba(0,0,0,0.25)"/>
+      <stop offset="50%" stop-color="rgba(0,0,0,0.04)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </linearGradient>
+    <linearGradient id="gR" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0%" stop-color="rgba(0,0,0,0.25)"/>
+      <stop offset="50%" stop-color="rgba(0,0,0,0.04)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </linearGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="n"/>
+      <feColorMatrix type="saturate" values="0" in="n" result="gray"/>
+      <feBlend in="SourceGraphic" in2="gray" mode="multiply"/>
+    </filter>
+  </defs>
+  <rect x="38" y="42" width="430" height="280" rx="4" ry="4" fill="rgba(0,0,0,0.15)" filter="url(#noise)"/>
+  <rect x="35" y="35" width="430" height="280" rx="4" ry="4" fill="url(#bg)" filter="url(#noise)"/>
+  <rect x="35" y="35" width="430" height="280" rx="4" ry="4" fill="url(#shadow)"/>
+  <rect x="35" y="35" width="20" height="280" fill="url(#gL)" rx="2"/>
+  <rect x="445" y="35" width="20" height="280" fill="url(#gR)" rx="2"/>
+  <rect x="35" y="300" width="430" height="15" fill="rgba(0,0,0,0.10)" rx="2"/>
+  <rect x="35" y="35" width="430" height="280" rx="4" ry="4" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+  <line x1="52" y1="58" x2="120" y2="58" stroke="rgba(255,215,0,0.12)" stroke-width="1" stroke-linecap="round"/>
+  <line x1="52" y1="70" x2="105" y2="70" stroke="rgba(255,215,0,0.12)" stroke-width="1" stroke-linecap="round"/>
+  <line x1="52" y1="82" x2="110" y2="82" stroke="rgba(255,215,0,0.12)" stroke-width="1" stroke-linecap="round"/>
+</svg>

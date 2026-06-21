@@ -101,7 +101,7 @@
             setTimeout(function() { spawnConfetti(); }, 900);
         }
 
-        var reveals = document.querySelectorAll('.animate-reveal, .animate-step, .animate-feature');
+        var reveals = document.querySelectorAll('.animate-reveal, .animate-step, .animate-feature, .showcase-card');
         reveals.forEach(function(el) {
             var r = el.getBoundingClientRect();
             if (r.top < winH - 60) {

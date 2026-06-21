@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
+use App\Http\Controllers\Admin\PatternController as AdminPatternController;
 use App\Http\Controllers\Admin\PaymentNotificationController as AdminPaymentNotificationController;
 use App\Http\Controllers\Admin\PlanController as AdminPlanController;
 use App\Http\Controllers\Admin\RefundController;
@@ -25,14 +26,16 @@ use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\InvitationController as UserInvitationController;
 use App\Models\ContactMessage;
 use App\Models\Invoice;
+use App\Models\Pattern;
 use App\Models\PaymentNotification;
 use App\Models\Review;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $reviews = Review::approved()->with('user')->latest()->get();
+    $patterns = Pattern::where('is_active', true)->where('image_path', 'not like', '%.svg')->latest()->take(12)->get();
 
-    return view('welcome', compact('reviews'));
+    return view('welcome', compact('reviews', 'patterns'));
 })->name('home');
 
 Route::get('/s/{shortLink}', [InvitationPublicController::class, 'shortLink'])->name('invitation.short');
@@ -132,6 +135,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('plans/{plan}/toggle-active', [AdminPlanController::class, 'toggleActive'])->name('plans.toggle-active');
 
     Route::resource('themes', AdminThemeController::class);
+
+    Route::resource('patterns', AdminPatternController::class);
+    Route::delete('patterns/mass-destroy', [AdminPatternController::class, 'massDestroy'])->name('patterns.mass-destroy');
 
     Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [AdminSettingController::class, 'update'])->name('settings.update');

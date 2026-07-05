@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Services\SubscriptionService;
+use App\Models\Plan;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
@@ -22,7 +23,34 @@ class CheckSubscription
             return redirect()->route('home')->with('error', 'Hesabınız pasif durumda. Lütfen yöneticinizle iletişime geçin.');
         }
 
-        // Auto-expire if subscription_end has passed
+        if (! $user->plan_id && ! $user->is_admin) {
+            $trialPlan = Plan::where('name', 'Deneme')->first();
+
+            if (! $trialPlan) {
+                $trialPlan = Plan::create([
+                    'name' => 'Deneme',
+                    'description' => '3 günlük ücretsiz deneme. Sınırsız özellik, 1 davetiye.',
+                    'monthly_price' => 0,
+                    'yearly_price' => 0,
+                    'max_invitations' => 1,
+                    'max_images_per_invitation' => 3,
+                    'music_feature' => true,
+                    'video_feature' => true,
+                    'cover_video_feature' => true,
+                    'rsvp_feature' => true,
+                    'qr_download' => true,
+                    'is_active' => true,
+                ]);
+            }
+
+            $user->update([
+                'plan_id' => $trialPlan->id,
+                'subscription_start' => now(),
+                'subscription_end' => now()->addDays(3),
+                'subscription_status' => User::STATUS_ACTIVE,
+            ]);
+        }
+
         if ($user->subscription_end && now()->greaterThan($user->subscription_end)) {
             if (in_array($user->subscription_status, [User::STATUS_ACTIVE, User::STATUS_CANCELLED])) {
                 $service = new SubscriptionService;
@@ -36,10 +64,6 @@ class CheckSubscription
 
         if ($expired && ! $user->is_admin) {
             $request->attributes->set('subscription_expired', true);
-        }
-
-        if (! $user->plan_id && ! $user->is_admin) {
-            $request->attributes->set('needs_subscription', true);
         }
 
         return $next($request);

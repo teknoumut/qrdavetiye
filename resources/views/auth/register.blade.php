@@ -234,7 +234,7 @@
             @endif
 
             <h2>Hesap Oluştur</h2>
-            <p class="desc">Ücretsiz üye ol, dijital davetiyeni oluşturmaya başla</p>
+            <p class="desc">3 gün ücretsiz dene, sonra istediğin plana geç. 🎁</p>
 
             <form method="POST" action="{{ route('register') }}">
                 @csrf

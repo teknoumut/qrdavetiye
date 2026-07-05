@@ -92,11 +92,11 @@
             <div class="orb" style="width:250px;height:250px;bottom:15%;right:10%;background:var(--site-secondary);animation-delay:-3s;"></div>
             <div class="orb" style="width:200px;height:200px;top:40%;left:60%;background:#6366f1;animation-delay:-5s;"></div>
         </div>
-        <div class="hero-badge"><span class="dot"></span> {{ __('Yeni Nesil Davetiye') }}</div>
+        <div class="hero-badge"><span class="dot"></span> 🚀 {{ __('3 Gün Ücretsiz Dene') }}</div>
         <h1>{{ __('Özel Günlerin İçin') }}<br><span class="highlight">{{ __('Dijital Davetiye') }}</span></h1>
-        <p>{{ __('QR kodlu, müzikli, fotoğraflı modern davetiyelerle sevdiklerini büyüle. Paylaşması kolay, etkisi büyük.') }}</p>
+        <p>{{ __('QR kodlu, müzikli, fotoğraflı modern davetiyelerle sevdiklerini büyüle. 3 gün ücretsiz dene, istediğin plana geç.') }}</p>
         <div class="btns">
-            <a href="#contact" class="primary">{{ __('Şimdi Başla') }}</a>
+            <a href="{{ route('register') }}" class="primary">{{ __('Ücretsiz Dene') }}</a>
             <a href="#how" class="secondary">{{ __('Nasıl Çalışır?') }}</a>
         </div>
         <div class="hero-scroll" id="heroScroll" onclick="document.getElementById('envSection').scrollIntoView({behavior:'smooth'})">

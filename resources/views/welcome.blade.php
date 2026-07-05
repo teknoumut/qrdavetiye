@@ -271,7 +271,7 @@
             </div>
         </div>
 
-        @php $plans = \App\Models\Plan::active()->get(); @endphp
+        @php $plans = \App\Models\Plan::active()->where('name', '!=', 'Deneme')->get(); @endphp
         @if ($plans->count())
         <div class="pricing-section" id="pricing">
             <div class="section-title animate-reveal">{{ __('Plan ve Fiyatlandırma') }}</div>

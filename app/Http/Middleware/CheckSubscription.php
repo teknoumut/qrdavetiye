@@ -49,6 +49,8 @@ class CheckSubscription
                 'subscription_end' => now()->addDays(3),
                 'subscription_status' => User::STATUS_ACTIVE,
             ]);
+
+            $user->refresh();
         }
 
         if ($user->subscription_end && now()->greaterThan($user->subscription_end)) {

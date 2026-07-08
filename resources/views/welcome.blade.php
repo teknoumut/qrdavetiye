@@ -34,6 +34,13 @@
         }
     </style>
     @vite(['resources/css/welcome.css', 'resources/js/welcome.js'])
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SFZ8Q9N7C"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-5SFZ8Q9N7C');
+    </script>
 </head>
 <body data-site-primary="{{ $sp }}" data-site-secondary="{{ $ss }}">
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-7 py-3 bg-white/75 backdrop-blur-2xl border-b border-black/[0.04] transition-all duration-300">

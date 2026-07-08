@@ -10,6 +10,13 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700|dancing-script:400,500,600,700&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SFZ8Q9N7C"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-5SFZ8Q9N7C');
+        </script>
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-100">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">

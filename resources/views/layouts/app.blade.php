@@ -10,6 +10,13 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|playfair-display:400,500,600,700|dancing-script:400,500,600,700&display=swap" rel="stylesheet" />
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SFZ8Q9N7C"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-5SFZ8Q9N7C');
+        </script>
         <style>
             [x-cloak] { display: none !important; }
             body { font-family: 'Figtree', sans-serif; -webkit-font-smoothing: antialiased; }

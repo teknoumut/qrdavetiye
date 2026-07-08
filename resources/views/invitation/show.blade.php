@@ -92,6 +92,31 @@
     @if($cdnFontUrl)<link href="{{ $cdnFontUrl }}" rel="stylesheet">@endif
     @if($fontFamily !== 'Anydore')<link href="{{ $anydoreFontUrl }}" rel="stylesheet">@endif
     <link href="{{ asset('css/invitation.css') }}" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "{{ $ev['couple'] ? $fixName($invitation->groom_name) . ' & ' . $fixName($invitation->bride_name) : $fixName($invitation->groom_name) }} - {{ $ev['title'] }}",
+        "description": "{{ $invitation->welcome_message ? Str::limit(strip_tags($invitation->welcome_message), 300) : $ev['title'] }}",
+        "startDate": "{{ $invitation->event_date ? $invitation->event_date->format('Y-m-d') : '' }}",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+            "@type": "Place",
+            "name": "{{ $invitation->venue_name ?? '' }}",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "{{ $invitation->city ?? '' }}",
+                "addressCountry": "TR"
+            }
+        },
+        "organizer": {
+            "@type": "Organization",
+            "name": "Senin Davetiyen",
+            "url": "{{ config('app.url') }}"
+        }
+    }
+    </script>
     <style>
         :root {
             --primary: {{ $primaryColor }};

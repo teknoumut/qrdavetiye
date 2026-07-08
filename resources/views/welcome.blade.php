@@ -41,6 +41,32 @@
         gtag('js', new Date());
         gtag('config', 'G-5SFZ8Q9N7C');
     </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Senin Davetiyen",
+        "url": "{{ config('app.url') }}",
+        "description": "Özel günleriniz için modern ve şık QR kodlu dijital davetiyeler. Müzik, video, fotoğraf galerisi ve RSVP takibi.",
+        "inLanguage": "tr-TR",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ config('app.url') }}?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Senin Davetiyen",
+        "url": "{{ config('app.url') }}",
+        "logo": "{{ asset('images/logo.svg') }}",
+        "description": "QR kodlu dijital davetiye platformu",
+        "areaServed": "TR"
+    }
+    </script>
 </head>
 <body data-site-primary="{{ $sp }}" data-site-secondary="{{ $ss }}">
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-7 py-3 bg-white/75 backdrop-blur-2xl border-b border-black/[0.04] transition-all duration-300">

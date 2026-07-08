@@ -5,6 +5,36 @@
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
+    <url>
+        <loc>{{ route('login') }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    <url>
+        <loc>{{ route('register') }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>{{ route('legal.gizlilik') }}</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.2</priority>
+    </url>
+    <url>
+        <loc>{{ route('legal.kullanim') }}</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.2</priority>
+    </url>
+    <url>
+        <loc>{{ route('legal.iade') }}</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.2</priority>
+    </url>
+    <url>
+        <loc>{{ route('legal.mesafeli') }}</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.2</priority>
+    </url>
     @foreach($invitations as $invitation)
     <url>
         <loc>{{ route('invitation.show', $invitation->slug) }}</loc>

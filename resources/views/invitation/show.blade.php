@@ -744,34 +744,52 @@
             text-align: center;
             padding: 24px;
             overflow: hidden;
+            isolation: isolate;
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+        }
+        .cover-section .cover-video {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; pointer-events: none; z-index: -1;
+            overflow: hidden;
+        }
+        .cover-section .cover-video iframe {
+            position: absolute; top: 50%; left: 50%; width: 200%; height: 200%;
+            border: 0; z-index: -1; pointer-events: none;
+            transform: translate(-50%, -50%) scale(1.6);
+        }
+        .cover-section .cover-video video {
+            position: absolute; top: 50%; left: 50%; width: 200%; height: 200%;
+            border: 0; z-index: -1;
+            transform: translate(-50%, -50%) scale(1.6);
         }
         .cover-section .cover-bg {
-            position: absolute; inset: 0; z-index: 2;
+            position: absolute; inset: 0; z-index: 3;
             background: @if($invitation->cover_image) url("{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_image) }}") @else linear-gradient(145deg, #1a1a2e, #0f3460) @endif;
             background-size: cover;
             background-position: center;
             filter: saturate(1.1);
-            transform: scale(1.05);
+            transform: scale(1.05) translateZ(0);
             transition: transform 0.1s ease-out;
+            will-change: transform;
         }
         .cover-section.has-video .cover-bg {
             opacity: 0.55;
         }
-        .cover-section .cover-video {
-            position: absolute; inset: 0; width: 100%; height: 100%;
-            object-fit: cover; pointer-events: none; z-index: 1;
-        }
         .cover-section .cover-bg::after {
             content: ''; position: absolute; inset: 0; z-index: 1;
-            background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.5) 100%);
+            background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.7) 100%);
+            transform: translateZ(0);
         }
         .cover-section .cover-bg::before {
             content: ''; position: absolute; inset: 0; z-index: 2;
-            background: radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(0,0,0,0.2) 100%);
+            background: radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(0,0,0,0.35) 100%);
+            transform: translateZ(0);
         }
         .cover-section .cover-overlay {
-            position: absolute; inset: 0; z-index: 5;
+            position: absolute; inset: 0; z-index: 4;
             background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.2) 100%);
+            transform: translateZ(0);
         }
         /* Cover dekoratif cizgi */
         .cover-section .cover-deco {
@@ -800,7 +818,7 @@
         }
         .cover-section .cover-particles {
             position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-            z-index: 2;
+            z-index: 5;
         }
         .cover-section .cover-particle {
             position: absolute; width: 2px; height: 2px; background: rgba(255,255,255,0.3); border-radius: 50%;
@@ -820,7 +838,7 @@
             position: relative;
             line-height: 1.15;
             animation: coverFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-            z-index: 3;
+            z-index: 10;
             letter-spacing: -0.5px;
         }
         .cover-section .names .groom,
@@ -836,7 +854,7 @@
             font-family: 'Montserrat', sans-serif;
             font-weight: 300;
             animation: coverFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
-            z-index: 3;
+            z-index: 10;
             margin-top: 16px;
         }
         .cover-section .date::before,
@@ -857,7 +875,7 @@
             vertical-align: middle;
         }
         .cover-section .scroll-indicator {
-            position: absolute; bottom: 36px; z-index: 3;
+            position: absolute; bottom: 36px; z-index: 10;
             color: rgba(255,255,255,0.35); font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
             font-family: 'Montserrat', sans-serif; cursor: pointer;
             animation: coverFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
@@ -972,6 +990,8 @@
             .cover-section .date { font-size: 0.75rem; letter-spacing: 3px; }
             .cover-section .date::before,
             .cover-section .date::after { margin: 0 6px; }
+            .cover-section .cover-video { display: none; }
+            .cover-section.has-video .cover-bg { opacity: 1; }
             .section-title { font-size: 2rem; }
             .section { padding: 50px 20px; }
             .countdown { gap: 12px; flex-wrap: wrap; }
@@ -1367,15 +1387,13 @@
 
     <div class="invitation-content" id="invitationContent">
         <div class="cover-section @if($invitation->cover_video) has-video @endif">
-            <div class="cover-bg"></div>
             @if($invitation->cover_video)
                 @if(str_starts_with($invitation->cover_video, 'http'))
                     <div class="cover-video">
-                        <iframe src="{{ $coverVideoUrl }}?autoplay=1&mute=1&loop=1&playlist={{ $coverYtId }}&controls=0&showinfo=0&rel=0"
-                            style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"
+                        <iframe src="{{ $coverVideoUrl }}?controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0&enablejsapi=1"
                             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
                             referrerpolicy="no-referrer-when-downgrade"
-                            sandbox="allow-same-origin allow-scripts allow-popups allow-presentation">
+                            id="coverVideoIframe">
                         </iframe>
                     </div>
                 @else
@@ -1384,6 +1402,7 @@
                     </video>
                 @endif
             @endif
+            <div class="cover-bg"></div>
             <div class="cover-overlay"></div>
             <div class="cover-deco"></div>
             <div class="cover-deco"></div>
@@ -1662,6 +1681,8 @@
         var invContent = document.getElementById('invitationContent');
         var envelopeOpened = false;
 
+        function unMuteCoverVideo() {}
+
         function openEnvelope() {
             if (envelopeOpened) return;
             envelopeOpened = true;
@@ -1684,6 +1705,10 @@
                 envelope.style.transform = '';
                 envelope.classList.add('open');
                 letter.classList.add('show');
+
+                @if($invitation->cover_video)
+                setTimeout(function() { unMuteCoverVideo(); }, 500);
+                @endif
 
                 @if($eventType === 'wedding' || $eventType === 'engagement')
                 createWeddingMagic(screen);
@@ -2193,6 +2218,41 @@
                 env.style.transform = '';
             });
         })();
+
+        @if($invitation->cover_video && str_starts_with($invitation->cover_video, 'http'))
+        var coverPlayer;
+        function onYouTubeIframeAPIReady() {
+            coverPlayer = new YT.Player('coverVideoIframe', {
+                playerVars: {
+                    autoplay: 1,
+                    mute: 1,
+                    loop: 1,
+                    playlist: '{{ $coverYtId }}',
+                    controls: 0,
+                    modestbranding: 1,
+                    iv_load_policy: 3,
+                    playsinline: 1,
+                    rel: 0,
+                    showinfo: 0
+                },
+                events: {
+                    'onReady': function(e) {
+                        e.target.playVideo();
+                    }
+                }
+            });
+        }
+        function unMuteCoverVideo() {
+            if (coverPlayer && coverPlayer.unMute) {
+                coverPlayer.unMute();
+                coverPlayer.setVolume(50);
+            }
+        }
+        var tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        var first = document.getElementsByTagName('script')[0];
+        first.parentNode.insertBefore(tag, first);
+        @endif
     </script>
 </body>
 </html>

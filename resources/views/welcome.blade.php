@@ -352,9 +352,13 @@
                 @foreach ($reviews as $review)
                     <div class="review-card animate-feature">
                         <div class="review-header">
-                            <div class="review-avatar">{{ substr($review->user->name, 0, 1) }}</div>
+                            @if($review->user->photo_url)
+                                <img src="{{ $review->user->photo_url }}" alt="" class="review-avatar" style="width:44px;height:44px;border-radius:12px;object-fit:cover;">
+                            @else
+                                <div class="review-avatar">{{ substr($review->user->name, 0, 1) }}</div>
+                            @endif
                             <div>
-                                <div class="review-name">{{ $review->user->name }}</div>
+                                <div class="review-name">{{ $review->is_anonymous ? explode(' ', $review->user->name)[0] : $review->user->name }}</div>
                                 <div class="review-date">{{ $review->created_at->format('d M Y') }}</div>
                             </div>
                             <div class="review-stars">

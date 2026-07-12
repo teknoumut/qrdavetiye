@@ -23,7 +23,11 @@ class CheckSubscription
             return redirect()->route('home')->with('error', 'Hesabınız pasif durumda. Lütfen yöneticinizle iletişime geçin.');
         }
 
-        if (! $user->plan_id && ! $user->is_admin) {
+        if ($user->is_admin) {
+            return $next($request);
+        }
+
+        if (! $user->plan_id) {
             $trialPlan = Plan::where('name', 'Deneme')->first();
 
             if (! $trialPlan) {

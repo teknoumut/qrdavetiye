@@ -334,6 +334,10 @@ class InvitationController extends Controller
 
     protected function checkInvitationLimit($user)
     {
+        if ($user->is_admin) {
+            return null;
+        }
+
         $plan = $user->plan;
 
         if (! $plan) {
@@ -359,11 +363,13 @@ class InvitationController extends Controller
             abort(403);
         }
 
-        $plan = auth()->user()->plan;
-        if ($plan && $plan->max_images_per_invitation >= 0) {
-            $count = $invitation->images()->count();
-            if ($count >= $plan->max_images_per_invitation) {
-                return back()->with('error', 'Planınız en fazla '.$plan->max_images_per_invitation.' fotoğrafa izin veriyor.');
+        if (! auth()->user()->is_admin) {
+            $plan = auth()->user()->plan;
+            if ($plan && $plan->max_images_per_invitation >= 0) {
+                $count = $invitation->images()->count();
+                if ($count >= $plan->max_images_per_invitation) {
+                    return back()->with('error', 'Planınız en fazla '.$plan->max_images_per_invitation.' fotoğrafa izin veriyor.');
+                }
             }
         }
 

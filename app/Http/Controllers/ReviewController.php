@@ -19,9 +19,11 @@ class ReviewController extends Controller
         $data = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'content' => 'required|string|max:5000',
+            'is_anonymous' => 'nullable|boolean',
         ]);
 
         $data['user_id'] = auth()->id();
+        $data['is_anonymous'] = $request->boolean('is_anonymous');
 
         Review::create($data);
 

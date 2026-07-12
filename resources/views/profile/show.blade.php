@@ -71,6 +71,10 @@
         @auth
             @if(auth()->id() === $user->id)
             <div class="bg-white dark:bg-night-800 rounded-2xl shadow-sm border border-cream-200 dark:border-night-700 p-6 mb-8">
+                @include('profile.partials.update-profile-photo-form')
+            </div>
+
+            <div class="bg-white dark:bg-night-800 rounded-2xl shadow-sm border border-cream-200 dark:border-night-700 p-6 mb-8">
                 <h2 class="text-lg font-bold text-night-900 dark:text-cream-100 mb-4">Şifre Değiştir</h2>
                 @include('profile.partials.update-password-form')
             </div>

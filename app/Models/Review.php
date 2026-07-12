@@ -11,11 +11,13 @@ class Review extends Model
         'rating',
         'content',
         'is_approved',
+        'is_anonymous',
     ];
 
     protected $casts = [
         'rating' => 'integer',
         'is_approved' => 'boolean',
+        'is_anonymous' => 'boolean',
     ];
 
     public function user()

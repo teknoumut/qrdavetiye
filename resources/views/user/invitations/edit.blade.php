@@ -541,7 +541,7 @@
                                         @enderror
                                     </div>
 
-                                    @if(auth()->user()->plan?->cover_video_feature)
+                                    @if(auth()->user()->is_admin || auth()->user()->plan?->cover_video_feature)
                                         @php
                                             $cv = $invitation->cover_video;
                                             $cvIsUrl = $cv && str_starts_with($cv, 'http');

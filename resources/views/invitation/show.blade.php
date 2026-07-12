@@ -749,19 +749,17 @@
             transform: translate3d(0,0,0);
         }
         .cover-section .cover-video {
-            position: absolute; inset: 0; width: 100%; height: 100%;
-            object-fit: cover; pointer-events: none; z-index: -1;
+            position: absolute; inset: -5%; width: 110%; height: 110%;
+            pointer-events: none; z-index: -1;
             overflow: hidden;
         }
         .cover-section .cover-video iframe {
-            position: absolute; top: 50%; left: 50%; width: 200%; height: 200%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             border: 0; z-index: -1; pointer-events: none;
-            transform: translate(-50%, -50%) scale(1.6);
         }
         .cover-section .cover-video video {
-            position: absolute; top: 50%; left: 50%; width: 200%; height: 200%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             border: 0; z-index: -1;
-            transform: translate(-50%, -50%) scale(1.6);
         }
         .cover-section .cover-bg {
             position: absolute; inset: 0; z-index: 3;
@@ -1390,7 +1388,7 @@
             @if($invitation->cover_video)
                 @if(str_starts_with($invitation->cover_video, 'http'))
                     <div class="cover-video">
-                        <iframe src="{{ $coverVideoUrl }}?controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0&enablejsapi=1"
+                        <iframe src="{{ $coverVideoUrl }}?autoplay=1&mute=1&loop=1&playlist={{ $coverYtId }}&controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0&enablejsapi=1"
                             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
                             referrerpolicy="no-referrer-when-downgrade"
                             id="coverVideoIframe">
@@ -2222,21 +2220,12 @@
         @if($invitation->cover_video && str_starts_with($invitation->cover_video, 'http'))
         var coverPlayer;
         function onYouTubeIframeAPIReady() {
+            var el = document.getElementById('coverVideoIframe');
+            if (!el) return;
             coverPlayer = new YT.Player('coverVideoIframe', {
-                playerVars: {
-                    autoplay: 1,
-                    mute: 1,
-                    loop: 1,
-                    playlist: '{{ $coverYtId }}',
-                    controls: 0,
-                    modestbranding: 1,
-                    iv_load_policy: 3,
-                    playsinline: 1,
-                    rel: 0,
-                    showinfo: 0
-                },
                 events: {
                     'onReady': function(e) {
+                        e.target.mute();
                         e.target.playVideo();
                     }
                 }
@@ -2248,10 +2237,11 @@
                 coverPlayer.setVolume(50);
             }
         }
-        var tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        var first = document.getElementsByTagName('script')[0];
-        first.parentNode.insertBefore(tag, first);
+        document.addEventListener('DOMContentLoaded', function() {
+            var tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.body.appendChild(tag);
+        });
         @endif
     </script>
 </body>

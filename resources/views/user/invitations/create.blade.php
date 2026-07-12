@@ -470,7 +470,7 @@
                                         <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                                             <span class="text-lg">🔗</span>
                                         </div>
-                                        <input type="url" name="cover_video_url" placeholder="https://www.youtube.com/watch?v=..." class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-700 dark:text-cream-200 placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-200/50 dark:focus:ring-gold-500/20 outline-none transition-all text-sm">
+                                    <textarea name="cover_video_url" rows="3" placeholder="https://www.youtube.com/watch?v=... (her satıra bir URL)" class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-cream-200 dark:border-night-700 bg-white dark:bg-night-900 text-night-700 dark:text-cream-200 placeholder:text-night-300 dark:placeholder:text-night-500 focus:border-gold-400 focus:ring-2 focus:ring-gold-200/50 dark:focus:ring-gold-500/20 outline-none transition-all text-sm"></textarea>
                                     </div>
                                     <p class="text-xs text-night-300 dark:text-night-500 text-center -mt-1">{{ __('YouTube video linkini yapıştır, otomatik olarak kapak videon olarak gösterilsin') }}</p>
                                 </div>

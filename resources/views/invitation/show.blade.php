@@ -1325,11 +1325,26 @@
             }
             return $url;
         }
-        $coverVideoUrl = $invitation->cover_video && str_starts_with($invitation->cover_video, 'http')
-            ? embedUrl($invitation->cover_video) : '';
-        $coverYtId = '';
-        if ($coverVideoUrl && preg_match('/\/embed\/([a-zA-Z0-9_-]+)/', $coverVideoUrl, $m)) {
-            $coverYtId = $m[1];
+        $coverVideos = $invitation->cover_video ? array_filter(explode("\n", str_replace("\r\n", "\n", $invitation->cover_video))) : [];
+        $coverYtIds = [];
+        $coverHasVideo = false;
+        foreach ($coverVideos as $cv) {
+            $cv = trim($cv);
+            if (!$cv) continue;
+            $coverHasVideo = true;
+            if (str_starts_with($cv, 'http') && preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $cv, $m)) {
+                $coverYtIds[] = $m[1];
+            }
+        }
+        $coverVideoUrl = '';
+        $coverVideoUrlUnmuted = '';
+        if (!empty($coverYtIds)) {
+            $baseUrl = 'https://www.youtube-nocookie.com/embed/' . $coverYtIds[0] . '?playlist=' . implode(',', $coverYtIds) . '&autoplay=1&loop=1&controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0';
+            $coverVideoUrl = $baseUrl . '&mute=1';
+            $coverVideoUrlUnmuted = $baseUrl;
+        } elseif ($coverHasVideo && str_starts_with($invitation->cover_video, 'http')) {
+            $coverVideoUrl = embedUrl($invitation->cover_video) . '?controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0&mute=1';
+            $coverVideoUrlUnmuted = embedUrl($invitation->cover_video) . '?controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0';
         }
         $eventMusicLabels = [
             'wedding' => '🎵 Düğün Şarkısı',
@@ -1384,14 +1399,24 @@
     </div>
 
     <div class="invitation-content" id="invitationContent">
-        <div class="cover-section @if($invitation->cover_video) has-video @endif">
-            @if($invitation->cover_video)
-                @if(str_starts_with($invitation->cover_video, 'http'))
+        <div class="cover-section @if($coverHasVideo) has-video @endif">
+            @if($coverHasVideo)
+                @if(!empty($coverYtIds))
                     <div class="cover-video">
-                        <iframe src="{{ $coverVideoUrl }}?controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0&enablejsapi=1"
+                        <iframe src="{{ $coverVideoUrl }}"
                             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
                             referrerpolicy="no-referrer-when-downgrade"
-                            id="coverVideoIframe">
+                            id="coverVideoIframe"
+                            data-unmuted-src="{{ $coverVideoUrlUnmuted }}">
+                        </iframe>
+                    </div>
+                @elseif(str_starts_with($invitation->cover_video, 'http'))
+                    <div class="cover-video">
+                        <iframe src="{{ $coverVideoUrl }}"
+                            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
+                            referrerpolicy="no-referrer-when-downgrade"
+                            id="coverVideoIframe"
+                            data-unmuted-src="{{ $coverVideoUrlUnmuted }}">
                         </iframe>
                     </div>
                 @else
@@ -1400,7 +1425,6 @@
                     </video>
                 @endif
             @endif
-            <div class="cover-bg"></div>
             <div class="cover-overlay"></div>
             <div class="cover-deco"></div>
             <div class="cover-deco"></div>
@@ -1679,7 +1703,14 @@
         var invContent = document.getElementById('invitationContent');
         var envelopeOpened = false;
 
-        function unMuteCoverVideo() {}
+        function unMuteCoverVideo() {
+            var iframe = document.getElementById('coverVideoIframe');
+            if (!iframe) return;
+            var unmuted = iframe.getAttribute('data-unmuted-src');
+            if (unmuted && iframe.src !== unmuted) {
+                iframe.src = unmuted;
+            }
+        }
 
         function openEnvelope() {
             if (envelopeOpened) return;
@@ -1689,6 +1720,10 @@
             var screen = document.getElementById('envelopeScreen');
             var letter = document.getElementById('floatingLetter');
             var seal = envelope.querySelector('.envelope-seal');
+
+            @if(!empty($coverYtIds))
+            unMuteCoverVideo();
+            @endif
 
             // Önce hafif bir titreme
             envelope.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -1703,10 +1738,6 @@
                 envelope.style.transform = '';
                 envelope.classList.add('open');
                 letter.classList.add('show');
-
-                @if($invitation->cover_video)
-                setTimeout(function() { unMuteCoverVideo(); }, 500);
-                @endif
 
                 @if($eventType === 'wedding' || $eventType === 'engagement')
                 createWeddingMagic(screen);
@@ -2217,30 +2248,6 @@
             });
         })();
 
-        @if($invitation->cover_video && str_starts_with($invitation->cover_video, 'http'))
-        var coverPlayer;
-        function onYouTubeIframeAPIReady() {
-            var el = document.getElementById('coverVideoIframe');
-            if (!el) return;
-            coverPlayer = new YT.Player('coverVideoIframe', {
-                events: {
-                    'onReady': function(e) {
-                        e.target.setVolume(50);
-                    }
-                }
-            });
-        }
-        function unMuteCoverVideo() {
-            if (!coverPlayer) return;
-            coverPlayer.playVideo();
-            coverPlayer.unMute();
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            var tag = document.createElement('script');
-            tag.src = 'https://www.youtube.com/iframe_api';
-            document.body.appendChild(tag);
-        });
-        @endif
     </script>
 </body>
 </html>

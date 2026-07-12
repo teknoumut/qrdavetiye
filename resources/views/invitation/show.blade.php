@@ -754,7 +754,7 @@
             transform: scale(1.05);
             transition: transform 0.1s ease-out;
         }
-        .cover-section:has(.cover-video) .cover-bg {
+        .cover-section.has-video .cover-bg {
             opacity: 0.55;
         }
         .cover-section .cover-video {
@@ -1366,7 +1366,7 @@
     </div>
 
     <div class="invitation-content" id="invitationContent">
-        <div class="cover-section">
+        <div class="cover-section @if($invitation->cover_video) has-video @endif">
             <div class="cover-bg"></div>
             @if($invitation->cover_video)
                 @if(str_starts_with($invitation->cover_video, 'http'))

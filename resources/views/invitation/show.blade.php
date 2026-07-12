@@ -978,8 +978,7 @@
             .countdown-item { min-width: 60px; padding: 12px 8px; }
             .countdown-number { font-size: 1.8rem; }
             .envelope { width: 360px; height: 250px; }
-            .envelope-flap { top: -76px; height: 84px; }
-            .envelope-seal { top: -44px; width: 40px; height: 40px; font-size: 0.8rem; }
+            .envelope-flap { top: 0; height: 80px; }
             .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 18px; }
             .envelope-inner .names { font-size: 1.8rem; }
             .envelope-inner .heart { font-size: 2.4rem; }
@@ -1000,8 +999,7 @@
 
         @media (max-width: 420px) {
             .envelope { width: 300px; height: 216px; }
-            .envelope-flap { top: -66px; height: 72px; }
-            .envelope-seal { top: -38px; width: 34px; height: 34px; font-size: 0.7rem; }
+            .envelope-flap { top: 0; height: 68px; }
             .envelope-inner { top: 8px; left: 8px; right: 8px; bottom: 8px; padding: 16px; }
             .envelope-inner .heart { font-size: 2rem; }
             .envelope-inner .names { font-size: 1.8rem; }

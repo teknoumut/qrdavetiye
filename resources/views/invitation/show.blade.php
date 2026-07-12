@@ -1388,7 +1388,7 @@
             @if($invitation->cover_video)
                 @if(str_starts_with($invitation->cover_video, 'http'))
                     <div class="cover-video">
-                        <iframe src="{{ $coverVideoUrl }}?autoplay=1&mute=1&loop=1&playlist={{ $coverYtId }}&controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0&enablejsapi=1"
+                        <iframe src="{{ $coverVideoUrl }}?controls=0&modestbranding=1&iv_load_policy=3&playsinline=1&rel=0&showinfo=0&enablejsapi=1"
                             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
                             referrerpolicy="no-referrer-when-downgrade"
                             id="coverVideoIframe">
@@ -2225,17 +2225,15 @@
             coverPlayer = new YT.Player('coverVideoIframe', {
                 events: {
                     'onReady': function(e) {
-                        e.target.mute();
-                        e.target.playVideo();
+                        e.target.setVolume(50);
                     }
                 }
             });
         }
         function unMuteCoverVideo() {
-            if (coverPlayer && coverPlayer.unMute) {
-                coverPlayer.unMute();
-                coverPlayer.setVolume(50);
-            }
+            if (!coverPlayer) return;
+            coverPlayer.playVideo();
+            coverPlayer.unMute();
         }
         document.addEventListener('DOMContentLoaded', function() {
             var tag = document.createElement('script');

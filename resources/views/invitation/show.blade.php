@@ -1403,6 +1403,7 @@
 
     <div class="invitation-content" id="invitationContent">
         <div class="cover-section @if($coverHasVideo) has-video @endif">
+            <div class="cover-bg"></div>
             @if($coverHasVideo)
                 @if(!empty($coverYtIds))
                     <div class="cover-video">

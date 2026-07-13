@@ -1671,15 +1671,20 @@
             <div class="section-subtitle">Paylaş</div>
             <div class="section-title">Davetiyeyi Paylaş</div>
             <div class="divider"></div>
-            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+            <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
                 @php $shareUrl = url()->current(); $shareText = $ev['couple'] ? $fixName($invitation->groom_name) . ' & ' . $fixName($invitation->bride_name) : $fixName($invitation->groom_name); @endphp
-                <a href="https://wa.me/?text={{ urlencode($shareText . ' - ' . $shareUrl) }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:#25D366;color:#fff;">WhatsApp</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:#1877F2;color:#fff;">Facebook</a>
-                <a href="https://twitter.com/intent/tweet?text={{ urlencode($shareText) }}&url={{ urlencode($shareUrl) }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:#000;color:#fff;">X</a>
-                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);color:#fff;">Instagram</a>
-                <button onclick="navigator.clipboard.writeText('{{ $shareUrl }}').then(function(){var b=event.target;b.textContent='Kopyalandı!';setTimeout(function(){b.textContent='Linki Kopyala';},2000);})" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;background:{{ $primaryColor }};color:#fff;">Linki Kopyala</button>
-                <a href="{{ route('invitation.pdf', $invitation->slug) }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:#e74c3c;color:#fff;">PDF İndir</a>
+                <a href="https://wa.me/?text={{ urlencode($shareText . ' - ' . $shareUrl) }}" target="_blank" rel="noopener noreferrer" class="share-btn" style="background:#25D366;">WhatsApp</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank" rel="noopener noreferrer" class="share-btn" style="background:#1877F2;">Facebook</a>
+                <a href="https://twitter.com/intent/tweet?text={{ urlencode($shareText) }}&url={{ urlencode($shareUrl) }}" target="_blank" rel="noopener noreferrer" class="share-btn" style="background:#000;">X</a>
+                <button onclick="var t=event.target;navigator.clipboard.writeText('{{ $shareUrl }}').then(function(){t.innerHTML='Kopyalandı';setTimeout(function(){t.innerHTML='Link';},2000)}).catch(function(){t.innerHTML='Hata';})" class="share-btn" style="background:{{ $primaryColor }};">Link</button>
+                <a href="{{ route('invitation.pdf', $invitation->slug) }}" target="_blank" rel="noopener noreferrer" class="share-btn" style="background:#e74c3c;">PDF</a>
             </div>
+            <style>
+            .share-btn{display:inline-flex;align-items:center;justify-content:center;min-width:72px;padding:10px 14px;border-radius:50px;font-size:0.8rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;color:#fff;transition:transform 0.15s,box-shadow 0.15s;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+            .share-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+            .share-btn:active{transform:translateY(0);}
+            @media(max-width:480px){.share-btn{min-width:60px;padding:8px 10px;font-size:0.7rem;}}
+            </style>
         </div>
 
         <div class="footer">

@@ -529,11 +529,13 @@
                                                     </button>
                                                 </form>
                                             </div>
+                                        @else
+                                            <p class="text-amber-600 dark:text-amber-400 text-sm mb-2 flex items-center gap-1.5">⚠️ Henüz kapak fotoğrafı yüklenmemiş. Fotoğraf seçip kaydedin.</p>
                                         @endif
                                         <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-cream-200 dark:border-night-700 rounded-xl cursor-pointer bg-cream-50/50 dark:bg-night-900/50 hover:border-gold-400 hover:bg-gold-50/50 dark:hover:bg-gold-500/5 transition-all group">
                                             <span class="text-3xl mb-2 group-hover:scale-110 transition-transform">📸</span>
                                             <span class="text-sm text-night-400 dark:text-cream-400 font-medium">{{ __('Kapak fotoğrafı yükle') }}</span>
-                                            <span class="text-xs text-night-300 dark:text-night-500 mt-0.5">{{ __('Önerilen: 1200x800px') }}</span>
+                                            <span class="text-xs text-night-300 dark:text-night-500 mt-0.5">{{ __('Önerilen: 1200x800px (max 20MB)') }}</span>
                                             <input type="file" name="cover_image" accept="image/*" class="hidden" onchange="this.parentElement.querySelectorAll('span')[1].textContent = this.files[0].name">
                                         </label>
                                         @error('cover_image')

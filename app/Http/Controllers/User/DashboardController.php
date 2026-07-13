@@ -22,6 +22,7 @@ class DashboardController extends Controller
         $features = [
             ['key' => 'music_feature', 'label' => 'Müzik Desteği', 'emoji' => '🎵', 'desc' => 'Davetiyene arka plan müziği ekle'],
             ['key' => 'video_feature', 'label' => 'Video Desteği', 'emoji' => '🎬', 'desc' => 'Davetiyene video ekle'],
+            ['key' => 'cover_video_feature', 'label' => 'Kapak Videosu', 'emoji' => '📽️', 'desc' => 'YouTube kapak videosu ekle'],
             ['key' => 'rsvp_feature', 'label' => 'RSVP Katılım Takibi', 'emoji' => '✅', 'desc' => 'Davetlilerden online yanıt al'],
             ['key' => 'qr_download', 'label' => 'QR Kod İndirme', 'emoji' => '📱', 'desc' => 'QR kodunu indirip basılı davetiye yap'],
         ];
@@ -33,20 +34,14 @@ class DashboardController extends Controller
             ->get();
 
         $missing_features = [];
-        if ($plan) {
-            foreach ($features as $f) {
-                if (! $plan->{$f['key']}) {
-                    $missing_features[] = $f;
-                }
+        foreach ($features as $f) {
+            if (! $user->hasFeature($f['key'])) {
+                $missing_features[] = $f;
             }
         }
 
-        $suggested_plan = null;
-        if ($plan) {
-            $suggested_plan = Plan::active()->where('monthly_price', '>', $plan->monthly_price)->orderBy('monthly_price')->first();
-        } else {
-            $suggested_plan = Plan::active()->orderBy('monthly_price')->first();
-        }
+        $plans = Plan::active()->where('name', '!=', 'Deneme')->get();
+        $suggested_plan = $plans->sortBy('monthly_price')->first();
 
         $latestPayment = PaymentNotification::where('user_id', $user->id)
             ->latest()
@@ -58,6 +53,7 @@ class DashboardController extends Controller
 
         $data = [
             'plan' => $plan,
+            'plans' => $plans,
             'payment_notification' => $latestPayment,
             'has_pending_payment' => $hasPendingPayment,
             'invoices' => $invoices,

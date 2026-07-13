@@ -88,6 +88,40 @@
                 </div>
             </div>
         @endif
+
+        @if($plan && $plan->name === 'Deneme' && $suggested_plan)
+            <div class="rounded-2xl bg-white dark:bg-night-800 border border-cream-200 dark:border-night-700 shadow-sm animate-fade-in overflow-hidden">
+                <div class="p-5 sm:p-6">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-100 to-rose-100 dark:from-gold-500/20 dark:to-rose-500/20 flex items-center justify-center text-lg shrink-0">🎯</div>
+                        <div>
+                            <h3 class="font-bold text-night-900 dark:text-cream-100">{{ __('Sana En Uygun Plan') }}</h3>
+                            <p class="text-xs text-night-400 dark:text-cream-400 mt-0.5">{{ __('Deneme süren bitmeden planını seç, davetiyen yayında kalsın') }}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        @foreach($plans as $p)
+                        @php $isBest = $p->name === 'Standart'; @endphp
+                        <div class="rounded-xl border-2 p-4 text-center transition-all hover:shadow-md hover:-translate-y-0.5 {{ $isBest ? 'border-gold-400 bg-gold-50/50 dark:bg-gold-500/5 dark:border-gold-500' : 'border-cream-200 dark:border-night-700 bg-white dark:bg-night-900' }}">
+                            @if($isBest)<div class="text-xs font-bold text-gold-700 dark:text-gold-400 mb-1">🔥 Popüler</div>@endif
+                            <h4 class="font-bold text-night-900 dark:text-cream-100 text-base">{{ $p->name }}</h4>
+                            <div class="text-xl font-extrabold text-night-900 dark:text-cream-100 mt-2">{{ formatCurrency($p->monthly_price) }}<span class="text-xs font-normal text-night-400 dark:text-cream-400">/ay</span></div>
+                            <ul class="text-left mt-4 space-y-1.5 text-xs">
+                                <li class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> {{ $p->max_invitations == -1 ? 'Sınırsız davetiye' : 'En fazla ' . $p->max_invitations . ' davetiye' }}</li>
+                                <li class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> {{ $p->max_images_per_invitation == -1 ? 'Sınırsız fotoğraf' : $p->max_images_per_invitation . ' fotoğraf' }}</li>
+                                <li class="flex items-center gap-1.5"><span class="{{ $p->music_feature ? 'text-emerald-500' : 'text-red-400' }} font-bold">{{ $p->music_feature ? '✓' : '✗' }}</span> Müzik</li>
+                                <li class="flex items-center gap-1.5"><span class="{{ $p->video_feature ? 'text-emerald-500' : 'text-red-400' }} font-bold">{{ $p->video_feature ? '✓' : '✗' }}</span> Video</li>
+                                <li class="flex items-center gap-1.5"><span class="{{ $p->cover_video_feature ? 'text-emerald-500' : 'text-red-400' }} font-bold">{{ $p->cover_video_feature ? '✓' : '✗' }}</span> Kapak videosu</li>
+                                <li class="flex items-center gap-1.5"><span class="{{ $p->rsvp_feature ? 'text-emerald-500' : 'text-red-400' }} font-bold">{{ $p->rsvp_feature ? '✓' : '✗' }}</span> RSVP</li>
+                                <li class="flex items-center gap-1.5"><span class="{{ $p->qr_download ? 'text-emerald-500' : 'text-red-400' }} font-bold">{{ $p->qr_download ? '✓' : '✗' }}</span> QR indirme</li>
+                            </ul>
+                            <a href="{{ route('payment.checkout', $p) }}" class="block mt-4 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold-500 to-rose-500 hover:from-gold-600 hover:to-rose-600 transition-all shadow-sm">{{ __('Seç') }}</a>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
         @endunless
 
         @if($payment_notification)

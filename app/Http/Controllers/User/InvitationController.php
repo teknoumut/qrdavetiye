@@ -408,11 +408,8 @@ class InvitationController extends Controller
             abort(403);
         }
 
-        if (! auth()->user()->is_admin) {
-            $plan = auth()->user()->plan;
-            if ($plan && ! $plan->video_feature) {
-                return back()->with('error', 'Planınız video özelliğini desteklemiyor.');
-            }
+        if (! auth()->user()->is_admin && ! auth()->user()->hasFeature('video_feature')) {
+            return back()->with('error', 'Planınız video özelliğini desteklemiyor.');
         }
 
         $rules = [
@@ -500,11 +497,8 @@ class InvitationController extends Controller
             abort(403);
         }
 
-        if (! auth()->user()->is_admin) {
-            $plan = auth()->user()->plan;
-            if ($plan && ! $plan->music_feature) {
-                return back()->with('error', 'Planınız müzik özelliğini desteklemiyor.');
-            }
+        if (! auth()->user()->is_admin && ! auth()->user()->hasFeature('music_feature')) {
+            return back()->with('error', 'Planınız müzik özelliğini desteklemiyor.');
         }
 
         $data = $request->validate([

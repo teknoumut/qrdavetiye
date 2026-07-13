@@ -541,7 +541,7 @@
                                         @enderror
                                     </div>
 
-                                    @if(auth()->user()->is_admin || auth()->user()->plan?->cover_video_feature)
+                                    @if(auth()->user()->is_admin || auth()->user()->hasFeature('cover_video_feature'))
                                         @php
                                             $cv = $invitation->cover_video;
                                             $cvIsUrl = $cv && str_starts_with($cv, 'http');
@@ -681,7 +681,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if ($userPlan && !$userPlan->music_feature && !auth()->user()->is_admin)
+                            @if (!auth()->user()->is_admin && !auth()->user()->hasFeature('music_feature'))
                             <div class="mx-6 sm:mx-8 mb-6 p-4 rounded-xl bg-gold-50 dark:bg-gold-500/10 border border-gold-200 dark:border-gold-500/20 flex items-start gap-3">
                                 <span class="text-lg shrink-0">🔒</span>
                                 <div>
@@ -748,6 +748,7 @@
                             </div>
                         </div>
 
+                        @if(auth()->user()->is_admin || auth()->user()->hasFeature('video_feature'))
                         <div class="bg-white dark:bg-night-800 rounded-2xl shadow-sm border border-cream-200 dark:border-night-700 overflow-hidden">
                             <div class="px-6 sm:px-8 pt-6 sm:pt-8 pb-4 border-b border-cream-100 dark:border-night-700 bg-gradient-to-r from-cream-50 to-gold-50/30 dark:from-night-800 dark:to-gold-500/5">
                                 <div class="flex items-center gap-3">
@@ -815,6 +816,7 @@
                                 @endif
                             </div>
                         </div>
+                        @endif
                     </div>
                 </template>
             </div>

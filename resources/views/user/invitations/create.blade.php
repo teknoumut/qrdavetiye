@@ -452,6 +452,7 @@
                                 </label>
                             </div>
 
+                            @if(auth()->user()->is_admin || auth()->user()->hasFeature('cover_video_feature'))
                             <div>
                                 <label class="block text-sm font-semibold text-night-700 dark:text-cream-200 mb-1.5">{{ __('Kapak Videosu') }}</label>
                                 <div class="space-y-4">
@@ -475,6 +476,7 @@
                                     <p class="text-xs text-night-300 dark:text-night-500 text-center -mt-1">{{ __('YouTube video linkini yapıştır, otomatik olarak kapak videon olarak gösterilsin') }}</p>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>

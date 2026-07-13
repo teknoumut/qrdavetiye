@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -149,6 +150,30 @@ class User extends Authenticatable
     public function getInitialAttribute(): string
     {
         return strtoupper(substr($this->name, 0, 1));
+    }
+
+    public function hasFeature(string $feature): bool
+    {
+        if ($this->is_admin) {
+            return true;
+        }
+
+        $plan = $this->plan;
+        if (! $plan) {
+            return false;
+        }
+
+        // Deneme plan: eski kullanicilar (bugunden once baslayan) tum ozelliklere erisir
+        if ($plan->name === 'Deneme') {
+            $cutoff = Carbon::parse('2026-07-13');
+            if ($this->subscription_start && $this->subscription_start->lt($cutoff)) {
+                return true;
+            }
+
+            return $plan->$feature ?? false;
+        }
+
+        return $plan->$feature ?? false;
     }
 
     public function isOnline(int $minutes = 5): bool

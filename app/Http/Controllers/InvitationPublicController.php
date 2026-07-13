@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invitation;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class InvitationPublicController extends Controller
@@ -31,6 +32,26 @@ class InvitationPublicController extends Controller
         }
 
         return view('invitation.show', compact('invitation'));
+    }
+
+    public function download($slug)
+    {
+        $invitation = Invitation::where('slug', $slug)
+            ->where('is_published', true)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        $ev = $this->eventLabels($invitation->event_type);
+        $fixName = function ($txt) {
+            return $txt ?? '';
+        };
+
+        $pdf = Pdf::loadView('invitation.pdf', compact('invitation', 'ev', 'fixName'));
+        $filename = $ev['couple']
+            ? $invitation->groom_name.'_'.$invitation->bride_name.'_davetiye.pdf'
+            : $invitation->groom_name.'_davetiye.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function rsvp(Request $request, $slug)
@@ -87,5 +108,19 @@ class InvitationPublicController extends Controller
         $sitemapUrl = route('sitemap');
 
         return response("User-agent: *\nAllow: /\nSitemap: $sitemapUrl\n")->header('Content-Type', 'text/plain');
+    }
+
+    private function eventLabels(?string $type): array
+    {
+        $labels = [
+            'wedding' => ['title' => 'Düğün Davetiyesi', 'couple' => true],
+            'engagement' => ['title' => 'Nişan Davetiyesi', 'couple' => true],
+            'circumcision' => ['title' => 'Sünnet Davetiyesi', 'couple' => false],
+            'birthday' => ['title' => 'Doğum Günü Davetiyesi', 'couple' => false],
+            'corporate' => ['title' => 'Kurumsal Davetiye', 'couple' => false],
+            'graduation' => ['title' => 'Mezuniyet Davetiyesi', 'couple' => false],
+        ];
+
+        return $labels[$type ?? 'wedding'] ?? $labels['wedding'];
     }
 }

@@ -42,6 +42,7 @@ Route::get('/s/{shortLink}', [InvitationPublicController::class, 'shortLink'])->
 Route::get('/invitation/{slug}', [InvitationPublicController::class, 'show'])->name('invitation.show');
 Route::post('/invitation/{slug}/rsvp', [InvitationPublicController::class, 'rsvp'])->name('invitation.rsvp');
 Route::get('/invitation/{slug}/qr-scan', [InvitationPublicController::class, 'trackQrScan'])->name('invitation.qr-scan');
+Route::get('/invitation/{slug}/pdf', [InvitationPublicController::class, 'download'])->name('invitation.pdf');
 
 Route::get('/sitemap.xml', [InvitationPublicController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [InvitationPublicController::class, 'robots'])->name('robots');

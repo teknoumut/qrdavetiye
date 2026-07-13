@@ -82,9 +82,12 @@
     <meta property="og:title" content="@if($ev['couple']){{ $fixName($invitation->groom_name) }} & {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif">
     <meta property="og:description" content="{{ $invitation->welcome_message ? Str::limit(strip_tags($invitation->welcome_message), 200) : $ev['title'] }}">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
     <meta name="twitter:card" content="summary_large_image">
     @if($invitation->cover_image)
         <meta property="og:image" content="{{ \Illuminate\Support\Facades\Storage::url($invitation->cover_image) }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
     @endif
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1572,6 +1575,7 @@
                 <div class="section-subtitle">Konum</div>
                 <div class="section-title">{{ $ev['locationLabel'] }}</div>
                 <div class="divider"></div>
+                @if($invitation->event_location)<p style="margin-bottom:4px;font-size:1.1rem;font-weight:600;">{{ $invitation->event_location }}</p>@endif
                 @if($invitation->event_address)<p style="margin-bottom:8px;opacity:0.65;font-size:1.05rem;">{{ $invitation->event_address }}</p>@endif
                 @if($invitation->event_lat && $invitation->event_lng)
                     <div class="map-container">
@@ -1579,6 +1583,9 @@
                             src="https://www.google.com/maps?q={{ $invitation->event_lat }},{{ $invitation->event_lng }}&output=embed">
                         </iframe>
                     </div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ $invitation->event_lat }},{{ $invitation->event_lng }}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:12px;padding:10px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:{{ $primaryColor }};color:#fff;">
+                        📍 Yol Tarifi Al
+                    </a>
                 @endif
             </div>
 
@@ -1657,6 +1664,21 @@
                     <p style="opacity:0.5;font-size:0.9rem;">Katılım durumunuz başarıyla kaydedildi.</p>
                     <p style="opacity:0.35;font-size:0.75rem;margin-top:16px;font-family:'Montserrat',sans-serif;">Sizi aramızda görmekten mutluluk duyacağız 🎊</p>
                 </div>
+            </div>
+        </div>
+
+        <div class="section animate-on-scroll zoom-in" style="background: rgba(0,0,0,0.015);padding-bottom:40px;">
+            <div class="section-subtitle">Paylaş</div>
+            <div class="section-title">Davetiyeyi Paylaş</div>
+            <div class="divider"></div>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+                @php $shareUrl = url()->current(); $shareText = $ev['couple'] ? $fixName($invitation->groom_name) . ' & ' . $fixName($invitation->bride_name) : $fixName($invitation->groom_name); @endphp
+                <a href="https://wa.me/?text={{ urlencode($shareText . ' - ' . $shareUrl) }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:#25D366;color:#fff;">WhatsApp</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:#1877F2;color:#fff;">Facebook</a>
+                <a href="https://twitter.com/intent/tweet?text={{ urlencode($shareText) }}&url={{ urlencode($shareUrl) }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:#000;color:#fff;">X</a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);color:#fff;">Instagram</a>
+                <button onclick="navigator.clipboard.writeText('{{ $shareUrl }}').then(function(){var b=event.target;b.textContent='Kopyalandı!';setTimeout(function(){b.textContent='Linki Kopyala';},2000);})" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;background:{{ $primaryColor }};color:#fff;">Linki Kopyala</button>
+                <a href="{{ route('invitation.pdf', $invitation->slug) }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-size:0.85rem;font-weight:600;text-decoration:none;background:#e74c3c;color:#fff;">PDF İndir</a>
             </div>
         </div>
 

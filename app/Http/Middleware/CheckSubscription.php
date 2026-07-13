@@ -33,14 +33,14 @@ class CheckSubscription
             if (! $trialPlan) {
                 $trialPlan = Plan::create([
                     'name' => 'Deneme',
-                    'description' => '3 günlük ücretsiz deneme. Sınırsız özellik, 1 davetiye.',
+                    'description' => '3 günlük ücretsiz deneme. Sınırlı özellik, 1 davetiye.',
                     'monthly_price' => 0,
                     'yearly_price' => 0,
                     'max_invitations' => 1,
                     'max_images_per_invitation' => 3,
-                    'music_feature' => true,
-                    'video_feature' => true,
-                    'cover_video_feature' => true,
+                    'music_feature' => false,
+                    'video_feature' => false,
+                    'cover_video_feature' => false,
                     'rsvp_feature' => true,
                     'qr_download' => true,
                     'is_active' => true,

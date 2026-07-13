@@ -25,6 +25,11 @@ class InvitationPublicController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
+        if (! session()->has('viewed_'.$invitation->id)) {
+            $invitation->increment('views');
+            session()->put('viewed_'.$invitation->id, true);
+        }
+
         return view('invitation.show', compact('invitation'));
     }
 

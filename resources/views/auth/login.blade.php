@@ -538,6 +538,23 @@
 
                     <button type="submit" class="btn-login">Giriş Yap</button>
 
+                    <div class="text-center mt-4">
+                        <button type="button" onclick="clearAll()" class="text-xs text-gray-400 hover:text-red-500 transition-colors underline cursor-pointer" style="background:none;border:none;font-family:inherit">Çerezleri temizle & yeniden dene</button>
+                    </div>
+
+                    <script>
+                        function clearAll() {
+                            var cookies = document.cookie.split('; ');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var c = cookies[i].split('=')[0];
+                                document.cookie = c + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                                document.cookie = c + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + location.hostname + ';';
+                            }
+                            try { localStorage.clear(); } catch(e) {}
+                            try { sessionStorage.clear(); } catch(e) {}
+                            location.reload();
+                        }
+                    </script>
                 </form>
             </div>
         </div>

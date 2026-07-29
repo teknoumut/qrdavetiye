@@ -119,13 +119,13 @@
 
 
     @php $heroVideo = \App\Models\Setting::getValue('hero_video'); @endphp
+    @if($heroVideo)
+        <video class="site-bg-video" muted autoplay loop playsinline preload="metadata">
+            <source src="{{ \Illuminate\Support\Facades\Storage::url($heroVideo) }}" type="video/{{ str_ends_with($heroVideo, '.webm') ? 'webm' : (str_ends_with($heroVideo, '.mov') ? 'quicktime' : 'mp4') }}">
+        </video>
+    @endif
     <section class="hero">
         <div class="hero-bg"></div>
-        @if($heroVideo)
-            <video class="hero-video" muted autoplay loop playsinline preload="metadata">
-                <source src="{{ \Illuminate\Support\Facades\Storage::url($heroVideo) }}" type="video/{{ str_ends_with($heroVideo, '.webm') ? 'webm' : (str_ends_with($heroVideo, '.mov') ? 'quicktime' : 'mp4') }}">
-            </video>
-        @endif
         <div class="hero-floating" id="heroOrbs">
             <div class="orb" style="width:300px;height:300px;top:10%;left:5%;background:var(--site-primary);animation-delay:0s;"></div>
             <div class="orb" style="width:250px;height:250px;bottom:15%;right:10%;background:var(--site-secondary);animation-delay:-3s;"></div>

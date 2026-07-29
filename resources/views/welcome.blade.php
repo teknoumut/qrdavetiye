@@ -121,19 +121,27 @@
     @php $heroVideo = \App\Models\Setting::getValue('hero_video'); @endphp
     @if($heroVideo)
         <div class="site-intro" id="siteIntro">
-            <video class="site-bg-video" muted autoplay playsinline preload="metadata" id="introVideo">
+            <video class="site-bg-video" muted autoplay playsinline preload="auto" id="introVideo">
                 <source src="{{ \Illuminate\Support\Facades\Storage::url($heroVideo) }}" type="video/{{ str_ends_with($heroVideo, '.webm') ? 'webm' : (str_ends_with($heroVideo, '.mov') ? 'quicktime' : 'mp4') }}">
             </video>
         </div>
+        <script>
+            (function() {
+                var intro = document.getElementById('siteIntro');
+                var video = document.getElementById('introVideo');
+                document.body.style.overflow = 'hidden';
+                function done() {
+                    document.body.style.overflow = '';
+                    intro.style.transition = 'opacity 0.8s ease';
+                    intro.style.opacity = '0';
+                    setTimeout(function() { intro.style.display = 'none'; }, 800);
+                }
+                video.addEventListener('ended', done);
+                video.addEventListener('error', done);
+                setTimeout(done, 5000);
+            })();
+        </script>
     @endif
-    <script>
-        document.getElementById('introVideo')?.addEventListener('ended', function() {
-            var el = document.getElementById('siteIntro');
-            el.style.transition = 'opacity 1s ease';
-            el.style.opacity = '0';
-            setTimeout(function() { el.style.display = 'none'; }, 1000);
-        });
-    </script>
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-floating" id="heroOrbs">

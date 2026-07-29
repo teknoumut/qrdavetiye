@@ -131,6 +131,8 @@
                 var video = document.getElementById('introVideo');
                 document.body.style.overflow = 'hidden';
                 function done() {
+                    if (intro.dataset.done) return;
+                    intro.dataset.done = '1';
                     document.body.style.overflow = '';
                     intro.style.transition = 'opacity 0.8s ease';
                     intro.style.opacity = '0';
@@ -138,7 +140,6 @@
                 }
                 video.addEventListener('ended', done);
                 video.addEventListener('error', done);
-                setTimeout(done, 5000);
             })();
         </script>
     @endif

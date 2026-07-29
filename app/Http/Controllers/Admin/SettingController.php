@@ -49,6 +49,7 @@ class SettingController extends Controller
             'notification_sound_preset' => 'nullable|string|in:ding,chime,triple,custom',
             'notification_sound_custom' => 'nullable|string|max:500',
             'notification_sound_file' => 'nullable|file|mimes:mp3,wav,ogg,m4a,mp4|max:2048',
+            'hero_video' => 'nullable|file|mimes:mp4,webm,mov|max:51200',
         ]);
 
         if ($request->hasFile('notification_sound_file')) {
@@ -68,6 +69,9 @@ class SettingController extends Controller
             }
             if ($key === 'site_favicon' && $request->hasFile('site_favicon')) {
                 $value = $request->file('site_favicon')->store('settings', 'public');
+            }
+            if ($key === 'hero_video' && $request->hasFile('hero_video')) {
+                $value = $request->file('hero_video')->store('hero', 'public');
             }
             Setting::setValue($key, $value);
         }

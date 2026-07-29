@@ -276,6 +276,26 @@
                 }
             </script>
 
+            <div class="flex items-center gap-3 mb-6 pb-6 border-b border-gray-100">
+                <span class="section-icon">🎬</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 text-sm">Anasayfa Video</h3>
+                    <p class="text-xs text-gray-400">Site açılışında hero bölümünde gösterilecek video</p>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label>Hero Videosu (arka plan)</label>
+                <input type="file" name="hero_video" accept="video/mp4,video/webm,video/quicktime" style="padding:8px 14px">
+                <p class="text-xs text-gray-400 mt-1.5">MP4, WebM, MOV — max 50MB. Otomatik oynatılır, sessizdir.</p>
+                @if(!empty($settings['hero_video']))
+                    <div class="mt-3 rounded-xl overflow-hidden border border-gray-200 max-w-md">
+                        <video src="{{ \Illuminate\Support\Facades\Storage::url($settings['hero_video']) }}" muted autoplay loop playsinline class="w-full"></video>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1">Mevcut video: {{ basename($settings['hero_video']) }}</p>
+                @endif
+            </div>
+
             <div class="flex justify-end pt-4 border-t border-gray-100">
                 <button type="submit" class="btn-primary">Ayarları Kaydet</button>
             </div>

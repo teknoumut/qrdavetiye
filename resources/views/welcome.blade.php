@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <x-seo title="Dijital Davetiye Platformu - senin 💝 davetiyen" description="Özel günleriniz için modern ve şık QR kodlu dijital davetiyeler. Müzik, video, fotoğraf galerisi ve RSVP takibi ile sevdiklerinizi büyüleyin." />
+    <x-seo title="Dijital Davetiye | QR Kodlu Online Davetiye - Düğün, Nişan, Sünnet, Doğum Günü" description="QR kodlu dijital davetiye oluştur. Düğün, nişan, sünnet, doğum günü ve mezuniyet için müzikli, fotoğraflı, videolu online davetiyeler. 3 gün ücretsiz dene!" />
     <meta name="keywords" content="dijital davetiye, online davetiye, QR kod davetiye, düğün davetiyesi, nişan davetiyesi, sünnet davetiyesi, doğum günü davetiyesi">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800,900|playfair-display:400,500,600,700|dancing-script:400,500,600,700&display=swap" rel="stylesheet" />
@@ -64,9 +64,82 @@
         "url": "{{ config('app.url') }}",
         "logo": "{{ asset('images/logo.svg') }}",
         "description": "QR kodlu dijital davetiye platformu",
-        "areaServed": "TR"
+        "areaServed": "TR",
+        "sameAs": []
     }
     </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Dijital davetiye nedir?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Dijital davetiye, davetiyenizi kağıt yerine internet üzerinden göndermenizi sağlayan modern bir davet yöntemidir. QR kod veya link ile paylaşılır, müzik, video ve fotoğraf galerisi içerebilir."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "QR kodlu davetiye nasıl yapılır?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Senin Davetiyen ile dakikalar içinde QR kodlu davetiye oluşturabilirsiniz. Kayıt olun, davetiyenizi seçin, kişiselleştirin ve QR kodunuzu paylaşın. Misafirleriniz QR kodu okutarak davetiyenizi telefonlarında görüntüler."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Düğün davetiyesi nasıl hazırlanır?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Düğün davetiyenizi hazırlamak için kayıt olun, hazır şablonlardan birini seçin, gelin ve damat bilgilerini girin, tarih ve mekanı ekleyin. Müzik, fotoğraf ve video ekleyerek kişiselleştirin."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Online davetiye ücretsiz mi?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Senin Davetiyen'de 3 gün boyunca ücretsiz deneme yapabilirsiniz. Daha sonra ihtiyacınıza uygun planlardan birini seçebilirsiniz."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Nişan davetiyesi nasıl gönderilir?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nişan davetiyenizi oluşturduktan sonra WhatsApp, SMS, e-posta veya sosyal medya üzerinden link paylaşarak misafirlerinize gönderebilirsiniz. QR kod ile basılı kartlara da ekleyebilirsiniz."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Sünnet davetiyesi hazırlamak istiyorum",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Sünnet davetiyesi için kayıt olun, sünnet şablonunu seçin, çocuğunuzun adını, tarihi ve mekanı ekleyin. Müzik ve fotoğraflarla kişiselleştirip misafirlerinizle paylaşın."
+                }
+            }
+        ]
+    }
+    </script>
+    @if($reviews->count() >= 3)
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Senin Davetiyen",
+        "url": "{{ config('app.url') }}",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "{{ number_format($reviews->avg('rating'), 1) }}",
+            "bestRating": "5",
+            "reviewCount": "{{ $reviews->count() }}"
+        }
+    }
+    </script>
+    @endif
 </head>
 <body data-site-primary="{{ $sp }}" data-site-secondary="{{ $ss }}">
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-7 py-3 bg-white/75 backdrop-blur-2xl border-b border-black/[0.04] transition-all duration-300">

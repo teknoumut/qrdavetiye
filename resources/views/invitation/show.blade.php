@@ -79,6 +79,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@if($ev['couple']){{ $fixName($invitation->groom_name) }} & {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif - {{ $ev['title'] }}</title>
+    <meta name="description" content="{{ $invitation->welcome_message ? Str::limit(strip_tags($invitation->welcome_message), 160) : $ev['title'] . ' - ' . ($invitation->event_date ? $invitation->event_date->format('d.m.Y') : '') }}">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="{{ url()->current() }}">
     <meta property="og:title" content="@if($ev['couple']){{ $fixName($invitation->groom_name) }} & {{ $fixName($invitation->bride_name) }}@else{{ $fixName($invitation->groom_name) }}@endif">
     <meta property="og:description" content="{{ $invitation->welcome_message ? Str::limit(strip_tags($invitation->welcome_message), 200) : $ev['title'] }}">
     <meta property="og:type" content="website">

@@ -14,7 +14,7 @@
 <meta name="description" content="{{ $description }}">
 <link rel="canonical" href="{{ $url }}">
 @if($siteFavicon)
-<link rel="icon" type="image/png" href="{{ asset('storage/'.$siteFavicon) }}">
+<link rel="icon" type="image/png" href="{{ asset('storage/'.$siteFavicon) }}?v={{ @filemtime(public_path('storage/'.$siteFavicon)) }}">
 @else
 <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
 <link rel="alternate icon" href="{{ asset('favicon.ico') }}">

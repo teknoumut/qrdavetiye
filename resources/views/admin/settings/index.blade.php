@@ -38,7 +38,12 @@
 
             <div class="mb-6">
                 <label>Favicon</label>
-                <input type="file" name="site_favicon" accept=".ico,.png" style="padding:8px 14px">
+                <div class="flex items-center gap-4">
+                    <input type="file" name="site_favicon" accept=".ico,.png" style="padding:8px 14px">
+                    @if(!empty($settings['site_favicon']))
+                        <img src="{{ asset('storage/'.$settings['site_favicon']) }}" alt="Favicon" style="width:32px;height:32px;border-radius:6px;border:1px solid #e5e7eb">
+                    @endif
+                </div>
             </div>
 
             <div class="flex items-center gap-3 mb-6 pb-6 border-b border-gray-100">

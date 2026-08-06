@@ -7,11 +7,18 @@
     $image = $image ?? ($siteLogo ? asset('storage/'.$siteLogo) : '');
     $url = $url ?? url()->current();
     $type = $type ?? 'website';
+    $siteFavicon = \App\Models\Setting::getValue('site_favicon', '');
 @endphp
 <title>{{ $title }}</title>
 <meta name="google-site-verification" content="googleb55184e3cb1fc2cc" />
 <meta name="description" content="{{ $description }}">
 <link rel="canonical" href="{{ $url }}">
+@if($siteFavicon)
+<link rel="icon" type="image/png" href="{{ asset('storage/'.$siteFavicon) }}">
+@else
+<link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
+<link rel="alternate icon" href="{{ asset('favicon.ico') }}">
+@endif
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ $description }}">
 <meta property="og:url" content="{{ $url }}">

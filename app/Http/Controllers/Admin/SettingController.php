@@ -23,7 +23,7 @@ class SettingController extends Controller
             'site_name' => 'nullable|string|max:255',
             'site_description' => 'nullable|string',
             'site_logo' => 'nullable|image|mimes:png,jpg|max:1024',
-            'site_favicon' => 'nullable|image|mimes:ico,png|max:512',
+            'site_favicon' => 'nullable|file|mimes:ico,png|max:512',
             'smtp_host' => 'nullable|string',
             'smtp_port' => 'nullable|integer',
             'smtp_username' => 'nullable|string',

@@ -68,7 +68,7 @@ class SettingController extends Controller
                 $value = $request->file('site_logo')->store('settings', 'public');
             }
             if ($key === 'site_favicon' && $request->hasFile('site_favicon')) {
-                $value = $request->file('site_favicon')->store('settings', 'public');
+                $value = $this->storeResizedFavicon($request->file('site_favicon'));
             }
             if ($key === 'hero_video' && $request->hasFile('hero_video')) {
                 $value = $request->file('hero_video')->store('hero', 'public');
@@ -77,6 +77,54 @@ class SettingController extends Controller
         }
 
         return back()->with('success', 'Ayarlar güncellendi.');
+    }
+
+    private function storeResizedFavicon($file): string
+    {
+        $path = $file->store('settings', 'public');
+        $full = storage_path('app/public/'.$path);
+
+        $info = @getimagesize($full);
+        $ext = $info['mime'] ?? null;
+        if (! $info || ($ext !== 'image/png' && $ext !== 'image/x-icon' && $ext !== 'image/vnd.microsoft.icon')) {
+            return $path;
+        }
+
+        if ($ext === 'image/png') {
+            $src = imagecreatefrompng($full);
+            $outName = str_replace('.ico', '.png', $path);
+            $outFull = storage_path('app/public/'.$outName);
+        } else {
+            return $path;
+        }
+
+        if (! $src) {
+            return $path;
+        }
+
+        $size = 64;
+        $dst = imagecreatetruecolor($size, $size);
+        imagesavealpha($dst, true);
+        $transparent = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+        imagefill($dst, 0, 0, $transparent);
+        $w = $info[0];
+        $h = $info[1];
+        $side = max($w, $h);
+        $sx = ($side - $w) / 2;
+        $sy = ($side - $h) / 2;
+        $srcSquare = imagecreatetruecolor($side, $side);
+        imagesavealpha($srcSquare, true);
+        $t2 = imagecolorallocatealpha($srcSquare, 0, 0, 0, 127);
+        imagefill($srcSquare, 0, 0, $t2);
+        imagecopy($srcSquare, $src, (int) $sx, (int) $sy, 0, 0, $w, $h);
+        imagecopyresampled($dst, $srcSquare, 0, 0, 0, 0, $size, $size, $side, $side);
+        imagepng($dst, $outFull, 9);
+
+        if ($outName !== $path) {
+            @unlink($full);
+        }
+
+        return $outName;
     }
 
     public function downloadYoutubeSound(Request $request)

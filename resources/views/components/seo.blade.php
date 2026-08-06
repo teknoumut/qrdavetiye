@@ -15,6 +15,9 @@
 <link rel="canonical" href="{{ $url }}">
 @if($siteFavicon)
 <link rel="icon" type="image/png" href="{{ asset('storage/'.$siteFavicon) }}?v={{ @filemtime(public_path('storage/'.$siteFavicon)) }}">
+@elseif(file_exists(public_path('favicon.png')))
+<link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+<link rel="shortcut icon" href="{{ asset('favicon.png') }}">
 @else
 <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
 <link rel="alternate icon" href="{{ asset('favicon.ico') }}">

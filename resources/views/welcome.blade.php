@@ -191,36 +191,6 @@
 
 
 
-    @php $heroVideo = \App\Models\Setting::getValue('hero_video'); @endphp
-    @if($heroVideo)
-        <div class="site-intro" id="siteIntro">
-            <video class="site-bg-video" muted autoplay playsinline preload="auto" id="introVideo">
-                <source src="{{ \Illuminate\Support\Facades\Storage::url($heroVideo) }}" type="video/{{ str_ends_with($heroVideo, '.webm') ? 'webm' : (str_ends_with($heroVideo, '.mov') ? 'quicktime' : 'mp4') }}">
-            </video>
-        </div>
-        <script>
-            (function() {
-                var intro = document.getElementById('siteIntro');
-                var video = document.getElementById('introVideo');
-                document.body.style.overflow = 'hidden';
-                function done() {
-                    if (intro.dataset.done) return;
-                    intro.dataset.done = '1';
-                    var elapsed = Date.now() - start;
-                    var wait = Math.max(0, 3000 - elapsed);
-                    setTimeout(function() {
-                        document.body.style.overflow = '';
-                        intro.style.transition = 'opacity 0.8s ease';
-                        intro.style.opacity = '0';
-                        setTimeout(function() { intro.style.display = 'none'; }, 800);
-                    }, wait);
-                }
-                var start = Date.now();
-                video.addEventListener('ended', done);
-                video.addEventListener('error', done);
-            })();
-        </script>
-    @endif
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-floating" id="heroOrbs">
